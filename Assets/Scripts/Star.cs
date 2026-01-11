@@ -8,6 +8,11 @@ public class Star : CelestialBody
 
     }
 
+    private void FixedUpdate()
+    {
+        ApplyAllGravity();
+    }
+
     private void OnDisable()
     {
         DeRegister();

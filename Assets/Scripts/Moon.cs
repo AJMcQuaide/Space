@@ -12,10 +12,10 @@ public class Moon : CelestialBody
 
     private void FixedUpdate()
     {
-        ApplyGravity(Target);
-        transform.position += Velocity;
+        ApplyAllGravity();
 
-        Speed = Velocity.magnitude * ScaleFactor / c;
+        //Display speed
+        speed = Velocity.magnitude * ScaleFactor / 1000f;
     }
 
     private void OnDisable()

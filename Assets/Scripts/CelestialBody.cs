@@ -37,9 +37,9 @@ public class CelestialBody : MonoBehaviour
     float startSpeed;
     public float StartSpeed { get { return startSpeed; } set { startSpeed = value; } }
 
-    [Header("Pct of Speed of light")]
+    [Header("kps")]
     [SerializeField]
-    public float Speed;
+    public float speed;
 
     [Header("Properties")]
     [SerializeField]
@@ -60,7 +60,13 @@ public class CelestialBody : MonoBehaviour
     bool warpGrid;
     public bool WarpGrid { get { return warpGrid; } }
 
+    [SerializeField]
+    bool ignoreOwnType;
+    public bool IgnoreOwnType { get { return ignoreOwnType; } set { ignoreOwnType = value; } }
+
     public Vector3 Velocity { get; set; }
+
+    public float MaxAcceleration { get; set; }
 
     //Set scale and color among other things
     public void SetProperties()
@@ -69,7 +75,12 @@ public class CelestialBody : MonoBehaviour
         transform.localScale = new Vector3(Diameter / ScaleFactor, Diameter / ScaleFactor, Diameter / ScaleFactor);
         //Set Color
         GetComponentInChildren<MeshRenderer>().sharedMaterial.color = PlanetColor;
-        GetComponent<TrailRenderer>().material.color = lineColor;
+        //Set trail renderer color
+        TrailRenderer tr = GetComponentInChildren<TrailRenderer>(); 
+        tr.material.color = lineColor;
+        tr.time = 20f;
+        //Set Max acceleration based on mass and radius
+        MaxAcceleration = GetAcceleration((Diameter * 0.5f) / ScaleFactor, Mass);
     }
 
     //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
@@ -91,12 +102,10 @@ public class CelestialBody : MonoBehaviour
         {
             //Get the distance r from the celestial body
             Vector3 difference = cb.transform.position - transform.position;
-            //Cap the acceleration due to gravity at the surface of the celestial body
-            float maxAcceleration = GetAcceleration((cb.Diameter * 0.5f) / ScaleFactor, cb.mass);
             //Get the current un-clamped acceleration assuming the mass is at a single point
             float currentAcceleration = GetAcceleration(difference.magnitude, cb.mass);
             //Calculate and clamp the acceleration due to gravity
-            float acceleration = Mathf.Clamp(currentAcceleration, 0f, maxAcceleration);
+            float acceleration = Mathf.Clamp(currentAcceleration, 0f, MaxAcceleration);
             //Calculate vector offset per frame
             Vector3 deltaPos = acceleration * TimeMultiplier * Time.fixedDeltaTime * difference.normalized;
             //Calculate velocity and take into account scale factor
@@ -109,16 +118,24 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void ApplyAllGravity()
     {
-        if (isKinematic == false)
+        foreach (CelestialBody cb in SpaceController.Instance.Cb)
         {
-            foreach (CelestialBody cb in SpaceController.Instance.Cb)
+            if (cb != this)
             {
-                if (cb != this)
+                if (ignoreOwnType)
                 {
-                    cb.ApplyGravity(cb);
+                    if (cb.GetType() != GetType())
+                    {
+                        ApplyGravity(cb);
+                    }
+                }
+                else
+                {
+                    ApplyGravity(cb);
                 }
             }
         }
+        transform.position += Velocity;
     }
 
     //Add the object to the Celestial body list
