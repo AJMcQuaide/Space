@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent (typeof(TrailRenderer))]
 public class CelestialBody : MonoBehaviour
 {
     public const float G = 0.0000000000667f; //Gravitational constant
@@ -42,11 +43,11 @@ public class CelestialBody : MonoBehaviour
 
     [Header("Properties")]
     [SerializeField]
-    Color color;
-    public Color Color
+    Color planetColor;
+    public Color PlanetColor
     {
-        get { return color; } 
-        set { color = value; }
+        get { return planetColor; } 
+        set { planetColor = value; }
     }
 
     [SerializeField]
@@ -54,6 +55,10 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     bool isKinematic;
+
+    [SerializeField]
+    bool warpGrid;
+    public bool WarpGrid { get { return warpGrid; } }
 
     public Vector3 Velocity { get; set; }
 
@@ -63,7 +68,7 @@ public class CelestialBody : MonoBehaviour
         //Scale
         transform.localScale = new Vector3(Diameter / ScaleFactor, Diameter / ScaleFactor, Diameter / ScaleFactor);
         //Set Color
-        GetComponentInChildren<MeshRenderer>().sharedMaterial.color = Color;
+        GetComponentInChildren<MeshRenderer>().sharedMaterial.color = PlanetColor;
         GetComponent<TrailRenderer>().material.color = lineColor;
     }
 

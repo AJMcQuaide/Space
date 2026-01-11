@@ -140,6 +140,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 454872552}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: warpGrid
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
       value: 4.75
       objectReference: {fileID: 0}
@@ -312,6 +316,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 454872552}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: warpGrid
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
       value: 3.4
       objectReference: {fileID: 0}
@@ -399,6 +407,10 @@ PrefabInstance:
       propertyPath: Target
       value: 
       objectReference: {fileID: 454872552}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: warpGrid
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
       value: 3.645
@@ -843,6 +855,10 @@ PrefabInstance:
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: diameter
       value: 12750000
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
+      propertyPath: warpGrid
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: isKinematic

@@ -45,10 +45,6 @@ public class SpaceController : MonoBehaviour
 
     public List<CelestialBody> Cb { get; set; } = new List<CelestialBody>();
 
-    //Delete
-    [SerializeField, Range(0, 120)]
-    int scopeVertex;
-
     void Awake()
     {
         //Singleton
@@ -68,7 +64,8 @@ public class SpaceController : MonoBehaviour
     void LateUpdate()
     {
         WarpGrid();
-        Debug.Log("FPS " + 1f / Time.deltaTime);
+        //Debug.Log("FPS " + 1f / Time.deltaTime);
+        Debug.Log("CB List: " + Cb.Count);
     }
 
     //Apply a warp to then grid to show the effects of gravity
@@ -82,17 +79,20 @@ public class SpaceController : MonoBehaviour
             //For each celestial body
             for (int y = 0; y < Cb.Count; y++)
             {
-                //Distance Vector from the mesh vertex to the celestial body
-                Vector3 difference = Cb[y].transform.position - grid.transform.TransformPoint(initial[i]);
-                //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
-                offset = Cb[y].GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
-                if (offset.sqrMagnitude > difference.sqrMagnitude)
+                if (Cb[y].WarpGrid)
                 {
-                    offset = difference;
+                    //Distance Vector from the mesh vertex to the celestial body
+                    Vector3 difference = Cb[y].transform.position - grid.transform.TransformPoint(initial[i]);
+                    //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
+                    offset = Cb[y].GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
+                    if (offset.sqrMagnitude > difference.sqrMagnitude)
+                    {
+                        offset = difference;
+                    }
+                    //Combine
+                    totalOffset += offset;
+                    result[i] = initial[i] + totalOffset;
                 }
-                //Combine
-                totalOffset += offset;
-                result[i] = initial[i] + totalOffset;
             }
         }
         //Set the gravity distortion
