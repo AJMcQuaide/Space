@@ -99,6 +99,23 @@ public class CelestialBody : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Apply gravity for all celestial bodies that are non kinematic
+    /// </summary>
+    public void ApplyAllGravity()
+    {
+        if (isKinematic == false)
+        {
+            foreach (CelestialBody cb in SpaceController.Instance.Cb)
+            {
+                if (cb != this)
+                {
+                    cb.ApplyGravity(cb);
+                }
+            }
+        }
+    }
+
     //Add the object to the Celestial body list
     public void Register(CelestialBody celestialBody)
     {

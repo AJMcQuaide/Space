@@ -15,7 +15,7 @@ public class Moon : CelestialBody
         ApplyGravity(Target);
         transform.position += Velocity;
 
-        Speed = Velocity.magnitude / c;
+        Speed = Velocity.magnitude * ScaleFactor / c;
     }
 
     private void OnDisable()
