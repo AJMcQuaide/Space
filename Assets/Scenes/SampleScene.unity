@@ -143,6 +143,18 @@ PrefabInstance:
       propertyPath: startSpeed
       value: 4.75
       objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.g
+      value: 0.8365737
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -303,6 +315,18 @@ PrefabInstance:
       propertyPath: startSpeed
       value: 3.4
       objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.g
+      value: 0.2609253
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.5
@@ -378,6 +402,18 @@ PrefabInstance:
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
       value: 3.645
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
+      propertyPath: lineColor.r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_LocalPosition.x

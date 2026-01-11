@@ -50,6 +50,9 @@ public class CelestialBody : MonoBehaviour
     }
 
     [SerializeField]
+    Color lineColor;
+
+    [SerializeField]
     bool isKinematic;
 
     public Vector3 Velocity { get; set; }
@@ -61,6 +64,7 @@ public class CelestialBody : MonoBehaviour
         transform.localScale = new Vector3(Diameter / ScaleFactor, Diameter / ScaleFactor, Diameter / ScaleFactor);
         //Set Color
         GetComponentInChildren<MeshRenderer>().sharedMaterial.color = Color;
+        GetComponent<TrailRenderer>().material.color = lineColor;
     }
 
     //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
