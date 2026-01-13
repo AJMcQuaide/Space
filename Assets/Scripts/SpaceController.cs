@@ -23,12 +23,8 @@ public class SpaceController : MonoBehaviour
     CelestialBody Reference;
 
     [SerializeField]
-    int scaleFactor; //1 meter = ScaleFactor meters
-    public int ScaleFactor { get { return scaleFactor; } }
-
-    [SerializeField]
-    int timeMultiplier; //1 second = TimeMultiplier seconds
-    public int TimeMultiplier { get { return timeMultiplier; } }
+    float timeMultiplier; //1 second = TimeMultiplier seconds
+    public float TimeMultiplier { get { return timeMultiplier; } }
 
     [SerializeField, Range(0f, 1000f)]
     float gridMultiplier; //Adjust the scale gravity warp of the grid
@@ -59,13 +55,15 @@ public class SpaceController : MonoBehaviour
             meshFilter.sharedMesh.GetVertices(initial);
             result = new List<Vector3>(initial);
         }
+
+        Time.timeScale = timeMultiplier;
     }
 
     void LateUpdate()
     {
         WarpGrid();
         //Debug.Log("FPS " + 1f / Time.deltaTime);
-        Debug.Log("CB List: " + Cb.Count);
+        //Debug.Log("CB List: " + Cb.Count);
     }
 
     //Apply a warp to then grid to show the effects of gravity

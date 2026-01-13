@@ -5,6 +5,10 @@ public class CelestialBody : MonoBehaviour
 {
     public const float G = 0.0000000000667f; //Gravitational constant
     public const float c = 299792458; //Speed of light
+    /// <summary>
+    /// Scale factor, the length of 1 Unity metere
+    /// </summary>
+    public const int S = 10000000;
 
     [Header("Kg")]
     [SerializeField]
@@ -21,15 +25,6 @@ public class CelestialBody : MonoBehaviour
     {
         get { return diameter; }
         set { diameter = value; }
-    }
-
-    public int ScaleFactor
-    {
-        get { return SpaceController.Instance.ScaleFactor; }
-    }
-    public int TimeMultiplier
-    {
-        get { return SpaceController.Instance.TimeMultiplier; }
     }
 
     [Header("m/s")]
@@ -72,22 +67,24 @@ public class CelestialBody : MonoBehaviour
     public void SetProperties()
     {
         //Scale
-        transform.localScale = new Vector3(Diameter / ScaleFactor, Diameter / ScaleFactor, Diameter / ScaleFactor);
+        transform.localScale = new Vector3(Diameter / S, Diameter / S, Diameter / S);
         //Set Color
         GetComponentInChildren<MeshRenderer>().sharedMaterial.color = PlanetColor;
         //Set trail renderer color
         TrailRenderer tr = GetComponentInChildren<TrailRenderer>(); 
         tr.material.color = lineColor;
-        tr.time = 20f;
+        tr.time = 10f;
         //Set Max acceleration based on mass and radius
-        MaxAcceleration = GetAcceleration((Diameter * 0.5f) / ScaleFactor, Mass);
+        MaxAcceleration = GetAcceleration((Diameter * 0.5f) / S, Mass);
+        //Set starting speed
+        Velocity = (StartSpeed * SpaceController.Instance.TimeMultiplier * Time.fixedDeltaTime) * transform.forward;
     }
 
     //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
     public float GetAcceleration(float differenceUnity, float mass)
     {
         //The actual distance in Unity usually incorrect due to scaling, multiplied by the scale factor to make it true
-        float r = differenceUnity * ScaleFactor;
+        float r = differenceUnity * S;
         float g = (G * mass) / (r * r);
         return g;
     }
@@ -107,9 +104,9 @@ public class CelestialBody : MonoBehaviour
             //Calculate and clamp the acceleration due to gravity
             float acceleration = Mathf.Clamp(currentAcceleration, 0f, MaxAcceleration);
             //Calculate vector offset per frame
-            Vector3 deltaPos = acceleration * TimeMultiplier * Time.fixedDeltaTime * difference.normalized;
+            Vector3 deltaPos = acceleration * SpaceController.Instance.TimeMultiplier * Time.fixedDeltaTime * difference.normalized;
             //Calculate velocity and take into account scale factor
-            Velocity += (deltaPos / ScaleFactor);
+            Velocity += deltaPos;
         }
     }
 
@@ -135,7 +132,6 @@ public class CelestialBody : MonoBehaviour
                 }
             }
         }
-        transform.position += Velocity;
     }
 
     //Add the object to the Celestial body list
