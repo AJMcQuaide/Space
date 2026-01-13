@@ -357,7 +357,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: Target
@@ -369,7 +369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -772,7 +772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: Target
@@ -784,7 +784,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 2.7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -1676,7 +1676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: Target
@@ -1688,7 +1688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 2.8
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -1786,7 +1786,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: Target
@@ -1798,7 +1798,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 2.6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -2413,7 +2413,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 2.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -2511,7 +2511,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: Target
@@ -2523,7 +2523,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: startSpeed
-      value: 2.9
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: c8ec1af210582e141a6a56cd8f6f9c04, type: 3}
       propertyPath: lineColor.b
@@ -3170,7 +3170,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: timeMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

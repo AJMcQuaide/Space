@@ -77,7 +77,7 @@ public class CelestialBody : MonoBehaviour
         //Set Max acceleration based on mass and radius
         MaxAcceleration = GetAcceleration((Diameter * 0.5f) / S, Mass);
         //Set starting speed
-        Velocity = (StartSpeed * SpaceController.Instance.TimeMultiplier * Time.fixedDeltaTime) * transform.forward;
+        Velocity = (StartSpeed * Time.fixedDeltaTime) * transform.forward;
     }
 
     //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
@@ -104,7 +104,7 @@ public class CelestialBody : MonoBehaviour
             //Calculate and clamp the acceleration due to gravity
             float acceleration = Mathf.Clamp(currentAcceleration, 0f, MaxAcceleration);
             //Calculate vector offset per frame
-            Vector3 deltaPos = acceleration * SpaceController.Instance.TimeMultiplier * Time.fixedDeltaTime * difference.normalized;
+            Vector3 deltaPos = acceleration * Time.fixedDeltaTime * difference.normalized;
             //Calculate velocity and take into account scale factor
             Velocity += deltaPos;
         }

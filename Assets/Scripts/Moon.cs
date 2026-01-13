@@ -12,15 +12,19 @@ public class Moon : CelestialBody
 
     private void FixedUpdate()
     {
-        if (Time.time < 60)
+        if (Time.time < 1)
         {
-        //Display speed and convert from m to km
-        speed = Velocity.magnitude / Time.fixedDeltaTime;
+            //Display speed and convert from m to km
+            speed = Velocity.magnitude / Time.fixedDeltaTime;
 
-        ApplyAllGravity();
-        transform.position += Velocity;
+            ApplyAllGravity();
+            transform.position += Velocity;
 
-        Debug.Log("Time: " + Time.time);
+            Debug.Log("Time: " + Time.fixedDeltaTime);
+        }
+        else
+        {
+            Debug.Log("Final Pos" + SpaceController.Instance.Cb[0].name + " " + SpaceController.Instance.Cb[0].transform.localPosition);
         }
     }
 
