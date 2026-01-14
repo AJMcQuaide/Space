@@ -2,15 +2,15 @@ using UnityEngine;
 
 public class Star : CelestialBody
 {
-
-    private void Start()
-    {
-
-    }
-
     private void FixedUpdate()
     {
+        Speed = Velocity.magnitude * S / Time.fixedDeltaTime;
         ApplyAllGravity();
+        if (UseRelativeMass)
+        {
+            RelativeMass *= CalculateRelativeMass(Speed);
+        }
+        transform.position += Velocity;
     }
 
     private void OnDisable()

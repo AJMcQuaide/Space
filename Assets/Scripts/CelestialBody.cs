@@ -3,8 +3,14 @@ using UnityEngine;
 [RequireComponent (typeof(TrailRenderer))]
 public class CelestialBody : MonoBehaviour
 {
-    public const float G = 0.0000000000667f; //Gravitational constant
-    public const float c = 299792458; //Speed of light
+    /// <summary>
+    /// Gravitational constant
+    /// </summary>
+    public const float G = 0.0000000000667f;
+    /// <summary>
+    /// Speed of light
+    /// </summary>
+    public const float c = 299792458;
     /// <summary>
     /// Scale factor, the length of 1 Unity metere
     /// </summary>
@@ -13,37 +19,29 @@ public class CelestialBody : MonoBehaviour
     [Header("Kg")]
     [SerializeField]
     float mass;
-    public float Mass //In KG
-    {
-        get { return mass; }
-    }
+    public float Mass { get { return mass; } set { mass = value; } }
 
-    [Header("m")]
+    public float RelativeMass { get; set; }
+
+    [Header("scaled meters")]
     [SerializeField]
-    float diameter; //Real world diamters in m
-    public float Diameter
-    {
-        get { return diameter; }
-        set { diameter = value; }
-    }
+    float diameter;
+    public float Diameter { get { return diameter; } set { diameter = value; } }
 
     [Header("m/s")]
     [SerializeField]
     float startSpeed;
     public float StartSpeed { get { return startSpeed; } set { startSpeed = value; } }
 
-    [Header("kps")]
+    [Header("m/s")]
     [SerializeField]
-    public float speed;
+    float speed;
+    public float Speed { get { return speed; } set { speed = value; } }
 
     [Header("Properties")]
     [SerializeField]
     Color planetColor;
-    public Color PlanetColor
-    {
-        get { return planetColor; } 
-        set { planetColor = value; }
-    }
+    public Color PlanetColor {  get { return planetColor; } }
 
     [SerializeField]
     Color lineColor;
@@ -57,7 +55,10 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     bool ignoreOwnType;
-    public bool IgnoreOwnType { get { return ignoreOwnType; } set { ignoreOwnType = value; } }
+
+    [SerializeField]
+    bool useRelativeMass;
+    public bool UseRelativeMass { get { return useRelativeMass; } }
 
     public Vector3 Velocity { get; set; }
 
@@ -69,11 +70,11 @@ public class CelestialBody : MonoBehaviour
         //Scale
         transform.localScale = new Vector3(Diameter / S, Diameter / S, Diameter / S);
         //Set Color
-        GetComponentInChildren<MeshRenderer>().sharedMaterial.color = PlanetColor;
+        GetComponentInChildren<MeshRenderer>().material.color = PlanetColor;
         //Set trail renderer color
         TrailRenderer tr = GetComponentInChildren<TrailRenderer>(); 
         tr.material.color = lineColor;
-        tr.time = 10f;
+        tr.time = SpaceController.Instance.TrailLength;
         //Set Max acceleration based on mass and radius
         MaxAcceleration = GetAcceleration((Diameter * 0.5f) / S, Mass);
         //Set starting speed
@@ -97,10 +98,11 @@ public class CelestialBody : MonoBehaviour
     {
         if (isKinematic == false)
         {
+            float mass = useRelativeMass ? cb.RelativeMass : cb.Mass;
             //Get the distance r from the celestial body
             Vector3 difference = cb.transform.position - transform.position;
             //Get the current un-clamped acceleration assuming the mass is at a single point
-            float currentAcceleration = GetAcceleration(difference.magnitude, cb.mass);
+            float currentAcceleration = GetAcceleration(difference.magnitude, mass);
             //Calculate and clamp the acceleration due to gravity
             float acceleration = Mathf.Clamp(currentAcceleration, 0f, MaxAcceleration);
             //Calculate vector offset per frame
@@ -113,26 +115,31 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// Apply gravity for all celestial bodies that are non kinematic
     /// </summary>
-    public void ApplyAllGravity()
-    {
-        foreach (CelestialBody cb in SpaceController.Instance.Cb)
-        {
-            if (cb != this)
-            {
-                if (ignoreOwnType)
-                {
-                    if (cb.GetType() != GetType())
-                    {
+    public void ApplyAllGravity() {
+        foreach (CelestialBody cb in SpaceController.Instance.Cb) {
+            if (cb != this) {
+                if (ignoreOwnType) {
+                    if (cb.GetType() != GetType()) {
                         ApplyGravity(cb);
                     }
                 }
-                else
-                {
+                else{
                     ApplyGravity(cb);
                 }
             }
         }
     }
+
+    /// <summary>
+    /// Return percentage of mass increase due to speed
+    /// </summary>
+    /// <param name="celestialBody"></param>
+    public float CalculateRelativeMass(float speed)
+    {
+        float pct = 1f / Mathf.Sqrt(1f - (speed * speed) / (c * c));
+        Debug.Log("Mass increased by " + pct);
+        return pct;
+    }    
 
     //Add the object to the Celestial body list
     public void Register(CelestialBody celestialBody)

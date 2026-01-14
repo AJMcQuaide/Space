@@ -29,6 +29,10 @@ public class SpaceController : MonoBehaviour
     [SerializeField, Range(0f, 1000f)]
     float gridMultiplier; //Adjust the scale gravity warp of the grid
 
+    [SerializeField]
+    float trailLength; //Trail renderer length in time
+    public float TrailLength { get { return trailLength; } set { trailLength = value; } }
+
     //Testing below
     [SerializeField]
     GameObject grid;
@@ -61,14 +65,16 @@ public class SpaceController : MonoBehaviour
 
     void LateUpdate()
     {
-        WarpGrid();
-        //Debug.Log("FPS " + 1f / Time.deltaTime);
-        //Debug.Log("CB List: " + Cb.Count);
+        WarpGrid(meshFilter.mesh);
     }
 
     //Apply a warp to then grid to show the effects of gravity
-    void WarpGrid()
+    void WarpGrid(Mesh mesh)
     {
+        if (mesh == null)
+        {
+            return;
+        }
         Vector3 offset;
         //For each vertex in the grid
         for (int i = 0; i < initial.Count; i++)
@@ -94,6 +100,6 @@ public class SpaceController : MonoBehaviour
             }
         }
         //Set the gravity distortion
-        meshFilter.mesh.SetVertices(result);
+        mesh.SetVertices(result);
     }
 }
