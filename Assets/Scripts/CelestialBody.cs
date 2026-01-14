@@ -98,7 +98,7 @@ public class CelestialBody : MonoBehaviour
     {
         if (isKinematic == false)
         {
-            float mass = useRelativeMass ? cb.RelativeMass : cb.Mass;
+            float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
             //Get the distance r from the celestial body
             Vector3 difference = cb.transform.position - transform.position;
             //Get the current un-clamped acceleration assuming the mass is at a single point
