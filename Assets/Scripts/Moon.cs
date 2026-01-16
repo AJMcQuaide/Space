@@ -4,13 +4,16 @@ public class Moon : CelestialBody
 {
     private void FixedUpdate()
     {
-        Speed = Velocity.magnitude * S / Time.fixedDeltaTime;
-        ApplyAllGravity();
-        if (UseRelativeMass)
+        if (Time.time < 1000f)
         {
-            RelativeMass *= CalculateRelativeMass(Speed);
+            Speed = Velocity.magnitude * S;
+            ApplyAllGravity();
+            if (UseRelativeMass)
+            {
+                RelativeMass *= CalculateRelativeMass(Speed);
+            }
+            transform.position += Velocity * Time.fixedDeltaTime;
         }
-        transform.position += Velocity;
     }
 
     private void OnDisable()

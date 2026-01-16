@@ -5,13 +5,13 @@ using UnityEngine;
 public class TempReportAccel : CelestialBody
 {
     [SerializeField]
-    float acceleration;
+    float reportAcceleration;
 
     [SerializeField]
     CelestialBody WhatToCheck;
 
     void Update()
     {
-        acceleration = GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
+        reportAcceleration = GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
     }
 }

@@ -16,6 +16,12 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// List of default planets in the solar system to reference or instantiate
+    /// </summary>
+    [SerializeField]
+    GameObject[] DefaultPlanets;
+
     [SerializeField]
     MeshRenderer mr;
 

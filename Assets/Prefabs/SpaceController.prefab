@@ -44,8 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae088345254574a4ead531e97869226f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  DefaultPlanets:
+  - {fileID: 3455992494001712473, guid: dee13249668aa0d4594b621268da6437, type: 3}
+  - {fileID: 0}
   mr: {fileID: 0}
   Reference: {fileID: 0}
-  scaleFactor: 10000
+  timeMultiplier: 1
+  gridMultiplier: 5
+  trailLength: 5
   grid: {fileID: 0}
-  multiplier: 1

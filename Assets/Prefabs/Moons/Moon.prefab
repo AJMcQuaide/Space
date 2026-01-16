@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b63d545e394fb594181972f006eeee02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -109,14 +109,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2958218282634449679}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 38.44, y: 0, z: 0}
-  m_LocalScale: {x: 0.34748, y: 0.34748, z: 0.34748}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
+  m_LocalPosition: {x: -0, y: 0, z: 53.825}
+  m_LocalScale: {x: 0.34748015, y: 0.34748015, z: 0.34748015}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6966134460637667949}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!114 &4742664919660872131
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,14 +131,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mass: 7.347e+22
   diameter: 3474800
-  startSpeed: 0
+  startSpeed: 5
   speed: 0
-  planetColor: {r: 0.6132076, g: 0.6132076, b: 0.6132076, a: 0}
-  lineColor: {r: 0, g: 0, b: 0, a: 0}
+  planetColor: {r: 0.5283019, g: 0.5283019, b: 0.5283019, a: 0}
+  lineColor: {r: 0.5699029, g: 0, b: 1, a: 0}
   isKinematic: 0
   warpGrid: 0
   ignoreOwnType: 1
-  Target: {fileID: 0}
+  useRelativeMass: 1
 --- !u!96 &3392062456809797304
 TrailRenderer:
   serializedVersion: 3
