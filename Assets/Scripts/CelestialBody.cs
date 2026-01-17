@@ -1,3 +1,4 @@
+using System;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -17,8 +18,6 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public const int S = 10000000;
 
-
-
     [Header("Kg")]
     [SerializeField]
     float mass;
@@ -29,7 +28,7 @@ public class CelestialBody : MonoBehaviour
 
     public float RelativeMass { get; set; }
 
-    [Header("scaled meters")]
+    [Header("meters")]
     [SerializeField]
     float diameter;
     public float Diameter { get { return diameter; } set { diameter = value; } }
@@ -78,7 +77,9 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// The max acceleration is set to the radius of the planet
     /// </summary>
-    public float MaxAcceleration { get; set; }
+    [SerializeField]
+    float maxAcceleration;
+    public float MaxAcceleration { get { return maxAcceleration; } set { maxAcceleration = value; } }
 
     //Set scale and color among other things
     public void SetProperties()
@@ -93,7 +94,7 @@ public class CelestialBody : MonoBehaviour
         tr.time = SpaceController.Instance.TrailLength * SpaceController.Instance.TimeMultiplier;
         tr.widthMultiplier = 0.1f;
         //Set Max acceleration based on mass and radius
-        MaxAcceleration = GetAcceleration((Diameter * 0.5f) / S, Mass);
+        maxAcceleration = GetAcceleration(Diameter * 0.5f / S, Mass);
         //Set starting speed, clamp to the speed of light
         StartSpeed = Mathf.Clamp(StartSpeed, 0f, c / S);
         Velocity = StartSpeed * transform.forward;
@@ -111,20 +112,21 @@ public class CelestialBody : MonoBehaviour
     }
 
     /// <summary>
-    /// Modifies the Velocity of the object
+    /// Modifies the Velocity of this object based on another
     /// </summary>
     /// <param name="cb"></param>
     public void ApplyGravity(CelestialBody cb)
     {
         if (isKinematic == false)
         {
+            //Use masss or relative mass
             float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
             //Get the distance r from the celestial body
             Vector3 difference = cb.transform.position - transform.position;
             //Get the current un-clamped acceleration assuming the mass is at a single point
             float preClampAcceleration = GetAcceleration(difference.magnitude, mass);
             //Calculate and clamp the acceleration due to gravity for one celestial body, clamp to the MaxAcceleration
-            float accel = Mathf.Clamp(preClampAcceleration, 0f, MaxAcceleration);
+            float accel = Mathf.Clamp(preClampAcceleration, 0f, cb.MaxAcceleration);
             Acceleration += accel;
             //Calculate vector offset per frame
             Vector3 deltaPos = accel * Time.fixedDeltaTime * difference.normalized;
@@ -160,16 +162,24 @@ public class CelestialBody : MonoBehaviour
     {   
         if (speed >= c)
         {
-            Debug.LogWarning(gameObject.name + " velocity is faster than speed of light");
+            Debug.LogWarning(gameObject.name + " input speed faster than the speed of light");
             return 1;
         }
         float speedSquared = speed * speed;
         float lightSquared = c * c;
         float pct = 1f / Mathf.Sqrt(1f - (speedSquared / lightSquared));
-        //Debug.Log("Mass increased from " + gameObject.name + " by " + pct);
         massIncrease = pct;
         return pct;
-    }    
+    }
+
+    /// <summary>
+    /// Calculate the speed, clamp to the speed of light
+    /// </summary>
+    public void UpdateSpeed()
+    {
+        Speed = Velocity.magnitude * S;
+        Speed = Mathf.Clamp(Speed, 0f, c);
+    }
 
     //Add the object to the Celestial body list
     public void Register(CelestialBody celestialBody)

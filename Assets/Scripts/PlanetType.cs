@@ -8,5 +8,7 @@ public enum PlanetType
     Jupiter = 4,
     Saturn = 5,
     Uranus = 6,
-    Neptune = 7
+    Neptune = 7,
+    Pluto = 8,
+    Custom = 9
 }

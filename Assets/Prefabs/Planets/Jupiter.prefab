@@ -47,15 +47,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1.898e+27
+  massIncrease: 0
   diameter: 142984000
   startSpeed: 0
   speed: 0
+  acceleration: 0
   planetColor: {r: 0.18406412, g: 0, b: 0.5377358, a: 0}
-  lineColor: {r: 0, g: 0, b: 0, a: 0}
-  isKinematic: 1
+  lineColor: {r: 1, g: 1, b: 1, a: 0}
+  isKinematic: 0
   warpGrid: 0
   ignoreOwnType: 0
-  useRelativeMass: 0
+  useRelativeMass: 1
+  planetType: 4
 --- !u!96 &7744195894712322540
 TrailRenderer:
   serializedVersion: 3

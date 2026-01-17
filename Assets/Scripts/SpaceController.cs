@@ -28,8 +28,11 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     CelestialBody Reference;
 
+    /// <summary>
+    /// 1x = Scale factor seconds
+    /// </summary>
     [SerializeField]
-    float timeMultiplier; //1 second = TimeMultiplier seconds
+    float timeMultiplier;
     public float TimeMultiplier { get { return timeMultiplier; } }
 
     [SerializeField, Range(0f, 1000f)]

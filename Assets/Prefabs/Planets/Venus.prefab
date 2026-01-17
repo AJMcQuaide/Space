@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3455992494001712473
+--- !u!1 &2991273160805281101
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,65 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 386875132472326292}
-  - component: {fileID: 373796433849631161}
-  - component: {fileID: 7744195894712322540}
+  - component: {fileID: 4084214675994664063}
+  - component: {fileID: 7291968058516164798}
+  - component: {fileID: 6441242431580452394}
   m_Layer: 0
-  m_Name: Earth
+  m_Name: Venus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &386875132472326292
+--- !u!4 &4084214675994664063
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3455992494001712473}
+  m_GameObject: {fileID: 2991273160805281101}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.275, y: 1.275, z: 1.275}
+  m_LocalScale: {x: 1.21, y: 1.21, z: 1.21}
   m_ConstrainProportionsScale: 1
   m_Children:
-  - {fileID: 5908185426975417176}
+  - {fileID: 2939154924447808769}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
---- !u!114 &373796433849631161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3455992494001712473}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  mass: 5.97e+24
-  massIncrease: 0
-  diameter: 12750000
-  startSpeed: 0
-  speed: 0
-  acceleration: 0
-  planetColor: {r: 0, g: 0.5060239, b: 1, a: 0}
-  lineColor: {r: 1, g: 1, b: 1, a: 0}
-  isKinematic: 0
-  warpGrid: 0
-  ignoreOwnType: 0
-  useRelativeMass: 1
-  planetType: 2
---- !u!96 &7744195894712322540
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!96 &7291968058516164798
 TrailRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3455992494001712473}
+  m_GameObject: {fileID: 2991273160805281101}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -101,11 +76,11 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0
+  m_Time: 5
   m_PreviewTimeScale: 1
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.1
+    widthMultiplier: 1
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -163,7 +138,32 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!1 &4604320399357128498
+--- !u!114 &6441242431580452394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2991273160805281101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 4.86732e+24
+  massIncrease: 0
+  diameter: 12100000
+  startSpeed: 0
+  speed: 0
+  acceleration: 0
+  planetColor: {r: 0.7830189, g: 0.33615157, b: 0, a: 0}
+  lineColor: {r: 1, g: 1, b: 1, a: 0}
+  isKinematic: 0
+  warpGrid: 0
+  ignoreOwnType: 0
+  useRelativeMass: 1
+  planetType: 1
+--- !u!1 &3562761189487448796
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -171,9 +171,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5908185426975417176}
-  - component: {fileID: 6619995543238736681}
-  - component: {fileID: 8073857904451366662}
+  - component: {fileID: 2939154924447808769}
+  - component: {fileID: 6991147947972593290}
+  - component: {fileID: 9006015513673635023}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -181,36 +181,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5908185426975417176
+--- !u!4 &2939154924447808769
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4604320399357128498}
+  m_GameObject: {fileID: 3562761189487448796}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 386875132472326292}
+  m_Father: {fileID: 4084214675994664063}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6619995543238736681
+--- !u!33 &6991147947972593290
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4604320399357128498}
+  m_GameObject: {fileID: 3562761189487448796}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &8073857904451366662
+--- !u!23 &9006015513673635023
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4604320399357128498}
+  m_GameObject: {fileID: 3562761189487448796}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -224,7 +224,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f001ff805a6dcd74fa00a89061dbc6af, type: 2}
+  - {fileID: 2100000, guid: 6f3aa8641bde3f9439228c4fe306deb6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
