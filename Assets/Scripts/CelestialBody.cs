@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent (typeof(TrailRenderer))]
@@ -81,6 +80,19 @@ public class CelestialBody : MonoBehaviour
     float maxAcceleration;
     public float MaxAcceleration { get { return maxAcceleration; } set { maxAcceleration = value; } }
 
+    GameObject arrowClone;
+
+    [SerializeField]
+    bool showGravityArrow = false;
+
+    [SerializeField, Range(0.1f, 10f)]
+    float gravityArrowSize = 1f;
+
+    /// <summary>
+    /// The total gravity vectors added together for all cb's acting on this
+    /// </summary>
+    Vector3 totalGravity = Vector3.zero;
+
     //Set scale and color among other things
     public void SetProperties()
     {
@@ -129,9 +141,13 @@ public class CelestialBody : MonoBehaviour
             float accel = Mathf.Clamp(preClampAcceleration, 0f, cb.MaxAcceleration);
             Acceleration += accel;
             //Calculate vector offset per frame
-            Vector3 deltaPos = accel * Time.fixedDeltaTime * difference.normalized;
+            Vector3 deltaPos = accel * difference.normalized;
+            if (showGravityArrow)
+            {
+                totalGravity += deltaPos;
+            }
             //Calculate velocity in m/s without scale factor
-            Velocity += deltaPos;
+            Velocity += deltaPos * Time.fixedDeltaTime;
         }
     }
 
@@ -139,7 +155,10 @@ public class CelestialBody : MonoBehaviour
     /// Apply gravity for all celestial bodies that are non kinematic
     /// </summary>
     public void ApplyAllGravity() {
+        //Reset per-frame variables
         Acceleration = 0f;
+        totalGravity = Vector3.zero;
+        //For each celestial body
         foreach (CelestialBody cb in SpaceController.Instance.Cb) {
             if (cb != this && isKinematic == false) {
                 if (ignoreOwnType) {
@@ -151,6 +170,16 @@ public class CelestialBody : MonoBehaviour
                     ApplyGravity(cb);
                 }
             }
+
+        }
+        //Point arrow at average gravity
+        if (showGravityArrow && totalGravity != Vector3.zero)
+        {
+            //Get average of all gravity vectors, less this
+            totalGravity /= SpaceController.Instance.Cb.Count - 1f;
+            Vector3 start = 0.5f * (Diameter / S) * totalGravity.normalized + transform.position;
+            Vector3 dir = totalGravity.normalized;
+            GravityArrow(start, dir);
         }
     }
 
@@ -180,6 +209,21 @@ public class CelestialBody : MonoBehaviour
         Speed = Velocity.magnitude * S;
         Speed = Mathf.Clamp(Speed, 0f, c);
     }
+
+    /// <summary>
+    /// Place  an arrow on the model to present the direction of gravity
+    /// </summary>
+    public void GravityArrow(Vector3 startPoint, Vector3 direction)
+    {
+        if (arrowClone == null)
+        {
+            arrowClone = Instantiate(SpaceController.Instance.ArrowPrefab);
+            arrowClone.transform.SetParent(transform, false);
+        }
+        Quaternion lookAt = Quaternion.LookRotation(direction, Vector3.up);
+        arrowClone.transform.SetPositionAndRotation(startPoint, lookAt);
+        arrowClone.transform.localScale = new Vector3(gravityArrowSize, gravityArrowSize, gravityArrowSize);
+    }    
 
     //Add the object to the Celestial body list
     public void Register(CelestialBody celestialBody)

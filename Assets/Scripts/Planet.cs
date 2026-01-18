@@ -3,18 +3,21 @@ using UnityEngine;
 public class Planet : CelestialBody
 {
     [SerializeField]
-    PlanetType pt;
-    public PlanetType Pt { get { return pt; } }
+    PlanetType planetTyp;
+    public PlanetType PlanetTyp { get { return planetTyp; } }
 
     private void FixedUpdate()
     {
-        UpdateSpeed();
-        ApplyAllGravity();
-        if (UseRelativeMass)
+        if (SpaceController.Instance.FrameCounter < 15000)
         {
-            RelativeMass = Mass * CalculateRelativeMass(Speed);
+            UpdateSpeed();
+            ApplyAllGravity();
+            if (UseRelativeMass)
+            {
+                RelativeMass = Mass * CalculateRelativeMass(Speed);
+            }
+            transform.position += Velocity * Time.fixedDeltaTime;
         }
-        transform.position += Velocity * Time.fixedDeltaTime;
     }
 
     private void OnDisable()

@@ -54,9 +54,10 @@ MonoBehaviour:
   - {fileID: 7417145583582741602, guid: c4d58b2e20b4b9d4595acf394ab9fb57, type: 3}
   - {fileID: 7017242223385061797, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
   - {fileID: 5651180754249931293, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
-  mr: {fileID: 0}
-  Reference: {fileID: 0}
+  meshRenderer: {fileID: 0}
   timeMultiplier: 1
   gridMultiplier: 5
   trailLength: 5
   grid: {fileID: 0}
+  arrowPrefab: {fileID: 2914364808835926261, guid: 0b43031d4f03a8942b25522c11f0de74, type: 3}
+  frameCounter: 0

@@ -23,10 +23,7 @@ public class SpaceController : MonoBehaviour
     GameObject[] DefaultPlanets;
 
     [SerializeField]
-    MeshRenderer mr;
-
-    [SerializeField]
-    CelestialBody Reference;
+    MeshRenderer meshRenderer;
 
     /// <summary>
     /// 1x = Scale factor seconds
@@ -36,10 +33,10 @@ public class SpaceController : MonoBehaviour
     public float TimeMultiplier { get { return timeMultiplier; } }
 
     [SerializeField, Range(0f, 1000f)]
-    float gridMultiplier; //Adjust the scale gravity warp of the grid
+    float gridMultiplier;
 
     [SerializeField]
-    float trailLength; //Trail renderer length in time
+    float trailLength;
     public float TrailLength { get { return trailLength; } set { trailLength = value; } }
 
     //Testing below
@@ -53,6 +50,15 @@ public class SpaceController : MonoBehaviour
     MeshFilter meshFilter;
 
     public List<CelestialBody> Cb { get; set; } = new List<CelestialBody>();
+
+    [SerializeField]
+    GameObject arrowPrefab;
+    public GameObject ArrowPrefab { get { return arrowPrefab; } }
+
+    //temp
+    [SerializeField]
+    int frameCounter = 0;
+    public int FrameCounter { get { return frameCounter; } set { frameCounter = value; } }
 
     void Awake()
     {
@@ -72,9 +78,11 @@ public class SpaceController : MonoBehaviour
         Time.timeScale = timeMultiplier;
     }
 
-    void LateUpdate()
+    void FixedUpdate()
     {
         WarpGrid(meshFilter.mesh);
+
+        frameCounter++;
     }
 
     //Apply a warp to then grid to show the effects of gravity

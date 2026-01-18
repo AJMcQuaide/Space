@@ -218,12 +218,17 @@ Material:
     - _EmissionColorUI: {r: 0, g: 0, b: 0, a: 1}
     - _EmissionColorWithMapUI: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
+--- !u!1 &275105329 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+  m_PrefabInstance: {fileID: 946987684}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &454872552 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
   m_PrefabInstance: {fileID: 237059911574011232}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 965076864}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
@@ -439,16 +444,20 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+      propertyPath: lineColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: lineColor.b
-      value: 0.5377358
+      value: 0.7421383
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: lineColor.g
-      value: 0.5377358
+      value: 0.7421383
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: lineColor.r
-      value: 0.5377358
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
@@ -456,7 +465,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+      propertyPath: showGravityVector
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.x
@@ -609,13 +622,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attachToTarget: 0
-  target: {fileID: 965076864}
+  target: {fileID: 275105329}
   followDistance: 7
---- !u!1 &965076864 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3455992494001712473, guid: dee13249668aa0d4594b621268da6437, type: 3}
-  m_PrefabInstance: {fileID: 237059911574011232}
-  m_PrefabAsset: {fileID: 0}
 --- !u!21 &1863112428
 Material:
   serializedVersion: 8
@@ -901,11 +909,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: lineColor.g
-      value: 0.7551784
+      value: 0.46203288
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: lineColor.r
-      value: 0.36477983
+      value: 0.12941176
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: planetColor.b
@@ -921,7 +929,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: useRelativeMass
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1212,7 +1220,7 @@ PrefabInstance:
       objectReference: {fileID: 454872552}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: trailLength
-      value: 500
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: gridMultiplier
@@ -1220,7 +1228,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: timeMultiplier
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
