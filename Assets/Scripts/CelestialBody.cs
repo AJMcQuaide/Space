@@ -83,7 +83,7 @@ public class CelestialBody : MonoBehaviour
     GameObject arrowClone;
 
     [SerializeField]
-    bool showGravityArrow = false;
+    bool showGravityArrow = true;
 
     [SerializeField, Range(0.1f, 10f)]
     float gravityArrowSize = 1f;
@@ -115,9 +115,8 @@ public class CelestialBody : MonoBehaviour
     }
 
     //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
-    public float GetAcceleration(float differenceUnity, float mass)
+    public static float GetAcceleration(float differenceUnity, float mass)
     {
-        //The actual distance in Unity usually incorrect due to scaling, multiplied by the scale factor to make it true
         float r = differenceUnity * S;
         float g = (G * mass) / (r * r);
         return g;

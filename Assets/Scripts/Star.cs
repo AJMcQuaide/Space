@@ -4,7 +4,7 @@ public class Star : CelestialBody
 {
     private void FixedUpdate()
     {
-        if (SpaceController.Instance.FrameCounter < 15000)
+        if (SpaceController.Instance.FrameCounter < 150000)
         {
             UpdateSpeed();
             ApplyAllGravity();

@@ -22,9 +22,6 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     GameObject[] DefaultPlanets;
 
-    [SerializeField]
-    MeshRenderer meshRenderer;
-
     /// <summary>
     /// 1x = Scale factor seconds
     /// </summary>
@@ -43,13 +40,31 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     GameObject grid;
 
-    List<Vector3> initial = new List<Vector3>();
+    readonly List<Vector3> initial = new();
 
-    List<Vector3> result;
+    List<Vector3> result = new();
 
     MeshFilter meshFilter;
+    MeshRenderer meshRenderer;
 
-    public List<CelestialBody> Cb { get; set; } = new List<CelestialBody>();
+    /// <summary>
+    /// Celestial Body list
+    /// </summary>
+    public List<CelestialBody> Cb { get; set; } = new();
+
+    /// <summary>
+    /// A list of the positions of Celestial bodies which have Warp grid set to true
+    /// </summary>
+    
+    public List<Vector4> CBWarpPos { get; set; } = new();
+    /// <summary>
+    /// A list of the positions of Celestial bodies which have Warp grid set to true
+    /// </summary>
+    public List<float> CBWarpMass { get; set; } = new();
+    /// <summary>
+    /// A list of the max acceleration of Celestial bodies which have Warp grid set to true
+    /// </summary>
+    public List<float> CBMaxAccel { get; set; } = new();
 
     [SerializeField]
     GameObject arrowPrefab;
@@ -60,6 +75,9 @@ public class SpaceController : MonoBehaviour
     int frameCounter = 0;
     public int FrameCounter { get { return frameCounter; } set { frameCounter = value; } }
 
+    [SerializeField]
+    bool useGPU;
+
     void Awake()
     {
         //Singleton
@@ -69,20 +87,37 @@ public class SpaceController : MonoBehaviour
         }
         else
         {
-            //Get the local mesh
             meshFilter = grid.GetComponent<MeshFilter>();
+            meshRenderer = grid.GetComponent<MeshRenderer>();
             meshFilter.sharedMesh.GetVertices(initial);
             result = new List<Vector3>(initial);
+            Time.timeScale = timeMultiplier;
         }
+    }
 
-        Time.timeScale = timeMultiplier;
+    private void Start()
+    {
+        Debug.Log("Grid Count: " + initial.Count);
+        Debug.Log("CB Count: " + Cb.Count);
     }
 
     void FixedUpdate()
     {
-        WarpGrid(meshFilter.mesh);
-
+        if (useGPU)
+        {
+            SetShader(meshRenderer.material);
+        }
+        else
+        {
+            WarpGrid(meshFilter.mesh);
+        }
+        meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
         frameCounter++;
+    }
+
+    private void Update()
+    {
+        Debug.Log("FPS: " + 1 / Time.deltaTime);
     }
 
     //Apply a warp to then grid to show the effects of gravity
@@ -105,7 +140,7 @@ public class SpaceController : MonoBehaviour
                     //Distance Vector from the mesh vertex to the celestial body
                     Vector3 difference = Cb[y].transform.position - grid.transform.TransformPoint(initial[i]);
                     //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
-                    offset = Cb[y].GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
+                    offset = CelestialBody.GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
                     if (offset.sqrMagnitude > difference.sqrMagnitude)
                     {
                         offset = difference;
@@ -118,5 +153,31 @@ public class SpaceController : MonoBehaviour
         }
         //Set the gravity distortion
         mesh.SetVertices(result);
+    }
+
+    //Set shader properties
+    void SetShader(Material material)
+    {
+        int CountToWarp = 0;
+        CBWarpPos.Clear();
+        CBWarpMass.Clear();
+        CBMaxAccel.Clear();
+        foreach (CelestialBody cb in Cb)
+        {
+            if (cb.WarpGrid)
+            {
+                CountToWarp++;
+                CBWarpPos.Add(cb.transform.position);
+                CBWarpMass.Add(cb.Mass);
+                CBMaxAccel.Add(cb.MaxAcceleration);
+            }
+        }
+        material.SetFloat("_GridMultiplier", gridMultiplier);
+        material.SetInt("_ScaleFactor", CelestialBody.S);
+        material.SetInt("_CBCount", CountToWarp);
+
+        material.SetVectorArray("_Position", CBWarpPos);
+        material.SetFloatArray("_Mass", CBWarpMass);
+        material.SetFloatArray("_MaxAcceleration", CBMaxAccel);
     }
 }

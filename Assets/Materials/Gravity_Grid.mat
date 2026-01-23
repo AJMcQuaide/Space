@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Grid
+  m_Name: Gravity_Grid
   m_Shader: {fileID: 4800000, guid: db9438fa5f5f0cb4484999b9a686571d, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,12 +24,10 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: e790d62f4fa02114e8d26cecfe38cdcf, type: 3}
+        m_Texture: {fileID: 2800000, guid: 35102e6b06355cb46b8082e0f47b06eb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
-    m_Floats:
-    - _Gravity: 0.2
-    - _Radius: 50
+    m_Floats: []
     m_Colors: []
   m_BuildTextureStacks: []

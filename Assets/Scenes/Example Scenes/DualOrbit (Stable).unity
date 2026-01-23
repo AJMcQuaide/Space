@@ -468,6 +468,14 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+      propertyPath: gravityArrowSize
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+      propertyPath: showGravityArrow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: showGravityVector
       value: 1
       objectReference: {fileID: 0}
@@ -729,7 +737,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 373796433849631161, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
       propertyPath: useRelativeMass
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
+      propertyPath: gravityArrowSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
+      propertyPath: showGravityArrow
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
       propertyPath: m_LocalPosition.x
@@ -929,6 +945,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: useRelativeMass
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
+      propertyPath: gravityArrowSize
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
+      propertyPath: showGravityArrow
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}

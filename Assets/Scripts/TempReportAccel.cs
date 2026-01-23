@@ -12,6 +12,6 @@ public class TempReportAccel : MonoBehaviour
 
     void Update()
     {
-        reportAcceleration = SpaceController.Instance.Cb[0].GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
+        reportAcceleration = CelestialBody.GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
     }
 }

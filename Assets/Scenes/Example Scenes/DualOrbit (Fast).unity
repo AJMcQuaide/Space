@@ -547,6 +547,10 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
+      propertyPath: lineColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: lineColor.b
       value: 0
       objectReference: {fileID: 0}
@@ -719,6 +723,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 373796433849631161, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
+      propertyPath: lineColor.a
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
       propertyPath: useRelativeMass
       value: 0
@@ -894,6 +902,10 @@ PrefabInstance:
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: isKinematic
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
+      propertyPath: lineColor.a
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: lineColor.b
