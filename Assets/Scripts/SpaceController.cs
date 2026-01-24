@@ -72,11 +72,11 @@ public class SpaceController : MonoBehaviour
 
     //temp
     [SerializeField]
-    int frameCounter = 0;
-    public int FrameCounter { get { return frameCounter; } set { frameCounter = value; } }
-
-    [SerializeField]
     bool useGPU;
+
+    float timeCount = 0;
+    float frames = 0;
+    bool runOnce = false;
 
     void Awake()
     {
@@ -105,6 +105,12 @@ public class SpaceController : MonoBehaviour
     {
         if (useGPU)
         {
+            if (runOnce)
+            {
+                //Reset the vertices prior to GPU use
+                meshFilter.mesh.SetVertices(initial);
+                runOnce = false;
+            }
             SetShader(meshRenderer.material);
         }
         else
@@ -112,12 +118,21 @@ public class SpaceController : MonoBehaviour
             WarpGrid(meshFilter.mesh);
         }
         meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
-        frameCounter++;
     }
 
     private void Update()
     {
-        Debug.Log("FPS: " + 1 / Time.deltaTime);
+        if (timeCount >= 1f)
+        {
+            Debug.Log("FPS: " + frames  / timeCount);
+            timeCount = 0;
+            frames = 0;
+        }
+        else
+        {
+            timeCount += Time.deltaTime;
+            frames++;
+        }
     }
 
     //Apply a warp to then grid to show the effects of gravity
@@ -153,6 +168,7 @@ public class SpaceController : MonoBehaviour
         }
         //Set the gravity distortion
         mesh.SetVertices(result);
+        runOnce = true;
     }
 
     //Set shader properties

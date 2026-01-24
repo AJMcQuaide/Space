@@ -2,18 +2,20 @@ using UnityEngine;
 
 public class Moon : CelestialBody
 {
+    private void Awake()
+    {
+        gravityArrowSize = 4f;
+    }
     private void FixedUpdate()
     {
-        if (SpaceController.Instance.FrameCounter < 150000)
+
+        UpdateSpeed();
+        ApplyAllGravity();
+        if (UseRelativeMass)
         {
-            UpdateSpeed();
-            ApplyAllGravity();
-            if (UseRelativeMass)
-            {
-                RelativeMass = Mass * CalculateRelativeMass(Speed);
-            }
-            transform.position += Velocity * Time.fixedDeltaTime;
+            RelativeMass = Mass * CalculateRelativeMass(Speed);
         }
+        transform.position += Velocity * Time.fixedDeltaTime;
     }
 
     private void OnDisable()

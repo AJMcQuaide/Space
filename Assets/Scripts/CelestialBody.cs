@@ -86,7 +86,7 @@ public class CelestialBody : MonoBehaviour
     bool showGravityArrow = true;
 
     [SerializeField, Range(0.1f, 10f)]
-    float gravityArrowSize = 1f;
+    public float gravityArrowSize = 1f;
 
     /// <summary>
     /// The total gravity vectors added together for all cb's acting on this

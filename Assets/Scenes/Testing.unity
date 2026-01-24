@@ -140,6 +140,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
+      propertyPath: isKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 373796433849631161, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: gravityArrowSize
       value: 2
       objectReference: {fileID: 0}
@@ -149,7 +153,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: m_LocalPosition.y
@@ -157,7 +161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 386875132472326292, guid: dee13249668aa0d4594b621268da6437, type: 3}
       propertyPath: m_LocalRotation.w
@@ -214,7 +218,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5032012974035103804, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
       propertyPath: isKinematic
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5032012974035103804, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
       propertyPath: gravityArrowSize
@@ -270,7 +274,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7017242223385061797, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -540,7 +544,7 @@ Transform:
   m_GameObject: {fileID: 963194225}
   serializedVersion: 2
   m_LocalRotation: {x: 0.45337543, y: -0, z: -0, w: 0.89131975}
-  m_LocalPosition: {x: 0, y: 36.7, z: -46.7}
+  m_LocalPosition: {x: 0, y: 45, z: -40}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -575,7 +579,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -603,7 +607,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -684,7 +688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -712,7 +716,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -740,7 +744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2.5
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -862,7 +866,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -890,7 +894,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -918,7 +922,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -971,7 +975,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -999,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -1027,7 +1031,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1080,7 +1084,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -1108,7 +1112,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -1136,7 +1140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1189,7 +1193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2958218282634449679, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: warpGrid
@@ -1217,7 +1221,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: ignoreOwnType
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4742664919660872131, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: useRelativeMass
@@ -1245,7 +1249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6958993634146821268, guid: 24cf7ece57e300e459573ee3912aa6c0, type: 3}
       propertyPath: m_LocalPosition.z

@@ -83,7 +83,7 @@ Shader "Gravity"
                 for (int i = 0; i < _CBCount; i++)
                 {
                     //Distance Vector from the mesh vertex to the celestial body
-                    float3 difference = Difference(_Position[0].xyz, vertexWorldPos);
+                    float3 difference = Difference(_Position[i].xyz, vertexWorldPos);
                     //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
                     float accel = GetAcceleration(length(difference), _Mass[i]);
                     //Clamp at the radius of the cb
@@ -119,8 +119,8 @@ Shader "Gravity"
             //Fragment Shader
             fixed4 frag (interpolators i) : SV_Target
             {
-                //reverse black to white
                 fixed4 col = tex2D(_MainTex, i.uv);
+                col.xyz += 0.5;
                 return col;
             }
             ENDCG
