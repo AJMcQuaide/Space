@@ -139,6 +139,7 @@ public class CelestialBody : MonoBehaviour
         trailProperty.SetColor("_Color", trailColor);
         tr.SetPropertyBlock(trailProperty);
         tr.widthMultiplier = trailWidth;
+        tr.time = sc.UniversalTrailLength;
 
         //Set Max acceleration based on mass and radius
         maxAcceleration = GetAcceleration(Radius / S, Mass);
@@ -190,7 +191,7 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// Apply gravity for all celestial bodies that are non kinematic
     /// </summary>
-    public void ApplyAllGravity() {
+    public void TotalGravity() {
         //Reset per-frame variables
         Acceleration = 0f;
         totalGravity = Vector3.zero;

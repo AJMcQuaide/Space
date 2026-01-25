@@ -11,7 +11,7 @@ public class Moon : CelestialBody
         if (Application.isPlaying)
         {
             UpdateSpeed();
-            ApplyAllGravity();
+            TotalGravity();
             if (UseRelativeMass)
             {
                 RelativeMass = Mass * CalculateRelativeMass(Speed);

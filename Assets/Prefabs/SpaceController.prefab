@@ -85,7 +85,7 @@ MonoBehaviour:
   - 695700000
   timeMultiplier: 1
   gridMultiplier: 5
-  trailLength: 5
+  universalTrailLength: 10
   grid: {fileID: 0}
   arrowPrefab: {fileID: 4266237560885085036, guid: 0b43031d4f03a8942b25522c11f0de74, type: 3}
   useGPU: 0
