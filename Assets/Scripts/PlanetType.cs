@@ -11,4 +11,6 @@ public enum PlanetType
     Uranus = 7,
     Neptune = 8,
     Pluto = 9,
+    EarthMoon = 10,
+    Sun = 11
 }

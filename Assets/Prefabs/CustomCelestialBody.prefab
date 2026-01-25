@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 4274485802449358177}
   - component: {fileID: 9160321406527601813}
   m_Layer: 0
-  m_Name: CustomPlanet
+  m_Name: CustomCelestialBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

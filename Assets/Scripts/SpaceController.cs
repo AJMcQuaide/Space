@@ -20,7 +20,7 @@ public class SpaceController : MonoBehaviour
     /// List of default planets in the solar system to reference or instantiate
     /// </summary>
     [SerializeField]
-    GameObject[] DefaultPlanets;
+    GameObject[] DefaultCelestialBodies;
 
     [SerializeField]
     float[] MassArray;
@@ -40,8 +40,8 @@ public class SpaceController : MonoBehaviour
     float gridMultiplier;
 
     [SerializeField]
-    float trailLength;
-    public float TrailLength { get { return trailLength; } set { trailLength = value; } }
+    float universalTrailLength;
+    public float UniversalTrailLength { get { return universalTrailLength; } set { universalTrailLength = value; } }
 
     //Testing below
     [SerializeField]

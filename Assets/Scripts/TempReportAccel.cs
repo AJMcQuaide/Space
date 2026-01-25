@@ -12,6 +12,9 @@ public class TempReportAccel : MonoBehaviour
 
     void Update()
     {
-        reportAcceleration = CelestialBody.GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
+        if (WhatToCheck != null)
+        {
+            reportAcceleration = CelestialBody.GetAcceleration((WhatToCheck.transform.position - transform.position).magnitude, WhatToCheck.Mass);
+        }
     }
 }

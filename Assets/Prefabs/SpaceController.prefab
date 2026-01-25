@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae088345254574a4ead531e97869226f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefaultPlanets:
+  DefaultCelestialBodies:
   - {fileID: 7983612122409361475, guid: 71451a84d1d17b941aa9775a189e6dec, type: 3}
   - {fileID: 4938733899446115610, guid: 8787a0be1d3b1dc4ba0cc31d4ea29567, type: 3}
   - {fileID: 2249413489313739924, guid: f7241af2658a63d479b0c4346d0c4fb2, type: 3}
@@ -55,6 +55,8 @@ MonoBehaviour:
   - {fileID: 2621570862502916777, guid: c4d58b2e20b4b9d4595acf394ab9fb57, type: 3}
   - {fileID: 2113578009027737089, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
   - {fileID: 142912650216394716, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+  - {fileID: 544062071155166443, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+  - {fileID: 655178659559779157, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
   MassArray:
   - 0
   - 3.3e+23
@@ -66,6 +68,8 @@ MonoBehaviour:
   - 8.68e+25
   - 1.02e+26
   - 1.309e+22
+  - 7.347e+22
+  - 1.989e+30
   RadiusArray:
   - 0
   - 2439500
@@ -77,6 +81,8 @@ MonoBehaviour:
   - 25559000
   - 24764000
   - 738400
+  - 1738000
+  - 695700000
   timeMultiplier: 1
   gridMultiplier: 5
   trailLength: 5
