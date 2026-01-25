@@ -45,19 +45,41 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultPlanets:
-  - {fileID: 3050750917338804881, guid: 8787a0be1d3b1dc4ba0cc31d4ea29567, type: 3}
-  - {fileID: 2991273160805281101, guid: f7241af2658a63d479b0c4346d0c4fb2, type: 3}
-  - {fileID: 3455992494001712473, guid: dee13249668aa0d4594b621268da6437, type: 3}
-  - {fileID: 7094304376483060837, guid: dc7b7ee3c73ee8048b19aace5111ef42, type: 3}
-  - {fileID: 3455992494001712473, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
-  - {fileID: 5998064111926784259, guid: faef485e68822ba47a9f1785994b2567, type: 3}
-  - {fileID: 7417145583582741602, guid: c4d58b2e20b4b9d4595acf394ab9fb57, type: 3}
-  - {fileID: 7017242223385061797, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
-  - {fileID: 5651180754249931293, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
-  meshRenderer: {fileID: 0}
+  - {fileID: 7983612122409361475, guid: 71451a84d1d17b941aa9775a189e6dec, type: 3}
+  - {fileID: 4938733899446115610, guid: 8787a0be1d3b1dc4ba0cc31d4ea29567, type: 3}
+  - {fileID: 2249413489313739924, guid: f7241af2658a63d479b0c4346d0c4fb2, type: 3}
+  - {fileID: 7367360741140010079, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+  - {fileID: 1756803845072603336, guid: dc7b7ee3c73ee8048b19aace5111ef42, type: 3}
+  - {fileID: 4641584250157092756, guid: 0a2e8900736a3984e97eef486f0ee949, type: 3}
+  - {fileID: 8707894496157572774, guid: faef485e68822ba47a9f1785994b2567, type: 3}
+  - {fileID: 2621570862502916777, guid: c4d58b2e20b4b9d4595acf394ab9fb57, type: 3}
+  - {fileID: 2113578009027737089, guid: 7ee33e4870ade864c97d3f1e4c514031, type: 3}
+  - {fileID: 142912650216394716, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+  MassArray:
+  - 0
+  - 3.3e+23
+  - 4.87e+24
+  - 5.97e+24
+  - 6.42e+23
+  - 1.898e+27
+  - 5.68e+26
+  - 8.68e+25
+  - 1.02e+26
+  - 1.309e+22
+  RadiusArray:
+  - 0
+  - 2439500
+  - 6052000
+  - 6371000
+  - 3393500
+  - 71492000
+  - 60268000
+  - 25559000
+  - 24764000
+  - 738400
   timeMultiplier: 1
   gridMultiplier: 5
   trailLength: 5
   grid: {fileID: 0}
   arrowPrefab: {fileID: 4266237560885085036, guid: 0b43031d4f03a8942b25522c11f0de74, type: 3}
-  frameCounter: 0
+  useGPU: 0

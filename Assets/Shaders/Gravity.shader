@@ -120,7 +120,7 @@ Shader "Gravity"
             fixed4 frag (interpolators i) : SV_Target
             {
                 fixed4 col = tex2D(_MainTex, i.uv);
-                col.xyz += 0.5;
+                col.xyz += 0.2;
                 return col;
             }
             ENDCG

@@ -22,6 +22,13 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     GameObject[] DefaultPlanets;
 
+    [SerializeField]
+    float[] MassArray;
+    //Make method for indexer*
+
+    [SerializeField]
+    float[] RadiusArray;
+
     /// <summary>
     /// 1x = Scale factor seconds
     /// </summary>
@@ -122,17 +129,7 @@ public class SpaceController : MonoBehaviour
 
     private void Update()
     {
-        if (timeCount >= 1f)
-        {
-            Debug.Log("FPS: " + frames  / timeCount);
-            timeCount = 0;
-            frames = 0;
-        }
-        else
-        {
-            timeCount += Time.deltaTime;
-            frames++;
-        }
+        //FPS();
     }
 
     //Apply a warp to then grid to show the effects of gravity
@@ -188,12 +185,44 @@ public class SpaceController : MonoBehaviour
                 CBMaxAccel.Add(cb.MaxAcceleration);
             }
         }
-        material.SetFloat("_GridMultiplier", gridMultiplier);
-        material.SetInt("_ScaleFactor", CelestialBody.S);
-        material.SetInt("_CBCount", CountToWarp);
+        if (CBWarpMass.Count > 0)
+        {
+            material.SetFloat("_GridMultiplier", gridMultiplier);
+            material.SetInt("_ScaleFactor", CelestialBody.S);
+            material.SetInt("_CBCount", CountToWarp);
 
-        material.SetVectorArray("_Position", CBWarpPos);
-        material.SetFloatArray("_Mass", CBWarpMass);
-        material.SetFloatArray("_MaxAcceleration", CBMaxAccel);
+            material.SetVectorArray("_Position", CBWarpPos);
+            material.SetFloatArray("_Mass", CBWarpMass);
+            material.SetFloatArray("_MaxAcceleration", CBMaxAccel);
+        }
+    }
+
+    void FPS()
+    {
+        //FPS count only works with time multiplier of 1
+        //Use in Update
+        if (timeCount >= 1f)
+        {
+            Debug.Log("FPS: " + frames / timeCount);
+            timeCount = 0;
+            frames = 0;
+        }
+        else
+        {
+            timeCount += Time.deltaTime;
+            frames++;
+        }
+    }
+
+    public float GetMass(PlanetType planet)
+    {
+        float mass = MassArray[(int)planet];
+        return mass;
+    }
+
+    public float GetDiameter(PlanetType planet)
+    {
+        float diameter = RadiusArray[(int)planet];
+        return diameter;
     }
 }

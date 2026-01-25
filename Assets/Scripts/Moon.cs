@@ -4,18 +4,20 @@ public class Moon : CelestialBody
 {
     private void Awake()
     {
-        gravityArrowSize = 4f;
+        gravityArrowSize = 1f;
     }
     private void FixedUpdate()
     {
-
-        UpdateSpeed();
-        ApplyAllGravity();
-        if (UseRelativeMass)
+        if (Application.isPlaying)
         {
-            RelativeMass = Mass * CalculateRelativeMass(Speed);
+            UpdateSpeed();
+            ApplyAllGravity();
+            if (UseRelativeMass)
+            {
+                RelativeMass = Mass * CalculateRelativeMass(Speed);
+            }
+            transform.position += Velocity * Time.fixedDeltaTime;
         }
-        transform.position += Velocity * Time.fixedDeltaTime;
     }
 
     private void OnDisable()

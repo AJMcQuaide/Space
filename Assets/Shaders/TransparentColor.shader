@@ -6,13 +6,14 @@ Shader "Unlit/Color"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags { "RenderType"="Transparent" }
         LOD 100
 
         Pass
         {
+            ZWrite Off
+            Blend SrcAlpha OneMinusSrcAlpha
             CGPROGRAM
-
             #pragma vertex vert
             #pragma fragment frag
 

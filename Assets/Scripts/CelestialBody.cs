@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[RequireComponent (typeof(TrailRenderer))]
+[ExecuteAlways]
 public class CelestialBody : MonoBehaviour
 {
     /// <summary>
@@ -17,28 +17,40 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public const int S = 10000000;
 
+    [SerializeField]
+    PlanetType massReference;
+    public PlanetType MassReference { get { return massReference; } set { massReference = value; } }
+
+    [SerializeField]
+    PlanetType diameterReference;
+    public PlanetType DiameterReference { get { return diameterReference; } set { diameterReference = value; } }
+
+    public SpaceController sc { get; set; }
+
+    [SerializeField]
+    GameObject model;
+
     [Header("Kg")]
     [SerializeField]
     float mass;
     public float Mass { get { return mass; } set { mass = value; } }
 
-    [SerializeField]
+    //Show in game
     float massIncrease;
 
     public float RelativeMass { get; set; }
 
     [Header("meters")]
     [SerializeField]
-    float diameter;
-    public float Diameter { get { return diameter; } set { diameter = value; } }
+    float radius;
+    public float Radius { get { return radius; } set { radius = value; } }
 
     [Header("m/s")]
     [SerializeField]
     float startSpeed;
     public float StartSpeed { get { return startSpeed; } set { startSpeed = value; } }
 
-    [Header("m/s")]
-    [SerializeField]
+    //Show in game
     float speed;
     public float Speed { get { return speed; } set { speed = value; } }
 
@@ -55,7 +67,10 @@ public class CelestialBody : MonoBehaviour
     public Color PlanetColor {  get { return planetColor; } }
 
     [SerializeField]
-    Color lineColor;
+    Color trailColor;
+
+    [SerializeField]
+    float trailWidth;
 
     [SerializeField]
     bool isKinematic;
@@ -68,7 +83,7 @@ public class CelestialBody : MonoBehaviour
     bool ignoreOwnType;
 
     [SerializeField]
-    bool useRelativeMass;
+    bool useRelativeMass = true;
     public bool UseRelativeMass { get { return useRelativeMass; } }
 
     public Vector3 Velocity { get; set; }
@@ -76,7 +91,6 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// The max acceleration is set to the radius of the planet
     /// </summary>
-    [SerializeField]
     float maxAcceleration;
     public float MaxAcceleration { get { return maxAcceleration; } set { maxAcceleration = value; } }
 
@@ -96,21 +110,45 @@ public class CelestialBody : MonoBehaviour
     //Set scale and color among other things
     public void SetProperties()
     {
-        //Scale
-        transform.localScale = new Vector3(Diameter / S, Diameter / S, Diameter / S);
+        //Get space controller reference
+        sc = SpaceController.Instance;
+
+        //Get reference to use for mass
+        if (MassReference != PlanetType.Custom)
+        {
+            Mass = sc.GetMass(MassReference);
+        }
+
+        //Get reference to use for diameter
+        if (DiameterReference != PlanetType.Custom)
+        {
+            Radius = sc.GetDiameter(DiameterReference);
+        }
+
+        //Set the scale of the model
+        float scale = (Radius * 2) / S;
+        model.transform.localScale = new Vector3(scale, scale, scale);
+
         //Set Color
-        GetComponentInChildren<MeshRenderer>().material.color = PlanetColor;
+        MaterialPropertyBlock colorProperty = new();
+        colorProperty.SetColor("_Color", planetColor);
+        model.GetComponent<MeshRenderer>().SetPropertyBlock(colorProperty);
+
         //Set trail renderer color
-        TrailRenderer tr = GetComponentInChildren<TrailRenderer>(); 
-        tr.material.color = lineColor;
-        tr.time = SpaceController.Instance.TrailLength * SpaceController.Instance.TimeMultiplier;
-        tr.widthMultiplier = 0.1f;
+        TrailRenderer tr = GetComponent<TrailRenderer>();
+        MaterialPropertyBlock trailProperty = new();
+        trailProperty.SetColor("_Color", trailColor);
+        tr.SetPropertyBlock(trailProperty);
+        tr.widthMultiplier = trailWidth;
+
         //Set Max acceleration based on mass and radius
-        maxAcceleration = GetAcceleration(Diameter * 0.5f / S, Mass);
+        maxAcceleration = GetAcceleration(Radius / S, Mass);
+
         //Set starting speed, clamp to the speed of light
         StartSpeed = Mathf.Clamp(StartSpeed, 0f, c / S);
         Velocity = StartSpeed * transform.forward;
-        //Set relative mass
+
+        //Set relative mass equal to mass to start
         RelativeMass = Mass;
     }
 
@@ -172,12 +210,14 @@ public class CelestialBody : MonoBehaviour
 
         }
         //Point arrow at average gravity
-        if (showGravityArrow && totalGravity != Vector3.zero)
+        if (showGravityArrow && totalGravity.sqrMagnitude > 0.001f)
         {
             //Get average of all gravity vectors, less this
             totalGravity /= SpaceController.Instance.Cb.Count - 1f;
-            Vector3 start = 0.5f * (Diameter / S) * totalGravity.normalized + transform.position;
             Vector3 dir = totalGravity.normalized;
+            Vector3 offset = dir * 0.1f;
+            float scaledDiameter = (Radius * 2) / S;
+            Vector3 start = 0.5f * scaledDiameter * dir + offset + transform.position;
             GravityArrow(start, dir);
         }
     }

@@ -1,14 +1,14 @@
 
 public enum PlanetType 
 {
-    Mercury = 0,
-    Venus = 1,
-    Earth = 2,
-    Mars = 3,
-    Jupiter = 4,
-    Saturn = 5,
-    Uranus = 6,
-    Neptune = 7,
-    Pluto = 8,
-    Custom = 9
+    Custom = 0,
+    Mercury = 1,
+    Venus = 2,
+    Earth = 3,
+    Mars = 4,
+    Jupiter = 5,
+    Saturn = 6,
+    Uranus = 7,
+    Neptune = 8,
+    Pluto = 9,
 }
