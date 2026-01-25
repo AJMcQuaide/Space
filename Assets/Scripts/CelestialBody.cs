@@ -247,6 +247,7 @@ public class CelestialBody : MonoBehaviour
     {
         Speed = Velocity.magnitude * S;
         Speed = Mathf.Clamp(Speed, 0f, c);
+        Debug.Log("Test");
     }
 
     /// <summary>
