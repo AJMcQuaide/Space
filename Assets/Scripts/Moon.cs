@@ -1,22 +1,18 @@
+using UnityEditor.Profiling;
 using UnityEngine;
 
 public class Moon : CelestialBody
 {
-    private void Awake()
-    {
-        gravityArrowSize = 1f;
-    }
     private void FixedUpdate()
     {
-        if (Application.isPlaying)
+        if (Application.isPlaying && SpaceController.Instance.Frames < 50)
         {
             UpdateSpeed();
-            TotalGravity();
+            SetPosition(TotalAcceleration);
             if (UseRelativeMass)
             {
                 RelativeMass = Mass * CalculateRelativeMass(Speed);
             }
-            transform.position += Velocity * Time.fixedDeltaTime;
         }
     }
 

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8094519788987611281}
   - component: {fileID: 4437791289926518734}
-  - component: {fileID: 3709747406535974930}
+  - component: {fileID: 3904172581075527885}
   m_Layer: 0
   m_Name: Sun
   m_TagString: Untagged
@@ -138,7 +138,7 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &3709747406535974930
+--- !u!114 &3904172581075527885
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,21 +147,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 655178659559779157}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8bb2a04a4b8a7324e93c4366d144eb49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   massReference: 11
-  diameterReference: 11
+  massMultiplier: 0
+  radiusReference: 11
+  radiusMultiplier: 0
   model: {fileID: 8721087067105666146}
-  mass: 1.989e+30
-  radius: 695700000
+  mass: 0
+  massIncrease: 0
+  radius: 0
   startSpeed: 0
   acceleration: 0
-  planetColor: {r: 0.94117653, g: 0.7960785, b: 0.36078432, a: 0}
+  planetColor: {r: 1, g: 0.8166218, b: 0, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0.1
+  trailWidth: 0
   isKinematic: 0
-  warpGrid: 1
+  warpGrid: 0
   ignoreOwnType: 0
   useRelativeMass: 1
   showGravityArrow: 1

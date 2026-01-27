@@ -1,17 +1,13 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpaceController : MonoBehaviour
 {
     static SpaceController instance;
-    public static SpaceController Instance
-    {
-        get
-        {
-            if (instance == null)
-            {
-                instance = FindAnyObjectByType<SpaceController>();
-            }
+    public static SpaceController Instance {
+        get {
+            if (instance == null) { instance = FindAnyObjectByType<SpaceController>(); }
             return instance;
         }
     }
@@ -82,16 +78,15 @@ public class SpaceController : MonoBehaviour
     bool useGPU;
 
     float timeCount = 0;
+    [SerializeField]
     float frames = 0;
+    public float Frames { get { return frames; } set { frames = value; } }
     bool runOnce = false;
 
     void Awake()
     {
         //Singleton
-        if (Instance != this)
-        {
-            Destroy(gameObject);
-        }
+        if (Instance != this) { Destroy(gameObject); }
         else
         {
             meshFilter = grid.GetComponent<MeshFilter>();

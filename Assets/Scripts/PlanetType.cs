@@ -1,7 +1,7 @@
 
 public enum PlanetType 
 {
-    Custom = 0,
+    EnterManually = 0,
     Mercury = 1,
     Venus = 2,
     Earth = 3,

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static TMPro.SpriteAssetUtilities.TexturePacker_JsonArray;
 
 public class CelestialBody : MonoBehaviour
 {
@@ -12,17 +13,31 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public const float c = 299792458;
     /// <summary>
-    /// Scale factor, the length of 1 Unity metere
+    /// Scale factor, the length of 1 Unity meter
     /// </summary>
     public const int S = 10000000;
+    /// <summary>
+    /// Scale factor in decimel form, the length of 1 meter in Unity
+    /// </summary>
+    public const float SD = 0.0000001f;
+    /// <summary>
+    /// Scale factor  of time
+    /// </summary>
+    public const int T = 1000;
 
     [SerializeField]
     PlanetType massReference;
     public PlanetType MassReference { get { return massReference; } set { massReference = value; } }
 
     [SerializeField]
-    PlanetType diameterReference;
-    public PlanetType DiameterReference { get { return diameterReference; } set { diameterReference = value; } }
+    float massMultiplier;
+
+    [SerializeField]
+    PlanetType radiusReference;
+    public PlanetType RadiusReference { get { return radiusReference; } set { radiusReference = value; } }
+
+    [SerializeField]
+    float radiusMultiplier;
 
     public SpaceController sc { get; set; }
 
@@ -35,6 +50,7 @@ public class CelestialBody : MonoBehaviour
     public float Mass { get { return mass; } set { mass = value; } }
 
     //Show in game
+    [SerializeField]
     float massIncrease;
 
     public float RelativeMass { get; set; }
@@ -50,6 +66,7 @@ public class CelestialBody : MonoBehaviour
     public float StartSpeed { get { return startSpeed; } set { startSpeed = value; } }
 
     //Show in game
+    [SerializeField]
     float speed;
     public float Speed { get { return speed; } set { speed = value; } }
 
@@ -57,8 +74,8 @@ public class CelestialBody : MonoBehaviour
     /// The sum of all accelerations on the object
     /// </summary>
     [SerializeField]
-    float acceleration;
-    public float Acceleration { get { return acceleration; } set { acceleration = value; } }
+    Vector3 totalAcceleration;
+    public Vector3 TotalAcceleration { get { return totalAcceleration; } set { totalAcceleration = value; } }
 
     [Header("Properties")]
     [SerializeField]
@@ -86,6 +103,7 @@ public class CelestialBody : MonoBehaviour
     public bool UseRelativeMass { get { return useRelativeMass; } }
 
     public Vector3 Velocity { get; set; }
+    public Vector3 TotalPosition { get; set; }
 
     /// <summary>
     /// The max acceleration is set to the radius of the planet
@@ -99,7 +117,7 @@ public class CelestialBody : MonoBehaviour
     bool showGravityArrow = true;
 
     [SerializeField, Range(0.1f, 10f)]
-    public float gravityArrowSize = 1f;
+    float gravityArrowSize = 1f;
 
     /// <summary>
     /// The total gravity vectors added together for all cb's acting on this
@@ -113,15 +131,17 @@ public class CelestialBody : MonoBehaviour
         sc = SpaceController.Instance;
 
         //Get reference to use for mass
-        if (MassReference != PlanetType.Custom)
+        if (MassReference != PlanetType.EnterManually)
         {
-            Mass = sc.GetMass(MassReference);
+            if (massMultiplier ==  0) { massMultiplier = 1; }
+            Mass = massMultiplier * sc.GetMass(MassReference);
         }
 
         //Get reference to use for diameter
-        if (DiameterReference != PlanetType.Custom)
+        if (RadiusReference != PlanetType.EnterManually)
         {
-            Radius = sc.GetDiameter(DiameterReference);
+            if (radiusMultiplier == 0) { radiusMultiplier = 1; }
+            Radius = radiusMultiplier * sc.GetDiameter(RadiusReference);
         }
 
         //Set the scale of the model
@@ -160,67 +180,113 @@ public class CelestialBody : MonoBehaviour
         return g;
     }
 
-    /// <summary>
-    /// Modifies the Velocity of this object based on another
-    /// </summary>
-    /// <param name="cb"></param>
-    public void ApplyGravity(CelestialBody cb)
+    //Get the total acceleration of all nearby Cb's, and average direction
+    public void SetTotalAcceleration()
     {
-        if (isKinematic == false)
+        Vector3 totalAcceleration = Vector3.zero;
+        int celestialBodiesEvaluated = 0;
+        foreach (CelestialBody cb in sc.Cb)
         {
-            //Use masss or relative mass
-            float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
-            //Get the distance r from the celestial body
-            Vector3 difference = cb.transform.position - transform.position;
-            //Get the current un-clamped acceleration assuming the mass is at a single point
-            float preClampAcceleration = GetAcceleration(difference.magnitude, mass);
-            //Calculate and clamp the acceleration due to gravity for one celestial body, clamp to the MaxAcceleration
-            float accel = Mathf.Clamp(preClampAcceleration, 0f, cb.MaxAcceleration);
-            Acceleration += accel;
-            //Calculate vector offset per frame
-            Vector3 deltaPos = accel * difference.normalized;
-            if (showGravityArrow)
+            if (cb == this || isKinematic == true || ignoreOwnType && cb.GetType() == this.GetType())
             {
-                totalGravity += deltaPos;
+                break;
             }
-            //Calculate velocity in m/s without scale factor
-            Velocity += deltaPos * Time.fixedDeltaTime;
+            celestialBodiesEvaluated++;
+            Vector3 difference = cb.transform.position - transform.position;
+            float magnitude = difference.magnitude;
+            float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
+            totalAcceleration += GetAcceleration(magnitude, mass) * difference.normalized;
         }
+        TotalAcceleration = totalAcceleration / celestialBodiesEvaluated;
+    }
+
+    //Calculate the velocity
+    public void SetVelocity(Vector3 totalAcceleration)
+    {
+        Velocity += totalAcceleration * Time.fixedDeltaTime * T;
     }
 
     /// <summary>
-    /// Apply gravity for all celestial bodies that are non kinematic
+    /// Set the transform to the new position based on the total acceleration due to gravity of all relavant celestial bodies
     /// </summary>
-    public void TotalGravity() {
-        //Reset per-frame variables
-        Acceleration = 0f;
-        totalGravity = Vector3.zero;
-        //For each celestial body
-        foreach (CelestialBody cb in SpaceController.Instance.Cb) {
-            if (cb != this && isKinematic == false) {
-                if (ignoreOwnType) {
-                    if (cb.GetType() != GetType()) {
-                        ApplyGravity(cb);
-                    }
-                }
-                else{
-                    ApplyGravity(cb);
-                }
-            }
-
-        }
-        //Point arrow at average gravity
-        if (showGravityArrow && totalGravity.sqrMagnitude > 0.001f)
-        {
-            //Get average of all gravity vectors, less this
-            totalGravity /= SpaceController.Instance.Cb.Count - 1f;
-            Vector3 dir = totalGravity.normalized;
-            Vector3 offset = dir * 0.1f;
-            float scaledDiameter = (Radius * 2) / S;
-            Vector3 start = 0.5f * scaledDiameter * dir + offset + transform.position;
-            GravityArrow(start, dir);
-        }
+    /// <param name="totalAcceleration"></param>
+    /// <param name="direction"></param>
+    public void SetPosition(Vector3 totalAcceleration)
+    {
+        float initialVelocity = Velocity.magnitude * Time.fixedDeltaTime * T;
+        float newPosition = 0.5f * (totalAcceleration.magnitude * Mathf.Pow(Time.fixedDeltaTime * T, 2));
+        Vector3 deltaPos = (initialVelocity + newPosition) * totalAcceleration.normalized;
+        transform.position += deltaPos;
     }
+
+    ///// <summary>
+    ///// Modifies the Velocity of this object based on another (cb)
+    ///// </summary>
+    ///// <param name="cb"></param>
+    //public void ApplyGravity(CelestialBody cb)
+    //{
+    //    if (isKinematic == false && gameObject.name == "Pluto")
+    //    {
+    //        //Use masss or relative mass
+    //        float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
+    //        //Get the distance r from the celestial body
+    //        Vector3 difference = cb.transform.position - transform.position;
+    //        //Get the current un-clamped acceleration assuming the mass is at a single point
+    //        float preClampAcceleration = GetAcceleration(difference.magnitude, mass);
+    //        //Calculate and clamp the acceleration due to gravity for one celestial body, clamp to the MaxAcceleration
+    //        float accel = Mathf.Clamp(preClampAcceleration, 0f, cb.MaxAcceleration);
+    //        accel = 10f;
+    //        TotalAcceleration += accel;
+
+    //        Velocity += GetVelocity(accel) * difference.normalized;
+
+    //        //Calculate vector offset per frame. This is the acceleration per second, per second
+    //        //Vector3 deltaPos = GetDeltaPos(accel, difference.normalized);
+
+    //        sc.Frames++;
+
+    //        if (showGravityArrow)
+    //        {
+    //            //totalGravity += deltaPos;
+    //        }
+    //        //TotalPosition += deltaPos;
+    //    }
+    //}
+
+    ///// <summary>
+    ///// Apply gravity for all celestial bodies that are non kinematic
+    ///// </summary>
+    //public void TotalGravity() {
+    //    //Reset per-frame variables
+    //    TotalAcceleration = 0f;
+    //    totalGravity = Vector3.zero;
+    //    TotalPosition = Vector3.zero;
+    //    //For each celestial body
+    //    foreach (CelestialBody cb in SpaceController.Instance.Cb) {
+    //        if (cb != this && isKinematic == false) {
+    //            if (ignoreOwnType) {
+    //                if (cb.GetType() != GetType()) {
+    //                    ApplyGravity(cb);
+    //                }
+    //            }
+    //            else{
+    //                ApplyGravity(cb);
+    //            }
+    //        }
+
+    //    }
+    //    //Point arrow at average gravity
+    //    if (showGravityArrow && totalGravity.sqrMagnitude > 0.001f)
+    //    {
+    //        //Get average of all gravity vectors, less this
+    //        totalGravity /= SpaceController.Instance.Cb.Count - 1f;
+    //        Vector3 dir = totalGravity.normalized;
+    //        Vector3 offset = dir * 0.1f;
+    //        float scaledDiameter = (Radius * 2) / S;
+    //        Vector3 start = 0.5f * scaledDiameter * dir + offset + transform.position;
+    //        GravityArrow(start, dir);
+    //    }
+    //}
 
     /// <summary>
     /// Return percentage of mass increase due to speed
@@ -228,11 +294,11 @@ public class CelestialBody : MonoBehaviour
     /// <param name="celestialBody"></param>
     public float CalculateRelativeMass(float speed)
     {   
-        if (speed >= c)
-        {
-            Debug.LogWarning(gameObject.name + " input speed faster than the speed of light");
-            return 1;
-        }
+        //if (speed >= c)
+        //{
+        //    Debug.LogWarning(gameObject.name + " input speed faster than the speed of light");
+        //    return massIncrease;
+        //}
         float speedSquared = speed * speed;
         float lightSquared = c * c;
         float pct = 1f / Mathf.Sqrt(1f - (speedSquared / lightSquared));
@@ -246,8 +312,7 @@ public class CelestialBody : MonoBehaviour
     public void UpdateSpeed()
     {
         Speed = Velocity.magnitude * S;
-        Speed = Mathf.Clamp(Speed, 0f, c);
-        Debug.Log("Test");
+        //Speed = Mathf.Clamp(Speed, 0f, c);
     }
 
     /// <summary>

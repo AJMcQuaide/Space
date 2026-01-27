@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6669117431865974009}
   - component: {fileID: 2593019405388878121}
-  - component: {fileID: 2228041960379618347}
+  - component: {fileID: 3111146739206355080}
   m_Layer: 0
   m_Name: EarthMoon
   m_TagString: Untagged
@@ -138,7 +138,7 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &2228041960379618347
+--- !u!114 &3111146739206355080
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -147,21 +147,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 544062071155166443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ef6dc89eb22e714e85f7b9a0990c100, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   massReference: 10
-  diameterReference: 10
+  massMultiplier: 0
+  radiusReference: 10
+  radiusMultiplier: 0
   model: {fileID: 8692366649515791373}
-  mass: 7.35e+22
-  radius: 1738000
+  mass: 0
+  massIncrease: 0
+  radius: 0
   startSpeed: 0
   acceleration: 0
-  planetColor: {r: 0.75, g: 0.75, b: 0.75, a: 0}
+  planetColor: {r: 0.754717, g: 0.754717, b: 0.754717, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0.1
+  trailWidth: 0
   isKinematic: 0
-  warpGrid: 1
+  warpGrid: 0
   ignoreOwnType: 0
   useRelativeMass: 1
   showGravityArrow: 1
