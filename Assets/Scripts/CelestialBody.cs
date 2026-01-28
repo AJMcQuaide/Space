@@ -60,10 +60,10 @@ public class CelestialBody : MonoBehaviour
     float radius;
     public float Radius { get { return radius; } set { radius = value; } }
 
-    [Header("m/s")]
+    [Header("In real world m/s")]
     [SerializeField]
-    float startSpeed;
-    public float StartSpeed { get { return startSpeed; } set { startSpeed = value; } }
+    float initialVelocity;
+    public float InitialVelocity { get { return initialVelocity; } set { initialVelocity = value; } }
 
     //Show in game
     [SerializeField]
@@ -102,6 +102,9 @@ public class CelestialBody : MonoBehaviour
     bool useRelativeMass = true;
     public bool UseRelativeMass { get { return useRelativeMass; } }
 
+    /// <summary>
+    /// Real world velocity. Not scaled for Unity.
+    /// </summary>
     public Vector3 Velocity { get; set; }
     public Vector3 TotalPosition { get; set; }
 
@@ -115,6 +118,7 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     bool showGravityArrow = true;
+    public bool ShowGravityArrow { get { return showGravityArrow; } }
 
     [SerializeField, Range(0.1f, 10f)]
     float gravityArrowSize = 1f;
@@ -122,7 +126,7 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// The total gravity vectors added together for all cb's acting on this
     /// </summary>
-    Vector3 totalGravity = Vector3.zero;
+    //Vector3 totalGravity = Vector3.zero;
 
     //Set scale and color among other things
     public void SetProperties()
@@ -164,15 +168,19 @@ public class CelestialBody : MonoBehaviour
         //Set Max acceleration based on mass and radius
         maxAcceleration = GetAcceleration(Radius / S, Mass);
 
-        //Set starting speed, clamp to the speed of light
-        StartSpeed = Mathf.Clamp(StartSpeed, 0f, c / S);
-        Velocity = StartSpeed * transform.forward;
-
         //Set relative mass equal to mass to start
         RelativeMass = Mass;
+
+        //Starting velocity
+        Velocity = initialVelocity * transform.forward;
     }
 
-    //Set the acceleration due to gravity in m/s^2. Units are m, kg. G is gravitational constent.
+    /// <summary>
+    /// Get the acceleration due to gravity at a particular position, with respect to a given mass. (Formula: gravitational constant * mass / radius^2)
+    /// </summary>
+    /// <param name="differenceUnity"></param>
+    /// <param name="mass"></param>
+    /// <returns></returns>
     public static float GetAcceleration(float differenceUnity, float mass)
     {
         float r = differenceUnity * S;
@@ -180,7 +188,9 @@ public class CelestialBody : MonoBehaviour
         return g;
     }
 
-    //Get the total acceleration of all nearby Cb's, and average direction
+    /// <summary>
+    /// Get the mean acceleration due to all relevent celestial bodies, with the direction and magnitude 
+    /// </summary>
     public void SetTotalAcceleration()
     {
         Vector3 totalAcceleration = Vector3.zero;
@@ -197,26 +207,62 @@ public class CelestialBody : MonoBehaviour
             float mass = cb.useRelativeMass ? cb.RelativeMass : cb.Mass;
             totalAcceleration += GetAcceleration(magnitude, mass) * difference.normalized;
         }
-        TotalAcceleration = totalAcceleration / celestialBodiesEvaluated;
-    }
+        if (celestialBodiesEvaluated != 0)
+        {
+            TotalAcceleration = totalAcceleration / celestialBodiesEvaluated;
+        }
 
-    //Calculate the velocity
-    public void SetVelocity(Vector3 totalAcceleration)
-    {
-        Velocity += totalAcceleration * Time.fixedDeltaTime * T;
+        //Temp manually set acceleration
+        //TotalAcceleration = new Vector3(10, 0, 0);
     }
 
     /// <summary>
-    /// Set the transform to the new position based on the total acceleration due to gravity of all relavant celestial bodies
+    /// Calculate the velocity based on acceleration, in real world units.
     /// </summary>
     /// <param name="totalAcceleration"></param>
-    /// <param name="direction"></param>
-    public void SetPosition(Vector3 totalAcceleration)
+    public void SetVelocity()
     {
-        float initialVelocity = Velocity.magnitude * Time.fixedDeltaTime * T;
-        float newPosition = 0.5f * (totalAcceleration.magnitude * Mathf.Pow(Time.fixedDeltaTime * T, 2));
-        Vector3 deltaPos = (initialVelocity + newPosition) * totalAcceleration.normalized;
-        transform.position += deltaPos;
+        Velocity += TotalAcceleration * Time.fixedDeltaTime * T;
+    }
+
+    /// <summary>
+    /// Apply gravity. Get the distance traveled based on the velocity and total acceleration. Formula: distance = initial velocity * time + 1/2 * acceleration * time^2
+    /// </summary>
+    public void SetPosition()
+    {
+        //Get the total acceleration
+        SetTotalAcceleration();
+
+        //Distance due to acceleration formula.
+        Vector3 distance = (Velocity * Time.fixedDeltaTime * T) + (0.5f * (TotalAcceleration * Mathf.Pow(Time.fixedDeltaTime * T, 2)));
+
+        //Update the velocity figure after determining distance. This is not used in this method to calculate position.
+        SetVelocity();
+
+        //Scale the result
+        distance *= SD;
+        transform.position += distance;
+    }
+
+    public void GravityArrow(Vector3 totalAcceleration)
+    {
+        //Point arrow at average gravity
+        if (totalAcceleration.sqrMagnitude > 0.0001f)
+        {
+            //Get average of all gravity vectors, less this
+            Vector3 dir = totalAcceleration.normalized;
+            Vector3 offset = dir * 0.1f;
+            float scaledDiameter = Radius / S;
+            Vector3 start = scaledDiameter * dir + offset + transform.position;
+            if (arrowClone == null)
+            {
+                arrowClone = Instantiate(SpaceController.Instance.ArrowPrefab);
+                arrowClone.transform.SetParent(transform, false);
+            }
+            Quaternion lookAt = Quaternion.LookRotation(dir, Vector3.up);
+            arrowClone.transform.SetPositionAndRotation(start, lookAt);
+            arrowClone.transform.localScale = new Vector3(gravityArrowSize, gravityArrowSize, gravityArrowSize);
+        }
     }
 
     ///// <summary>
@@ -292,7 +338,7 @@ public class CelestialBody : MonoBehaviour
     /// Return percentage of mass increase due to speed
     /// </summary>
     /// <param name="celestialBody"></param>
-    public float CalculateRelativeMass(float speed)
+    public float GetRelativeMass(float speed)
     {   
         //if (speed >= c)
         //{
@@ -311,24 +357,24 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void UpdateSpeed()
     {
-        Speed = Velocity.magnitude * S;
+        Speed = Velocity.magnitude;
         //Speed = Mathf.Clamp(Speed, 0f, c);
     }
 
-    /// <summary>
-    /// Place  an arrow on the model to present the direction of gravity
-    /// </summary>
-    public void GravityArrow(Vector3 startPoint, Vector3 direction)
-    {
-        if (arrowClone == null)
-        {
-            arrowClone = Instantiate(SpaceController.Instance.ArrowPrefab);
-            arrowClone.transform.SetParent(transform, false);
-        }
-        Quaternion lookAt = Quaternion.LookRotation(direction, Vector3.up);
-        arrowClone.transform.SetPositionAndRotation(startPoint, lookAt);
-        arrowClone.transform.localScale = new Vector3(gravityArrowSize, gravityArrowSize, gravityArrowSize);
-    }    
+    ///// <summary>
+    ///// Place  an arrow on the model to present the direction of gravity
+    ///// </summary>
+    //public void GravityArrow(Vector3 startPoint, Vector3 direction)
+    //{
+    //    if (arrowClone == null)
+    //    {
+    //        arrowClone = Instantiate(SpaceController.Instance.ArrowPrefab);
+    //        arrowClone.transform.SetParent(transform, false);
+    //    }
+    //    Quaternion lookAt = Quaternion.LookRotation(direction, Vector3.up);
+    //    arrowClone.transform.SetPositionAndRotation(startPoint, lookAt);
+    //    arrowClone.transform.localScale = new Vector3(gravityArrowSize, gravityArrowSize, gravityArrowSize);
+    //}    
 
     //Add the object to the Celestial body list
     public void Register(CelestialBody celestialBody)

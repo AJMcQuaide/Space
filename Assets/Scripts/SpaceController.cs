@@ -120,6 +120,11 @@ public class SpaceController : MonoBehaviour
             WarpGrid(meshFilter.mesh);
         }
         meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
+
+        if (Frames < 50)
+        {
+            Frames++;
+        }
     }
 
     private void Update()
@@ -192,22 +197,22 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    void FPS()
-    {
-        //FPS count only works with time multiplier of 1
-        //Use in Update
-        if (timeCount >= 1f)
-        {
-            Debug.Log("FPS: " + frames / timeCount);
-            timeCount = 0;
-            frames = 0;
-        }
-        else
-        {
-            timeCount += Time.deltaTime;
-            frames++;
-        }
-    }
+    //void FPS()
+    //{
+    //    //FPS count only works with time multiplier of 1
+    //    //Use in Update
+    //    if (timeCount >= 1f)
+    //    {
+    //        //Debug.Log("FPS: " + frames / timeCount);
+    //        timeCount = 0;
+    //        frames = 0;
+    //    }
+    //    else
+    //    {
+    //        timeCount += Time.deltaTime;
+    //        frames++;
+    //    }
+    //}
 
     public float GetMass(PlanetType planet)
     {

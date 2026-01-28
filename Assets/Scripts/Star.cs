@@ -7,10 +7,14 @@ public class Star : CelestialBody
         if (Application.isPlaying && SpaceController.Instance.Frames < 50)
         {
             UpdateSpeed();
-            SetPosition(TotalAcceleration);
+            SetPosition();
+            if (ShowGravityArrow)
+            {
+                GravityArrow(TotalAcceleration);
+            }
             if (UseRelativeMass)
             {
-                RelativeMass = Mass * CalculateRelativeMass(Speed);
+                RelativeMass = Mass * GetRelativeMass(Speed);
             }
         }
     }

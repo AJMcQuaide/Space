@@ -135,9 +135,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sun
       objectReference: {fileID: 0}
+    - target: {fileID: 655178659559779157, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3904172581075527885, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
+      propertyPath: isKinematic
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8094519788987611281, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8094519788987611281, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -352,6 +360,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4b02bde0de160204496bcc4c86445566, type: 3}
+--- !u!114 &810481646 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3904172581075527885, guid: c8e1a43b4366250469de46df23ddaa9f, type: 3}
+  m_PrefabInstance: {fileID: 535341540}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8bb2a04a4b8a7324e93c4366d144eb49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &963194225
 GameObject:
   m_ObjectHideFlags: 0
@@ -533,9 +552,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pluto
       objectReference: {fileID: 0}
+    - target: {fileID: 142912650216394716, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 583951614415315923, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -500
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 583951614415315923, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: m_LocalPosition.y
@@ -574,8 +597,24 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: warpGrid
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: startSpeed
+      value: 100000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: isKinematic
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: initialVelocity
+      value: 100000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: radiusReference
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -593,18 +632,18 @@ PrefabInstance:
     - target: {fileID: 959037109775912466, guid: 22fd77b653caf3348876364af60f26b9, type: 3}
       propertyPath: WhatToCheck
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 810481646}
     - target: {fileID: 5510215787787395120, guid: 22fd77b653caf3348876364af60f26b9, type: 3}
       propertyPath: m_Name
       value: CheckAccel
       objectReference: {fileID: 0}
     - target: {fileID: 5510215787787395120, guid: 22fd77b653caf3348876364af60f26b9, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8349574731631570828, guid: 22fd77b653caf3348876364af60f26b9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 8349574731631570828, guid: 22fd77b653caf3348876364af60f26b9, type: 3}
       propertyPath: m_LocalPosition.y

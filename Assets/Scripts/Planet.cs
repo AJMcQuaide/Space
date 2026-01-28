@@ -1,3 +1,4 @@
+using UnityEditor.Search;
 using UnityEngine;
 
 public class Planet : CelestialBody
@@ -12,12 +13,15 @@ public class Planet : CelestialBody
         if (Application.isPlaying && SpaceController.Instance.Frames < 50)
         {
             UpdateSpeed();
-            SetPosition(TotalAcceleration);
+            SetPosition();
+            if (ShowGravityArrow)
+            {
+                GravityArrow(TotalAcceleration);
+            }
             if (UseRelativeMass)
             {
-                RelativeMass = Mass * CalculateRelativeMass(Speed);
+                RelativeMass = Mass * GetRelativeMass(Speed);
             }
-            Debug.Log("Velocity: " + Velocity.x + " Position:" + transform.position.x);
         }
     }
 
