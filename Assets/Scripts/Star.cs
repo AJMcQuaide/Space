@@ -4,13 +4,13 @@ public class Star : CelestialBody
 {
     private void FixedUpdate()
     {
-        if (Application.isPlaying && SpaceController.Instance.Frames < 50)
+        if (Application.isPlaying && SpaceController.Instance.Frames < SpaceController.Instance.simulationLength)
         {
             UpdateSpeed();
             SetPosition();
             if (ShowGravityArrow)
             {
-                GravityArrow(TotalAcceleration);
+                GravityArrow();
             }
             if (UseRelativeMass)
             {

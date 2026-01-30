@@ -77,11 +77,14 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     bool useGPU;
 
-    float timeCount = 0;
     [SerializeField]
     float frames = 0;
     public float Frames { get { return frames; } set { frames = value; } }
     bool runOnce = false;
+
+    public int simulationLength;
+
+    float timeCount;
 
     void Awake()
     {
@@ -121,7 +124,7 @@ public class SpaceController : MonoBehaviour
         }
         meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
 
-        if (Frames < 50)
+        if (Frames < simulationLength)
         {
             Frames++;
         }
@@ -152,7 +155,7 @@ public class SpaceController : MonoBehaviour
                     //Distance Vector from the mesh vertex to the celestial body
                     Vector3 difference = Cb[y].transform.position - grid.transform.TransformPoint(initial[i]);
                     //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
-                    offset = CelestialBody.GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
+                    offset = (float)CelestialBody.GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
                     if (offset.sqrMagnitude > difference.sqrMagnitude)
                     {
                         offset = difference;
@@ -181,14 +184,14 @@ public class SpaceController : MonoBehaviour
             {
                 CountToWarp++;
                 CBWarpPos.Add(cb.transform.position);
-                CBWarpMass.Add(cb.Mass);
-                CBMaxAccel.Add(cb.MaxAcceleration);
+                CBWarpMass.Add((float)cb.Mass);
+                CBMaxAccel.Add((float)cb.MaxAcceleration);
             }
         }
         if (CBWarpMass.Count > 0)
         {
             material.SetFloat("_GridMultiplier", gridMultiplier);
-            material.SetInt("_ScaleFactor", CelestialBody.S);
+            material.SetInt("_ScaleFactor", (int)CelestialBody.S);
             material.SetInt("_CBCount", CountToWarp);
 
             material.SetVectorArray("_Position", CBWarpPos);
@@ -197,22 +200,22 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    //void FPS()
-    //{
-    //    //FPS count only works with time multiplier of 1
-    //    //Use in Update
-    //    if (timeCount >= 1f)
-    //    {
-    //        //Debug.Log("FPS: " + frames / timeCount);
-    //        timeCount = 0;
-    //        frames = 0;
-    //    }
-    //    else
-    //    {
-    //        timeCount += Time.deltaTime;
-    //        frames++;
-    //    }
-    //}
+    void FPS()
+    {
+        //FPS count only works with time multiplier of 1
+        //Use in Update
+        if (timeCount >= 1f)
+        {
+            //Debug.Log("FPS: " + frames / timeCount);
+            timeCount = 0;
+            frames = 0;
+        }
+        else
+        {
+            timeCount += Time.deltaTime;
+            frames++;
+        }
+    }
 
     public float GetMass(PlanetType planet)
     {
