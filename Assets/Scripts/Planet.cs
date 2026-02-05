@@ -1,26 +1,17 @@
-using UnityEditor.Search;
 using UnityEngine;
 
 public class Planet : CelestialBody
 {
-    private void Start()
-    {
-
-    }
-
     private void FixedUpdate()
     {
-        if (Application.isPlaying && SpaceController.Instance.Frames < SpaceController.Instance.simulationLength)
+        if (Application.isPlaying && sc.Frames < SpaceController.Instance.simulationLength && IsKinematic == false)
         {
             UpdateSpeed();
             SetPosition();
+            RelativeMass = Mass * LorentzFactor;
             if (ShowGravityArrow)
             {
                 GravityArrow();
-            }
-            if (UseRelativeMass)
-            {
-                RelativeMass = Mass * GetRelativeMass(Speed);
             }
         }
     }

@@ -234,12 +234,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   massReference: 1
-  diameterReference: 1
+  massMultiplier: 0
+  radiusReference: 1
+  radiusMultiplier: 0
   model: {fileID: 1842956839380013811}
   mass: 3.3e+23
+  massIncrease: 0
   radius: 2439500
-  startSpeed: 0
-  acceleration: 0
+  initialVelocity: 0
+  speed: 0
+  totalAcceleration:
+    x: 0
+    y: 0
+    z: 0
   planetColor: {r: 0.6431373, g: 0.6431373, b: 0.6431373, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 1}
   trailWidth: 0.1

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -24,13 +25,6 @@ public class SpaceController : MonoBehaviour
 
     [SerializeField]
     float[] RadiusArray;
-
-    /// <summary>
-    /// 1x = Scale factor seconds
-    /// </summary>
-    [SerializeField]
-    float timeMultiplier;
-    public float TimeMultiplier { get { return timeMultiplier; } }
 
     [SerializeField, Range(0f, 1000f)]
     float gridMultiplier;
@@ -73,16 +67,22 @@ public class SpaceController : MonoBehaviour
     GameObject arrowPrefab;
     public GameObject ArrowPrefab { get { return arrowPrefab; } }
 
-    //temp
-    [SerializeField]
-    bool useGPU;
+    bool useGPU = true;
 
     [SerializeField]
     float frames = 0;
     public float Frames { get { return frames; } set { frames = value; } }
     bool runOnce = false;
 
+    /// <summary>
+    /// How many frames the simulation lasts
+    /// </summary>
     public int simulationLength;
+
+    /// <summary>
+    /// The multiplier for time in the simulation
+    /// </summary>
+    public double TimeScale;
 
     float timeCount;
 
@@ -96,7 +96,6 @@ public class SpaceController : MonoBehaviour
             meshRenderer = grid.GetComponent<MeshRenderer>();
             meshFilter.sharedMesh.GetVertices(initial);
             result = new List<Vector3>(initial);
-            Time.timeScale = timeMultiplier;
         }
     }
 
