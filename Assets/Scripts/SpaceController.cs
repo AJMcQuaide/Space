@@ -86,16 +86,28 @@ public class SpaceController : MonoBehaviour
 
     float timeCount;
 
+    [SerializeField]
+    bool contactsEnabled;
+    public bool ContactsEnabled { get { return contactsEnabled; } }
+
+    [SerializeField]
+    bool useGravity;
+    public bool UseGravity { get { return useGravity; } }
+
     void Awake()
     {
         //Singleton
         if (Instance != this) { Destroy(gameObject); }
         else
         {
+            //Set Mesh if using CPU
             meshFilter = grid.GetComponent<MeshFilter>();
             meshRenderer = grid.GetComponent<MeshRenderer>();
             meshFilter.sharedMesh.GetVertices(initial);
             result = new List<Vector3>(initial);
+
+            //Set Fixed Update
+            Time.fixedDeltaTime = 0.01f;
         }
     }
 
@@ -107,6 +119,10 @@ public class SpaceController : MonoBehaviour
 
     void FixedUpdate()
     {
+        //Set acceleration and contacts for all Cb's
+        SetPhysics();
+
+        //Grid Warp
         if (useGPU)
         {
             if (runOnce)
@@ -123,6 +139,7 @@ public class SpaceController : MonoBehaviour
         }
         meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
 
+        //FPS
         if (Frames < simulationLength)
         {
             Frames++;
@@ -170,7 +187,10 @@ public class SpaceController : MonoBehaviour
         runOnce = true;
     }
 
-    //Set shader properties
+    /// <summary>
+    /// Set the shader properties for warp grid
+    /// </summary>
+    /// <param name="material"></param>
     void SetShader(Material material)
     {
         int CountToWarp = 0;
@@ -199,6 +219,24 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Set physics properties of all celestrial bodies
+    /// </summary>
+    public void SetPhysics()
+    {
+        for (int i = 0; i < Cb.Count; i++)
+        {
+            //Determine overall acceleration based on all celestial bodies
+            Cb[i].TotalAcceleration = Cb[i].SetAcceleration(Cb[i]);
+
+            //Alter velocity of this object, and the object contacted if there is contact
+            Cb[i].SetContact(Cb[i]);
+        }
+    }
+
+    /// <summary>
+    /// Calculate app FPS
+    /// </summary>
     void FPS()
     {
         //FPS count only works with time multiplier of 1

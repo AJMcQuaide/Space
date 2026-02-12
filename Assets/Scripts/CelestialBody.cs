@@ -120,10 +120,10 @@ public class CelestialBody : MonoBehaviour
     [SerializeField, Range(0.1f, 10f)]
     float gravityArrowSize = 1f;
 
-    /// <summary>
-    /// The total gravity vectors added together for all cb's acting on this
-    /// </summary>
-    //Vector3 totalGravity = Vector3.zero;
+    Vector3 previousPosition;
+    public Vector3 PreviousPosition { get { return previousPosition; } }
+
+    public bool ContactChecked { get; set; } = false;
 
     //Set scale and color among other things
     public void SetProperties()
@@ -172,11 +172,61 @@ public class CelestialBody : MonoBehaviour
         double3 transformForward = new(transform.forward.x, transform.forward.y, transform.forward.z);
 
         //Clamp initialvelocity and set to Velocity
-        Velocity = math.clamp(initialVelocity, 0d, c-1d) * transformForward;
+        Velocity = math.clamp(initialVelocity, 0d, c * 0.99999d) * transformForward;
 
         //Set position double to the transform at start
         double3 transformPosition = new(transform.position.x, transform.position.y, transform.position.z);
         Position = transformPosition;
+
+        //Set previous position equal to starting position
+        previousPosition = transform.position;
+    }
+
+    /// <summary>
+    /// Loop through all Celestial bodies and check for contacts and apply a reflection velocity if needed.
+    /// </summary>
+    public void SetContact(CelestialBody cb1)
+    {
+        //Break out of another cb already contacted this and set it's velocity
+        if (cb1.ContactChecked == true)
+        {
+            //Debug.Log(gameObject.name + " Skipped check");
+            cb1.ContactChecked = false;
+            return;
+        }
+
+        //Loop this (cb1) through other (cb2)
+        foreach (CelestialBody cb2 in sc.Cb)
+        {
+            if (cb2 != cb1)
+            {
+                //Convert to double
+                double3 p2 = new(cb2.transform.position.x, cb2.transform.position.y, cb2.transform.position.z);
+                double3 p1 = new(cb1.position.x, cb1.position.y, cb1.position.z);
+                double3 difference = p2 - p1;
+
+                //Debug
+                Debug.DrawLine(transform.position, transform.position + new Vector3((float)Velocity.x * 0.0005f, (float)Velocity.y * 0.0005f, (float)Velocity.z * 0.0005f));
+
+                //Contact and calculation reflection
+                if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
+                {
+                    //Debug.Log("Before: " + gameObject.name + " " + cb1.Velocity + " Cb2: " + cb2.Velocity);
+
+                    //Calculate the velocity of the cb being evaluated
+                    double3 iv1 = cb1.Velocity;
+                    double3 iv2 = cb2.Velocity;
+                    double3 v1 = Reflect(difference, iv1, iv2, cb1.Mass, cb2.Mass);
+                    cb1.Velocity = v1;
+                    //Calculate the velocity of the other cb that was contacted
+                    double3 v2 = Reflect(difference, iv2, iv1, cb2.Mass, cb1.Mass);
+                    cb2.Velocity = v2;
+                    cb2.ContactChecked = true;
+
+                    //Debug.Log("After: " + gameObject.name + " " + cb1.Velocity + " Cb2: " + cb2.Velocity);
+                }
+            }
+        }
     }
 
     /// <summary>
@@ -193,33 +243,64 @@ public class CelestialBody : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the mean acceleration due to all relevent celestial bodies, with the direction and magnitude 
+    /// Loop through all Celestial bodies and set total acceleration 
     /// </summary>
-    public void SetTotalAcceleration()
+    public double3 SetAcceleration(CelestialBody _thisCB)
     {
-        double3 totalAcceleration = double3.zero;
+        double3 accelerationVector = double3.zero;
+        if (sc.UseGravity == false)
+        {
+            return accelerationVector;
+        }
         int celestialBodiesEvaluated = 0;
+
+        //Loop this Cb through all other Cb's
         foreach (CelestialBody cb in sc.Cb)
         {
-            if (cb != this && isKinematic == false && ignoreOwnType == false || ignoreOwnType && cb.GetType() != this.GetType())
+            if (cb != _thisCB && _thisCB.isKinematic == false && _thisCB.ignoreOwnType == false || _thisCB.ignoreOwnType && cb.massReference != _thisCB.massReference)
             {
+               //Convert to double
+                double3 otherCB = new(cb.PreviousPosition.x, cb.PreviousPosition.y, cb.PreviousPosition.z);
+                double3 thisCB = new(_thisCB.transform.position.x, _thisCB.transform.position.y, _thisCB.transform.position.z);
+                double3 difference = otherCB - thisCB;
+
+                //Acceleration
                 celestialBodiesEvaluated++;
-                double3 cbTransformPosition = new(cb.transform.position.x, cb.transform.position.y, cb.transform.position.z);
-                double3 transformPosition = new(transform.position.x, transform.position.y, transform.position.z);
-                double3 difference = cbTransformPosition - transformPosition;
                 double magnitude = math.length(difference);
                 double acceleration = GetAcceleration(magnitude, cb.RelativeMass);
                 acceleration = Math.Clamp(acceleration, 0d, cb.MaxAcceleration);
-                totalAcceleration += acceleration * math.normalize(difference);
+                accelerationVector += acceleration * math.normalize(difference);
+
+                //Debug.Log("Frames: " + sc.Frames + " Object: " + gameObject.name + " Has distance of: " + magnitude + " Other: " + otherCB + " This: " + thisCB);
             }
         }
-        if (celestialBodiesEvaluated != 0)
-        {
-            TotalAcceleration = totalAcceleration / celestialBodiesEvaluated;
-        }
+        return accelerationVector;
+    }
 
-        //Temp
-        TotalAcceleration = new double3(100d, 0d, 0d);
+    /// <summary>
+    /// Calculate the reflection vector on collision of a rigid sphere
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="v1"></param>
+    /// <param name="v2"></param>
+    /// <param name="m1"></param>
+    /// <param name="m2"></param>
+    /// <returns></returns>
+    public double3 Reflect(double3 n, double3 v1, double3 v2, double m1, double m2)
+    {
+        n = math.normalize(n);
+        double3 vDelta = v1 - v2;
+        double vDeltaDotN = math.dot(vDelta, math.normalize(n));
+        double massDelta = (2 * m2) / (m1 + m2);
+        double3 reflection = v1 - (massDelta * vDeltaDotN * n);
+
+        //if (gameObject.name == "A")
+        //{
+        //    Debug.Log("");
+        //}
+        //Debug.Log(gameObject.name + " Input velocity: " + v1 + " reflection: " + reflection);
+
+        return reflection;
     }
 
     /// <summary>
@@ -236,61 +317,36 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void SetPosition()
     {
-        //Get the total acceleration
-        SetTotalAcceleration();
+        ////Check for contacts
+        //SetContact();
 
-        SetLorentzFactor();
+        ////Get the total acceleration and contacts
+        //SetAcceleration();
+
         //Percentage of energy contributing to acceleration
+        SetLorentzFactor();
         double relativity = 1d / math.pow(LorentzFactor, 3);
 
         //Distance due to acceleration formula.
         double3 distance = (Velocity * (double)Time.fixedDeltaTime * sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * sc.TimeScale, 2)));
+        distance = distance * SD * relativity;
 
         //Scale the result
-        position += distance * SD * relativity;
+        position += distance;
 
         //Update the velocity, which is to be used in the next frame and used as "initial velocity"
         SetVelocity();
 
+        previousPosition = transform.position;
         transform.position = new Vector3((float)position.x, (float)position.y, (float)position.z);
+
+        //Debug.Log("Frames: " + sc.Frames + " Object: " + gameObject.name + " Moved");
     }
-
-    ///// <summary>
-    ///// Defunct method
-    ///// </summary>
-    //public double3 RelativePosition()
-    //{
-    //    //Time
-    //    double t = (double)Time.fixedDeltaTime * sc.TimeScale;
-    //    //Speed of light squared divided by acceleration
-    //    double c2a = c * c / math.length(TotalAcceleration);
-    //    //Acceleration times time, containing the direction of acceleration
-    //    double3 at = TotalAcceleration * t;
-    //    //Velocity initial times lorentz factor
-    //    double3 v0l = Velocity * lorentzFactor;
-    //    //v0l plus at
-    //    double3 v0latc = (v0l + at) / c;
-
-    //    double3 squared = math.pow(v0latc, 2d);
-
-    //    double3 plus1 = 1d + squared;
-
-    //    double3 x = math.sqrt(plus1);
-
-    //    SetLorentzFactor();
-    //    double3 y = x - LorentzFactor;
-
-    //    //Enter into the formula for relavtive position given initial velocity, and constant acceleration
-    //    double3 formula = c2a * y;
-    //    Debug.Log("Frame: " + sc.Frames  + "  Name: " + gameObject.name  + "  t: " + t + "  c2a: " + c2a + "  v initial: " + Velocity + "  at: " + at + "  v0l: " + v0l + "  v0latc: " + v0latc + "  RETURN: " + formula*SD + "  Velocity: " + Velocity + "  Total Acceleration: " + TotalAcceleration + "  Squaured: " + squared + "  Plus1: " + plus1 + "  x: "  + x + "  y: " + y + "  Lorentz Factor: " + lorentzFactor);
-
-    //    return formula * SD;
-    //}
 
     public void GravityArrow()
     {
         //Point arrow at average gravity
-        if (math.lengthsq(TotalAcceleration) > 0.0001f)
+        if (math.lengthsq(TotalAcceleration) != 0f)
         {
             Vector3 totalAcceleration = new((float)TotalAcceleration.x, (float)TotalAcceleration.y, (float)TotalAcceleration.z);
             Vector3 dir = totalAcceleration.normalized;
