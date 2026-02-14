@@ -293,6 +293,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth
       value: 0.02
       objectReference: {fileID: 0}
@@ -392,6 +396,10 @@ PrefabInstance:
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: warpGrid
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth
@@ -939,9 +947,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   attachToTarget: 0
   rotate: 1
-  rotateSpeed: 0
+  rotateSpeed: 0.05
   target: {fileID: 1286838023}
-  followDistance: 10
+  followDistance: 7
 --- !u!1001 &973761404
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1298,6 +1306,10 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
+      propertyPath: useGravity
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: timeMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -1376,8 +1388,20 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5474955336293168598, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+      propertyPath: ArrowSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474955336293168598, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: isKinematic
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474955336293168598, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+      propertyPath: physicsArrow
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5474955336293168598, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+      propertyPath: physicsArrows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5474955336293168598, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: showGravityArrow
@@ -1562,6 +1586,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth
       value: 0.02
       objectReference: {fileID: 0}
@@ -1732,6 +1760,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth
       value: 0.02
       objectReference: {fileID: 0}
@@ -1833,6 +1865,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth
       value: 0.02
       objectReference: {fileID: 0}
@@ -1932,6 +1968,10 @@ PrefabInstance:
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: warpGrid
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2285960616907130382, guid: 91d5f2a4a746f7242965a49e8fdbf005, type: 3}
       propertyPath: trailWidth

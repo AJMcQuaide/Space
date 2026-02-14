@@ -9,9 +9,9 @@ public class Star : CelestialBody
             UpdateSpeed();
             SetPosition();
             RelativeMass = Mass * LorentzFactor;
-            if (ShowGravityArrow)
+            if (PhysicsArrows)
             {
-                GravityArrow();
+                PositionArrow(TotalAcceleration, Velocity);
             }
         }
     }

@@ -9,9 +9,9 @@ public class Moon : CelestialBody
             UpdateSpeed();
             SetPosition();
             RelativeMass = Mass * LorentzFactor;
-            if (ShowGravityArrow)
+            if (PhysicsArrows)
             {
-                GravityArrow();
+                PositionArrow(TotalAcceleration, Velocity);
             }
         }
     }

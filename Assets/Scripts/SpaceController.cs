@@ -1,6 +1,4 @@
-using JetBrains.Annotations;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpaceController : MonoBehaviour
@@ -94,6 +92,9 @@ public class SpaceController : MonoBehaviour
     bool useGravity;
     public bool UseGravity { get { return useGravity; } }
 
+    [SerializeField]
+    float physicsTimeStep;
+
     void Awake()
     {
         //Singleton
@@ -107,7 +108,9 @@ public class SpaceController : MonoBehaviour
             result = new List<Vector3>(initial);
 
             //Set Fixed Update
-            Time.fixedDeltaTime = 0.01f;
+            if (physicsTimeStep == 0)
+                physicsTimeStep = 0.01f;
+            Time.fixedDeltaTime = physicsTimeStep;
         }
     }
 

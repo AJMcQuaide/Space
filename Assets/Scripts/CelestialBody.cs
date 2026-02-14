@@ -111,14 +111,15 @@ public class CelestialBody : MonoBehaviour
     double maxAcceleration;
     public double MaxAcceleration { get { return maxAcceleration; } set { maxAcceleration = value; } }
 
-    GameObject arrowClone;
+    Arrow accelerationArrow;
+    Arrow velocityArrow;
 
     [SerializeField]
-    bool showGravityArrow = true;
-    public bool ShowGravityArrow { get { return showGravityArrow; } }
+    bool physicsArrow = true;
+    public bool PhysicsArrows { get { return physicsArrow; } }
 
     [SerializeField, Range(0.1f, 10f)]
-    float gravityArrowSize = 1f;
+    float ArrowSize = 1f;
 
     Vector3 previousPosition;
     public Vector3 PreviousPosition { get { return previousPosition; } }
@@ -180,6 +181,17 @@ public class CelestialBody : MonoBehaviour
 
         //Set previous position equal to starting position
         previousPosition = transform.position;
+
+        //Arrows
+        if (PhysicsArrows)
+        {
+            accelerationArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
+            accelerationArrow.transform.SetParent(transform, false);
+            accelerationArrow.Color = Color.yellow;
+            velocityArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
+            velocityArrow.transform.SetParent(transform, false);
+            velocityArrow.Color = Color.white;
+        }
     }
 
     /// <summary>
@@ -205,14 +217,9 @@ public class CelestialBody : MonoBehaviour
                 double3 p1 = new(cb1.position.x, cb1.position.y, cb1.position.z);
                 double3 difference = p2 - p1;
 
-                //Debug
-                Debug.DrawLine(transform.position, transform.position + new Vector3((float)Velocity.x * 0.0005f, (float)Velocity.y * 0.0005f, (float)Velocity.z * 0.0005f));
-
                 //Contact and calculation reflection
                 if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
                 {
-                    //Debug.Log("Before: " + gameObject.name + " " + cb1.Velocity + " Cb2: " + cb2.Velocity);
-
                     //Calculate the velocity of the cb being evaluated
                     double3 iv1 = cb1.Velocity;
                     double3 iv2 = cb2.Velocity;
@@ -222,8 +229,6 @@ public class CelestialBody : MonoBehaviour
                     double3 v2 = Reflect(difference, iv2, iv1, cb2.Mass, cb1.Mass);
                     cb2.Velocity = v2;
                     cb2.ContactChecked = true;
-
-                    //Debug.Log("After: " + gameObject.name + " " + cb1.Velocity + " Cb2: " + cb2.Velocity);
                 }
             }
         }
@@ -270,8 +275,6 @@ public class CelestialBody : MonoBehaviour
                 double acceleration = GetAcceleration(magnitude, cb.RelativeMass);
                 acceleration = Math.Clamp(acceleration, 0d, cb.MaxAcceleration);
                 accelerationVector += acceleration * math.normalize(difference);
-
-                //Debug.Log("Frames: " + sc.Frames + " Object: " + gameObject.name + " Has distance of: " + magnitude + " Other: " + otherCB + " This: " + thisCB);
             }
         }
         return accelerationVector;
@@ -294,12 +297,6 @@ public class CelestialBody : MonoBehaviour
         double massDelta = (2 * m2) / (m1 + m2);
         double3 reflection = v1 - (massDelta * vDeltaDotN * n);
 
-        //if (gameObject.name == "A")
-        //{
-        //    Debug.Log("");
-        //}
-        //Debug.Log(gameObject.name + " Input velocity: " + v1 + " reflection: " + reflection);
-
         return reflection;
     }
 
@@ -317,12 +314,6 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void SetPosition()
     {
-        ////Check for contacts
-        //SetContact();
-
-        ////Get the total acceleration and contacts
-        //SetAcceleration();
-
         //Percentage of energy contributing to acceleration
         SetLorentzFactor();
         double relativity = 1d / math.pow(LorentzFactor, 3);
@@ -343,25 +334,45 @@ public class CelestialBody : MonoBehaviour
         //Debug.Log("Frames: " + sc.Frames + " Object: " + gameObject.name + " Moved");
     }
 
-    public void GravityArrow()
+    public void PositionArrow(double3 a, double3 v)
     {
         //Point arrow at average gravity
-        if (math.lengthsq(TotalAcceleration) != 0f)
+        if (math.lengthsq(a) >= 0.0001d)
         {
-            Vector3 totalAcceleration = new((float)TotalAcceleration.x, (float)TotalAcceleration.y, (float)TotalAcceleration.z);
-            Vector3 dir = totalAcceleration.normalized;
-            Vector3 offset = dir * 0.1f;
-            float scaledDiameter = Radius / (float)S;
-            Vector3 start = scaledDiameter * dir + offset + transform.position;
-            if (arrowClone == null)
+            if (accelerationArrow.gameObject.activeSelf == false)
             {
-                arrowClone = Instantiate(SpaceController.Instance.ArrowPrefab);
-                arrowClone.transform.SetParent(transform, false);
+                accelerationArrow.gameObject.SetActive(true);
             }
-            Quaternion lookAt = Quaternion.LookRotation(dir, Vector3.up);
-            arrowClone.transform.SetPositionAndRotation(start, lookAt);
-            arrowClone.transform.localScale = new Vector3(gravityArrowSize, gravityArrowSize, gravityArrowSize);
+            Arrow(a, accelerationArrow);
         }
+        else
+        {
+            accelerationArrow.gameObject.SetActive(false);
+        }
+        if (math.lengthsq(v) >= 0.0001d)
+        {
+            if (velocityArrow.gameObject.activeSelf == false)
+            {
+                velocityArrow.gameObject.SetActive(true);
+            }
+            Arrow(v, velocityArrow);
+        }
+        else
+        {
+            velocityArrow.gameObject.SetActive(false);
+        }
+    }
+
+    void Arrow(double3 i, Arrow arrow)
+    {
+        Vector3 Vector = new((float)i.x, (float)i.y, (float)i.z);
+        Vector3 dir = Vector.normalized;
+        Vector3 offset = dir * 0.1f;
+        float rad = Radius * (float)SD;
+        Vector3 pos = rad * dir + offset + transform.position;
+        Quaternion lookAt = Quaternion.LookRotation(dir, Vector3.up);
+        arrow.transform.SetPositionAndRotation(pos, lookAt);
+        arrow.transform.localScale = new Vector3(ArrowSize, ArrowSize, ArrowSize);
     }
 
     /// <summary>

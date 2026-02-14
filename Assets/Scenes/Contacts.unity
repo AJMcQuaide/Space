@@ -145,8 +145,16 @@ PrefabInstance:
       value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: trailWidth
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: physicsArrow
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: trailColor.a
@@ -178,11 +186,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: massMultiplier
-      value: 5
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
-      value: 500
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: gravityArrowSize
@@ -202,11 +210,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.2588191
+      value: 0.42261827
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.x
@@ -214,7 +222,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.9659258
+      value: -0.9063079
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.z
@@ -226,7 +234,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -150
+      value: -130
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -514,11 +522,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c1d8c980c4e0e4bb15a65daf9f0b84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attachToTarget: 0
+  attachToTarget: 1
   rotate: 0
   rotateSpeed: 0.1
   target: {fileID: 23421547}
-  followDistance: 8
+  followDistance: 3
 --- !u!1001 &1219815320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -581,7 +589,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: TimeScale
-      value: 100
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
+      propertyPath: useGravity
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: timeMultiplier
@@ -618,11 +630,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2593019405388878121, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_MinVertexDistance
-      value: 0.05
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: ArrowSize
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: trailWidth
       value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: physicsArrow
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: trailColor.a
@@ -654,11 +674,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: massMultiplier
-      value: 5
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
-      value: 500
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: gravityArrowSize
@@ -678,11 +698,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.9659259
+      value: 0.9063079
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.x
@@ -690,7 +710,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.258819
+      value: -0.42261827
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalRotation.z
@@ -702,7 +722,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -30
+      value: -50
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

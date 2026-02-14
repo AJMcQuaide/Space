@@ -59,7 +59,7 @@ public class CameraController : MonoBehaviour
     void Rotate()
     {
         //float t = Time.time * rotateSpeed;
-        timer += -Time.deltaTime * rotateSpeed;
+        timer += Time.deltaTime * rotateSpeed;
         Vector3 offset = new Vector3(Mathf.Sin(timer), 0.2f, Mathf.Cos(timer)) * followDistance;
 
         //Debug.DrawLine(target.transform.position, target.transform.position + offset);
