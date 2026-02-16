@@ -111,6 +111,18 @@ public class CelestialBody : MonoBehaviour
     double maxAcceleration;
     public double MaxAcceleration { get { return maxAcceleration; } set { maxAcceleration = value; } }
 
+    /// <summary>
+    /// Schwarzschild radius in m, real world units, not scaled (S) to Unity
+    /// </summary>
+    [SerializeField]
+    double sR;
+
+    /// <summary>
+    /// Density in kg/m^3
+    /// </summary>
+    [SerializeField]
+    float density;
+
     Arrow accelerationArrow;
     Arrow velocityArrow;
 
@@ -192,6 +204,12 @@ public class CelestialBody : MonoBehaviour
             velocityArrow.transform.SetParent(transform, false);
             velocityArrow.Color = Color.white;
         }
+
+        //Set sR
+        SchwarzschildRadius();
+
+        //Set density
+        UpdateDensity();
     }
 
     /// <summary>
@@ -393,6 +411,27 @@ public class CelestialBody : MonoBehaviour
     {
         float velocityMagnitude = (float)math.length(Velocity);
         Speed = velocityMagnitude;
+    }
+
+    /// <summary>
+    /// Calculate the density of the celestrial body
+    /// </summary>
+    public void UpdateDensity()
+    {
+        density = (float)Mass / (1.333333f * math.PI * (Radius * Radius * Radius));
+    }
+
+    /// <summary>
+    /// Calculate the point at which the celestial body becomes a black hole
+    /// </summary>
+    public void SchwarzschildRadius()
+    {
+        sR = (2f * G * Mass) / (c * c);
+        Debug.Log("Radius in m: " + Radius);
+        if (Radius <= sR)
+        {
+            Debug.LogWarning("Black Hole created for: " + gameObject.name);
+        }
     }
 
     //Add the object to the Celestial body list
