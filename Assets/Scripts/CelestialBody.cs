@@ -427,7 +427,6 @@ public class CelestialBody : MonoBehaviour
     public void SchwarzschildRadius()
     {
         sR = (2f * G * Mass) / (c * c);
-        Debug.Log("Radius in m: " + Radius);
         if (Radius <= sR)
         {
             Debug.LogWarning("Black Hole created for: " + gameObject.name);
