@@ -1,90 +1,69 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
-    Camera cam;
-
-    [SerializeField]
-    bool rotate;
-
-    [SerializeField, Range(0f, 1f)]
-    float rotateSpeed = 0.1f;
+    Transform cam;
 
     [SerializeField]
     GameObject target;
 
-    //Temp, leave the position that was last in the editor
-    Vector3 wideViewPos;
-    Quaternion wideViewRot;
+    /// <summary>
+    /// Camera radius/distance target from focus target
+    /// </summary>
+    float r = 0;
+    float rSmooth = 0;
 
-    [SerializeField]
-    float followDistance = 1f;
+    float xPos = 0;
+    float yPos = 0;
 
-    float timer = 0;
+    Vector2 mouseDelta = Vector2.zero;
+    bool leftMouseHeld = false;
+    float mouseWheelOutput = 0;
+    Vector2 MousePos = Vector2.zero;
+    Vector2 prevMousePos = Vector2.zero;
 
-    Vector2 mousePosOnClick = Vector2.zero;
-    Vector2 mouseDragDelta = Vector2.zero;
-
-    float multiplier = 0.01f;
+    [SerializeField, Range(0.1f, 10f)]
+    float zoomSensativity;
+    [SerializeField, Range(0.1f, 10f)]
+    float rotateSensativity;
+    [SerializeField, Range(0, 90f)]
+    float verticalRotationMax;
 
     private void Awake()
     {
-        cam = GetComponent<Camera>();
+        cam = GetComponent<Camera>().transform;
         if (cam == null) { Debug.LogWarning("No camera"); }
-
-        //Temp, leave the position that was last in the editor
-        wideViewPos = transform.position;
-        wideViewRot = transform.rotation;
+        if (r == 0f) r = 5f;
+        rSmooth = r;
     }
 
     private void Update()
     {
-        Zoom();
+        GetInput();
     }
 
     void FixedUpdate()
     {
-        //if (rotate)
-        //{
-        //    Rotate();
-        //}
-        //else
-        //{
-        //    //Temp, leave the position that was last in the editor
-        //    cam.transform.position = wideViewPos;
-        //    cam.transform.rotation = wideViewRot;
-        //}
 
-        if (Input.GetMouseButton(0))
-        {
-            if (mousePosOnClick == Vector2.zero)
-            {
-                mousePosOnClick = Mouse.current.position.ReadValue();
-            }
-            MouseDrag();
-        }
-        else
-        {
-            mouseDragDelta = Vector2.zero;
-            mousePosOnClick = Vector2.zero;
-        }
+        GetMouseDrag();
 
-        cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, LookAtTarget(target.transform.position), Time.deltaTime * 25f);
-        cam.transform.position = Vector3.Lerp(cam.transform.position, target.transform.position + Rotate(), Time.deltaTime * 25f);
-
-        //Debug
-        Debug.Log("Mouse Delta: " + mouseDragDelta);
-        //Debug.Log("First click: " + mousePosOnClick);
+        cam.transform.position = target.transform.position + CameraOrbit();
+        cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, LookAtTarget(target.transform.position), 1f);
     }
 
-    Vector3 Rotate()
+    Vector3 CameraOrbit()
     {
-        //float t = Time.time * rotateSpeed;
-        timer += Time.deltaTime * rotateSpeed;
-        Vector3 offset = new Vector3(Mathf.Sin(timer), 0.2f, Mathf.Cos(timer)) * followDistance;
-        return offset;
+        rSmooth = Mathf.Lerp(rSmooth, r, Time.fixedDeltaTime * 10f);
+        float x = rSmooth * Mathf.Cos(yPos) * Mathf.Cos(xPos);
+        float y = rSmooth * Mathf.Sin(yPos);
+        float z = rSmooth * Mathf.Cos(yPos) * Mathf.Sin(xPos);
+        Vector3 orbit = new(x, y, z);
+        Debug.DrawLine(target.transform.position, target.transform.position + orbit, Color.yellow);
+
+        return orbit;
     }
 
     Quaternion LookAtTarget(Vector3 target)
@@ -93,20 +72,42 @@ public class CameraController : MonoBehaviour
         return rotation;
     }
 
-    public void Zoom()
+    public void GetMouseDrag()
     {
         if (Mouse.current != null)
-        {
-            Vector2 mouseWheel = Mouse.current.scroll.ReadValue();
-            followDistance += mouseWheel.y * 0.00833f;
-            followDistance = Mathf.Clamp(followDistance, 2f, 15f);
+        {                
+            if (leftMouseHeld)
+            {
+                Vector2 unscaledMouseDelta = MousePos - prevMousePos;
+                mouseDelta = 0.002f * rotateSensativity * unscaledMouseDelta;
+            
+                xPos -= mouseDelta.x;
+                yPos -= mouseDelta.y;
+                float yMax = verticalRotationMax * Mathf.Deg2Rad;
+                yPos = Mathf.Clamp(yPos, -yMax, yMax);
+                //Debug.Log("xPos: " +  xPos * Mathf.Rad2Deg + " yPos: " + yPos * Mathf.Rad2Deg);
+            }
         }
-        else { Debug.LogError("No Mouse"); }
+        else { Debug.LogWarning("No Mouse!"); }
     }
 
-    public void MouseDrag()
+    public void GetInput()
     {
-        Vector2 unscaledMouseDelta = mousePosOnClick - Mouse.current.position.ReadValue();
-        mouseDragDelta = unscaledMouseDelta * multiplier;
+        //Left mouse is pressed
+        leftMouseHeld = Mouse.current.leftButton.isPressed;
+
+        //Mouse wheel
+        mouseWheelOutput = Mouse.current.scroll.ReadValue().y;
+        r -= mouseWheelOutput * 0.005f * zoomSensativity;
+        r = Mathf.Clamp(r, 2f, 20f);
+
+        //Mouse position on screen
+        prevMousePos = MousePos;
+        MousePos = Mouse.current.position.ReadValue();
+    }
+
+    public float NormalizeFloat(float min, float max, float current)
+    {
+        return (current - min) / (max - min);
     }
 }
