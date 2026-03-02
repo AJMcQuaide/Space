@@ -1,9 +1,8 @@
 using System;
 using UnityEngine;
 using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEditor.Callbacks;
 
+[RequireComponent(typeof(SphereCollider))]
 public class CelestialBody : MonoBehaviour
 {
     /// <summary>
@@ -210,6 +209,14 @@ public class CelestialBody : MonoBehaviour
 
         //Set density
         UpdateDensity();
+
+        //Set Layer
+        gameObject.layer = LayerMask.NameToLayer("CelestialBody");
+
+        //Set collider
+        SphereCollider collider = GetComponent<SphereCollider>();
+        collider.isTrigger = true;
+        collider.radius = scale * 0.5f;
     }
 
     /// <summary>
