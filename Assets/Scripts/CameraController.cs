@@ -20,7 +20,6 @@ public class CameraController : MonoBehaviour
     float yPos = 0;
 
     Vector2 mouseDelta = Vector2.zero;
-    bool leftMouseHeld = false;
     float mouseWheelOutput = 0;
     Vector2 MousePos = Vector2.zero;
     Vector2 prevMousePos = Vector2.zero;
@@ -96,7 +95,7 @@ public class CameraController : MonoBehaviour
     {
         if (Mouse.current != null)
         {                
-            if (leftMouseHeld)
+            if (Mouse.current.leftButton.isPressed)
             {
                 Vector2 unscaledMouseDelta = MousePos - prevMousePos;
                 mouseDelta = 0.002f * rotateSensativity * unscaledMouseDelta;
@@ -114,7 +113,7 @@ public class CameraController : MonoBehaviour
     public void GetInput()
     {
         //Left mouse is pressed
-        leftMouseHeld = Mouse.current.leftButton.isPressed;
+        //leftMouseHeld = Mouse.current.leftButton.isPressed;
 
         //Mouse wheel
         mouseWheelOutput = Mouse.current.scroll.ReadValue().y;
@@ -170,8 +169,16 @@ public class CameraController : MonoBehaviour
             if (highlightClone.activeSelf == false)
             {
                 highlightClone.SetActive(true);
-                float scale = hit.collider.GetComponent<CelestialBody>().Radius;
+                CelestialBody cb = hit.collider.GetComponent<CelestialBody>();
+                float scale = cb.Radius * (float)CelestialBody.SD * 2f;
                 highlightClone.transform.localScale = new Vector3(scale, scale, scale);
+            }
+            else
+            {
+                if (Mouse.current.leftButton.wasPressedThisFrame)
+                {
+                    target = hit.collider.gameObject;
+                }
             }
             Debug.Log("Hit celestial body!");
         }
