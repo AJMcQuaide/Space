@@ -1,8 +1,5 @@
-using System.Security.Cryptography;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.GraphicsBuffer;
 
 public class CameraController : MonoBehaviour
 {
@@ -14,8 +11,12 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Camera radius/distance target from focus target
     /// </summary>
-    float r = 0;
-    float rSmooth = 0;
+    float rad = 0;
+    /// <summary>
+    /// Camera radius/distance target from focus target smoothed
+    /// </summary>
+    float radSmoothed = 0;
+
     float xPos = 0;
     float yPos = 0;
 
@@ -30,8 +31,8 @@ public class CameraController : MonoBehaviour
     float rotateSensativity;
     [SerializeField, Range(0, 90f)]
     float verticalRotationMax;
-
     [SerializeField]
+
     GameObject highlightPrefab;
     GameObject highlightClone;
 
@@ -40,12 +41,15 @@ public class CameraController : MonoBehaviour
     /// </summary>
     Vector2 screenSize;
 
+    CelestialBody pickedCB;
+    CelestialBody previousPickedCB;
+
     private void Awake()
     {
         cam = GetComponent<Camera>();
         if (cam == null) { Debug.LogWarning("No camera"); }
-        if (r == 0f) r = 5f;
-        rSmooth = r;
+        if (rad == 0f) rad = 5f;
+        radSmoothed = rad;
         if (highlightPrefab != null)
         {
             highlightClone = Instantiate(highlightPrefab, transform.position, Quaternion.identity);
@@ -69,26 +73,28 @@ public class CameraController : MonoBehaviour
     {
         GetMouseDrag();
 
-        cam.transform.position = target.transform.position + CameraOrbit();
-        cam.transform.rotation = Quaternion.Slerp(cam.transform.rotation, LookAtTarget(target.transform.position), 1f);
+        //No Lerp
+        //cam.transform.position = target.transform.position + CameraOrbit();
+
+        //Lerp
+        transform.position = Vector3.Lerp(transform.position, target.transform.position + CameraOrbit(), Time.deltaTime * 25f);
+
+        //No Slerp
+        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
+
+        //Slerp
+        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up), 1f);
     }
 
     Vector3 CameraOrbit()
     {
-        rSmooth = Mathf.Lerp(rSmooth, r, Time.fixedDeltaTime * 10f);
-        float x = rSmooth * Mathf.Cos(yPos) * Mathf.Cos(xPos);
-        float y = rSmooth * Mathf.Sin(yPos);
-        float z = rSmooth * Mathf.Cos(yPos) * Mathf.Sin(xPos);
+        radSmoothed = Mathf.Lerp(radSmoothed, rad, Time.fixedDeltaTime * 10f);
+        float x = radSmoothed * Mathf.Cos(yPos) * Mathf.Cos(xPos);
+        float y = radSmoothed * Mathf.Sin(yPos);
+        float z = radSmoothed * Mathf.Cos(yPos) * Mathf.Sin(xPos);
         Vector3 orbit = new(x, y, z);
-        //Debug.DrawLine(target.transform.position, target.transform.position + orbit, Color.yellow);
 
         return orbit;
-    }
-
-    Quaternion LookAtTarget(Vector3 target)
-    {
-        Quaternion rotation = Quaternion.LookRotation(target - cam.transform.position, Vector3.up);
-        return rotation;
     }
 
     public void GetMouseDrag()
@@ -104,7 +110,6 @@ public class CameraController : MonoBehaviour
                 yPos -= mouseDelta.y;
                 float yMax = verticalRotationMax * Mathf.Deg2Rad;
                 yPos = Mathf.Clamp(yPos, -yMax, yMax);
-                //Debug.Log("xPos: " +  xPos * Mathf.Rad2Deg + " yPos: " + yPos * Mathf.Rad2Deg);
             }
         }
         else { Debug.LogWarning("No Mouse!"); }
@@ -112,13 +117,10 @@ public class CameraController : MonoBehaviour
 
     public void GetInput()
     {
-        //Left mouse is pressed
-        //leftMouseHeld = Mouse.current.leftButton.isPressed;
-
         //Mouse wheel
         mouseWheelOutput = Mouse.current.scroll.ReadValue().y;
-        r -= mouseWheelOutput * Time.fixedDeltaTime * zoomSensativity;
-        r = Mathf.Clamp(r, 2f, 20f);
+        rad -= mouseWheelOutput * Time.fixedDeltaTime * zoomSensativity;
+        rad = Mathf.Clamp(rad, 2f, 20f);
 
         //Mouse position on screen
         prevMousePos = MousePos;
@@ -163,15 +165,21 @@ public class CameraController : MonoBehaviour
 
         Vector3 total = x + y + z;
         //Debug.Log("raycast target: " +  total + " Mouse pos x: " + a + " Mouse pos y: " + b);
+
         if (Physics.Raycast(transform.position, total, out RaycastHit hit, total.magnitude, 1<<6))
         {
             highlightClone.transform.position = hit.collider.transform.position;
+            pickedCB = hit.collider.GetComponent<CelestialBody>();
+            if (pickedCB != previousPickedCB)
+            {
+                float scale;
+                scale = pickedCB.Radius * (float)CelestialBody.SD * 2f;
+                highlightClone.transform.localScale = new Vector3(scale, scale, scale);
+            }
+
             if (highlightClone.activeSelf == false)
             {
                 highlightClone.SetActive(true);
-                CelestialBody cb = hit.collider.GetComponent<CelestialBody>();
-                float scale = cb.Radius * (float)CelestialBody.SD * 2f;
-                highlightClone.transform.localScale = new Vector3(scale, scale, scale);
             }
             else
             {
@@ -180,6 +188,7 @@ public class CameraController : MonoBehaviour
                     target = hit.collider.gameObject;
                 }
             }
+            previousPickedCB = pickedCB;
             Debug.Log("Hit celestial body!");
         }
         else
@@ -192,8 +201,9 @@ public class CameraController : MonoBehaviour
             Debug.Log("No hit");
         }
 
-        Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
-        Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
-        Debug.DrawRay(transform.position, total, Color.blue);
+        ////Debug the picking
+        //Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
+        //Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
+        //Debug.DrawRay(transform.position, total, Color.blue);
     }
 }
