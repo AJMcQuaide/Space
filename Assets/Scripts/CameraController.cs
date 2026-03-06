@@ -189,7 +189,6 @@ public class CameraController : MonoBehaviour
                 }
             }
             previousPickedCB = pickedCB;
-            Debug.Log("Hit celestial body!");
         }
         else
         {
@@ -198,7 +197,6 @@ public class CameraController : MonoBehaviour
             {
                 highlightClone.SetActive(false);
             }
-            Debug.Log("No hit");
         }
 
         ////Debug the picking

@@ -65,12 +65,9 @@ public class SpaceController : MonoBehaviour
     GameObject arrowPrefab;
     public GameObject ArrowPrefab { get { return arrowPrefab; } }
 
-    bool useGPU = true;
-
     [SerializeField]
     float frames = 0;
     public float Frames { get { return frames; } set { frames = value; } }
-    bool runOnce = false;
 
     /// <summary>
     /// How many frames the simulation lasts
@@ -95,6 +92,10 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     float physicsTimeStep;
 
+    [SerializeField]
+    bool play;
+    public bool Play { get { return play; } }
+
     void Awake()
     {
         //Singleton
@@ -102,10 +103,11 @@ public class SpaceController : MonoBehaviour
         else
         {
             //Set Mesh if using CPU
-            meshFilter = grid.GetComponent<MeshFilter>();
+            //meshFilter = grid.GetComponent<MeshFilter>();
+            //meshFilter.sharedMesh.GetVertices(initial);
+            //result = new List<Vector3>(initial);
+
             meshRenderer = grid.GetComponent<MeshRenderer>();
-            meshFilter.sharedMesh.GetVertices(initial);
-            result = new List<Vector3>(initial);
 
             //Set Fixed Update
             if (physicsTimeStep == 0)
@@ -114,33 +116,13 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    private void Start()
-    {
-        Debug.Log("Grid Count: " + initial.Count);
-        Debug.Log("CB Count: " + Cb.Count);
-    }
-
     void FixedUpdate()
     {
         //Set acceleration and contacts for all Cb's
         SetPhysics();
 
         //Grid Warp
-        if (useGPU)
-        {
-            if (runOnce)
-            {
-                //Reset the vertices prior to GPU use
-                meshFilter.mesh.SetVertices(initial);
-                runOnce = false;
-            }
-            SetShader(meshRenderer.material);
-        }
-        else
-        {
-            WarpGrid(meshFilter.mesh);
-        }
-        meshRenderer.material.SetInt("useGPU", useGPU ? 1 : 0);
+        SetShader(meshRenderer.material);
 
         //FPS
         if (Frames < simulationLength)
@@ -187,7 +169,6 @@ public class SpaceController : MonoBehaviour
         }
         //Set the gravity distortion
         mesh.SetVertices(result);
-        runOnce = true;
     }
 
     /// <summary>

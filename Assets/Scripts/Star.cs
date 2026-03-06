@@ -2,9 +2,14 @@ using UnityEngine;
 
 public class Star : CelestialBody
 {
+    private void Awake()
+    {
+        sc = SpaceController.Instance;
+    }
+
     private void FixedUpdate()
     {
-        if (Application.isPlaying && sc.Frames < SpaceController.Instance.simulationLength && IsKinematic == false)
+        if (sc.Play && Application.isPlaying && sc.Frames < sc.simulationLength && IsKinematic == false)
         {
             UpdateSpeed();
             SetPosition();

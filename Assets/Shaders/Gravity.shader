@@ -50,7 +50,6 @@ Shader "Gravity"
             float4 _Position[100];
             float _Mass[100];
             float _MaxAcceleration[100];
-            int useGPU;
 
             float SqrLength(float3 vec)
             {
@@ -105,11 +104,8 @@ Shader "Gravity"
                 interpolators o;
 
                 //Warp
-                if (useGPU == 1)
-                {
-                    float3 vertexWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
-                    v.vertex.xyz += WarpGrid(vertexWorldPos);
-                }
+                float3 vertexWorldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+                v.vertex.xyz += WarpGrid(vertexWorldPos);
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
 
