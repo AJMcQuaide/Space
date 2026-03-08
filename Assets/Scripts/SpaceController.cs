@@ -249,4 +249,9 @@ public class SpaceController : MonoBehaviour
         float diameter = RadiusArray[(int)planet];
         return diameter;
     }
+
+    public void StartSimulation()
+    {
+        play = !play;
+    }
 }
