@@ -1556,6 +1556,54 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 139922931}
     m_Modifications:
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Hover_One
+      value: 
+      objectReference: {fileID: 2800000, guid: c2f95aa6d3fcfed42aad47183f05ec7f, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Hover_Two
+      value: 
+      objectReference: {fileID: 2800000, guid: 9b1c860a46db8b3438c03e71e714827b, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Button_One
+      value: 
+      objectReference: {fileID: 2800000, guid: 1d4efb6924cdd88469eb17f3047d6a6a, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Button_Two
+      value: 
+      objectReference: {fileID: 2800000, guid: 2de29532b9ce9564cb5622b3d9483659, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Play_Hover
+      value: 
+      objectReference: {fileID: 2800000, guid: c2f95aa6d3fcfed42aad47183f05ec7f, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Pause_Hover
+      value: 
+      objectReference: {fileID: 2800000, guid: 9b1c860a46db8b3438c03e71e714827b, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Play_Button
+      value: 
+      objectReference: {fileID: 2800000, guid: 1d4efb6924cdd88469eb17f3047d6a6a, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Pressed_One
+      value: 
+      objectReference: {fileID: 2800000, guid: 36ae761da03553d43bcbc4f01881d35f, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Pressed_Two
+      value: 
+      objectReference: {fileID: 2800000, guid: b5bc122ebb25a454dad90b08e98d14d0, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Pause_Button
+      value: 
+      objectReference: {fileID: 2800000, guid: 2de29532b9ce9564cb5622b3d9483659, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Play_Pressed
+      value: 
+      objectReference: {fileID: 2800000, guid: 36ae761da03553d43bcbc4f01881d35f, type: 3}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: Pause_Pressed
+      value: 
+      objectReference: {fileID: 2800000, guid: b5bc122ebb25a454dad90b08e98d14d0, type: 3}
     - target: {fileID: 2004213098548836270, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
