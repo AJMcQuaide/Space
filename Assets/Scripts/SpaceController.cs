@@ -94,7 +94,7 @@ public class SpaceController : MonoBehaviour
 
     [SerializeField]
     bool play;
-    public bool Play { get { return play; } }
+    public bool Play { get { return play; } set { play = value; } }
 
     void Awake()
     {

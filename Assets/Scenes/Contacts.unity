@@ -368,7 +368,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: massMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
@@ -931,7 +931,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6195784482657363717, guid: 4b02bde0de160204496bcc4c86445566, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -3
       objectReference: {fileID: 0}
     - target: {fileID: 6195784482657363717, guid: 4b02bde0de160204496bcc4c86445566, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1157,7 +1157,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: massMultiplier
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3111146739206355080, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
@@ -1224,11 +1224,83 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+--- !u!1 &947523957 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8058703520156622971, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+  m_PrefabInstance: {fileID: 355873220196703118}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1130417036 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 2004213098548836270, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
   m_PrefabInstance: {fileID: 355873220196703118}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1130417037 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1296115320092888844, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+  m_PrefabInstance: {fileID: 355873220196703118}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947523957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1130417040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 947523957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 2
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 21300000, guid: 25f2593631ba2ca40864f959662836da, type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: fef31990620e901409828df44fc60059, type: 3}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 1130417037}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 6103252648243364632}
+        m_TargetAssemblyTypeName: UIController, Assembly-CSharp
+        m_MethodName: PlayPauseButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1001 &1219815320
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1323,7 +1395,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
-      value: 2000
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: RadiusArray.Array.data[9]
@@ -1559,11 +1631,11 @@ PrefabInstance:
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Hover_One
       value: 
-      objectReference: {fileID: 2800000, guid: c2f95aa6d3fcfed42aad47183f05ec7f, type: 3}
+      objectReference: {fileID: 2800000, guid: 36ae761da03553d43bcbc4f01881d35f, type: 3}
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Hover_Two
       value: 
-      objectReference: {fileID: 2800000, guid: 9b1c860a46db8b3438c03e71e714827b, type: 3}
+      objectReference: {fileID: 2800000, guid: b5bc122ebb25a454dad90b08e98d14d0, type: 3}
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Button_One
       value: 
@@ -1577,6 +1649,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2800000, guid: c2f95aa6d3fcfed42aad47183f05ec7f, type: 3}
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      propertyPath: dualButton
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Pause_Hover
       value: 
       objectReference: {fileID: 2800000, guid: 9b1c860a46db8b3438c03e71e714827b, type: 3}
@@ -1587,11 +1663,11 @@ PrefabInstance:
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Pressed_One
       value: 
-      objectReference: {fileID: 2800000, guid: 36ae761da03553d43bcbc4f01881d35f, type: 3}
+      objectReference: {fileID: 2800000, guid: c2f95aa6d3fcfed42aad47183f05ec7f, type: 3}
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Pressed_Two
       value: 
-      objectReference: {fileID: 2800000, guid: b5bc122ebb25a454dad90b08e98d14d0, type: 3}
+      objectReference: {fileID: 2800000, guid: 9b1c860a46db8b3438c03e71e714827b, type: 3}
     - target: {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
       propertyPath: Pause_Button
       value: 
@@ -1688,10 +1764,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: RUN_BUTTON
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1784683411182039530, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8058703520156622971, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1130417040}
   m_SourcePrefab: {fileID: 100100000, guid: 6b5b02a9df2605749a0a3c25e68c5b27, type: 3}
 --- !u!1001 &2627957277315306262
 PrefabInstance:
@@ -1703,7 +1783,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2190498269651672760, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: far clip plane
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4613822729691006517, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: target
@@ -1719,7 +1799,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6405498177538066956, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: m_Name
-      value: Main Camera
+      value: CameraController
       objectReference: {fileID: 0}
     - target: {fileID: 9081308156864771538, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1766,13 +1846,98 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
+--- !u!1001 &6103252648243364630
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1933.0345
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 107.19346
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 19.042496
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7358250217428432606, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: m_Name
+      value: UIController
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7358250217428432606, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6103252648243364632}
+  m_SourcePrefab: {fileID: 100100000, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+--- !u!1 &6103252648243364631 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7358250217428432606, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+  m_PrefabInstance: {fileID: 6103252648243364630}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6103252648243364632
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6103252648243364631}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e007872f6009b242bc90005ab9ca4a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Play: {fileID: 21300000, guid: 38015e15ebc04814fb1a2a70e249a85e, type: 3}
+  Play_Hover: {fileID: 21300000, guid: 25f2593631ba2ca40864f959662836da, type: 3}
+  Play_Pressed: {fileID: 21300000, guid: fef31990620e901409828df44fc60059, type: 3}
+  Pause: {fileID: 21300000, guid: 8a223656903d55642bd1217f2348ff6d, type: 3}
+  Pause_Hover: {fileID: 21300000, guid: 45eda186d71e28443895c4720e475b0f, type: 3}
+  Pause_Pressed: {fileID: 21300000, guid: a2487823fd63cfa4cbd09ef66726f7eb, type: 3}
+  playPauseButton: {fileID: 1130417040}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
-  - {fileID: 2627957277315306262}
-  - {fileID: 705507995}
   - {fileID: 1219815320}
+  - {fileID: 2627957277315306262}
+  - {fileID: 6103252648243364630}
+  - {fileID: 705507995}
   - {fileID: 727760607}
   - {fileID: 1665933974}
   - {fileID: 1387668478}
