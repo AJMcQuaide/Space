@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.InputSystem;
 
 public class UIController : MonoBehaviour
 {
@@ -16,15 +15,22 @@ public class UIController : MonoBehaviour
 
     [SerializeField]
     Sprite Play;
+
     [SerializeField]
-    Sprite Play_Hover;
+    Sprite play_Hover;
+    public Sprite Play_Hover { get { return play_Hover; } }
+
     [SerializeField]
     Sprite Play_Pressed;
 
     [SerializeField]
     Sprite Pause;
+
     [SerializeField]
-    Sprite Pause_Hover;
+    Sprite pause_Hover;
+
+    public Sprite Pause_Hover { get { return pause_Hover; } }
+
     [SerializeField]
     Sprite Pause_Pressed;
 
@@ -32,66 +38,53 @@ public class UIController : MonoBehaviour
     Button playPauseButton;
 
     RectTransform rt;
-    bool selected = true;
+    bool playPauseSelected = true;
+    public bool PlayPauseSelected { get { return playPauseButton; } }
+
+    SpriteState playPause;
 
     private void Awake()
     {
         if (Instance != this) { Destroy(gameObject); }
+        playPause = new();
+
+        SetSpriteState();
     }
-
-    //bool MouseHover()
-    //{
-    //    //Check the image location in rect transform, compared to mouse position
-    //    Vector2 mouse = Mouse.current.position.ReadValue();
-    //    //Vector2 rectPos = rt.anchoredPosition;
-    //    Vector2 sizeHalf = rt.sizeDelta * 0.5f;
-
-    //    bool x = mouse.x > (rt.position.x - sizeHalf.x) && mouse.x < (rt.position.x + sizeHalf.x);
-    //    bool y = mouse.y > (rt.position.y - sizeHalf.y) && mouse.y < (rt.position.y + sizeHalf.y);
-
-    //    return x && y;
-    //}
-
-    ////Not using anymore
-    //void CustomButton()
-    //{
-    //    //If hovering over button, and pressed
-    //    if (MouseHover())
-    //    {
-    //        if (Mouse.current.leftButton.isPressed)
-    //        {
-    //            image.material.mainTexture = Pressed;
-    //            Debug.Log("Pressed");
-    //        }
-    //        else if (Mouse.current.leftButton.wasReleasedThisFrame)
-    //        {
-    //            selected = !selected;
-    //            //PlayPauseButton(!selected);
-    //        }
-    //        else
-    //        {
-    //            image.material.mainTexture = Hover;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        image.material.mainTexture = selected ? Pause : Play;
-    //    }
-    //    image.SetMaterialDirty();
-    //}
 
     public void PlayPauseButton()
     {
-        selected = !selected;
-        SpaceController.Instance.Play = !selected;
+        playPauseSelected = !playPauseSelected;
+        SpaceController.Instance.Play = !playPauseSelected;
 
-        SpriteState ss = playPauseButton.spriteState;
+        SetSpriteState();
+    }
 
-        playPauseButton.image.sprite = selected? Play : Pause;
-        ss.highlightedSprite = selected? Play_Hover : Pause_Hover;
-        ss.pressedSprite = selected? Play_Pressed : Pause_Pressed;
+    /// <summary>
+    /// Speed up the time multiplier of the simulation
+    /// </summary>
+    public void FastForward()
+    {
+        SpaceController.Instance.TimeScale *= 2f;
+    }
 
-        playPauseButton.spriteState = ss;
-        playPauseButton.image.SetMaterialDirty();
+    /// <summary>
+    /// Slow down the time multiplier of the simulation
+    /// </summary>
+    public void SlowForward()
+    {
+        SpaceController.Instance.TimeScale *= 0.5f;
+    }
+
+    public void SetSpriteState()
+    {
+        //Standard sprite
+        playPauseButton.image.sprite = playPauseSelected ? Play : Pause;
+        //Highlighted/Hover sprite
+        playPause.highlightedSprite = playPauseSelected ? Play_Hover : Pause_Hover;
+        //Selected/Pressed sprite
+        playPause.pressedSprite = playPauseSelected ? Play_Pressed : Pause_Pressed;
+
+        //Set the button sprite state
+        playPauseButton.spriteState = playPause;
     }
 }
