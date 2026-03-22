@@ -96,23 +96,22 @@ public class SpaceController : MonoBehaviour
     bool play;
     public bool Play { get { return play; } set { play = value; } }
 
+    string savePath;
+
     void Awake()
     {
         //Singleton
         if (Instance != this) { Destroy(gameObject); }
         else
         {
-            //Set Mesh if using CPU
-            //meshFilter = grid.GetComponent<MeshFilter>();
-            //meshFilter.sharedMesh.GetVertices(initial);
-            //result = new List<Vector3>(initial);
-
             meshRenderer = grid.GetComponent<MeshRenderer>();
 
             //Set Fixed Update
             if (physicsTimeStep == 0)
                 physicsTimeStep = 0.01f;
             Time.fixedDeltaTime = physicsTimeStep;
+
+            savePath = Application.persistentDataPath;
         }
     }
 
@@ -136,7 +135,10 @@ public class SpaceController : MonoBehaviour
         //FPS();
     }
 
-    //Apply a warp to then grid to show the effects of gravity
+    /// <summary>
+    /// Warp a grid to show the effects of gravity using the CPU
+    /// </summary>
+    /// <param name="mesh"></param>
     void WarpGrid(Mesh mesh)
     {
         if (mesh == null)
@@ -238,20 +240,41 @@ public class SpaceController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get the real world mass in kg of a input planet
+    /// </summary>
+    /// <param name="planet"></param>
+    /// <returns></returns>
     public float GetMass(PlanetType planet)
     {
         float mass = MassArray[(int)planet];
         return mass;
     }
 
+    /// <summary>
+    /// Get the real world radius in m of a input planet
+    /// </summary>
+    /// <param name="planet"></param>
+    /// <returns></returns>
     public float GetDiameter(PlanetType planet)
     {
         float diameter = RadiusArray[(int)planet];
         return diameter;
     }
 
-    public void StartSimulation()
+    /// <summary>
+    /// Start and pause the simulation
+    /// </summary>
+    public void PlayPause()
     {
         play = !play;
+    }
+
+    /// <summary>
+    /// Save the current state of the app
+    /// </summary>
+    public void Save()
+    {
+
     }
 }
