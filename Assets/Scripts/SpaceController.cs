@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class SpaceController : MonoBehaviour
@@ -108,10 +109,11 @@ public class SpaceController : MonoBehaviour
 
             //Set Fixed Update
             if (physicsTimeStep == 0)
+            {
                 physicsTimeStep = 0.01f;
+            }
             Time.fixedDeltaTime = physicsTimeStep;
-
-            savePath = Application.persistentDataPath;
+            savePath = Path.Combine(Application.persistentDataPath, "saveFile");
         }
     }
 
@@ -133,44 +135,6 @@ public class SpaceController : MonoBehaviour
     private void Update()
     {
         //FPS();
-    }
-
-    /// <summary>
-    /// Warp a grid to show the effects of gravity using the CPU
-    /// </summary>
-    /// <param name="mesh"></param>
-    void WarpGrid(Mesh mesh)
-    {
-        if (mesh == null)
-        {
-            return;
-        }
-        Vector3 offset;
-        //For each vertex in the grid
-        for (int i = 0; i < initial.Count; i++)
-        {
-            Vector3 totalOffset = Vector3.zero;
-            //For each celestial body
-            for (int y = 0; y < Cb.Count; y++)
-            {
-                if (Cb[y].WarpGrid)
-                {
-                    //Distance Vector from the mesh vertex to the celestial body
-                    Vector3 difference = Cb[y].transform.position - grid.transform.TransformPoint(initial[i]);
-                    //Warp the mesh using the acceleration due to gravity at the vertex of all celestial bodies
-                    offset = (float)CelestialBody.GetAcceleration(difference.magnitude, Cb[y].Mass) * gridMultiplier * difference.normalized;
-                    if (offset.sqrMagnitude > difference.sqrMagnitude)
-                    {
-                        offset = difference;
-                    }
-                    //Combine
-                    totalOffset += offset;
-                    result[i] = initial[i] + totalOffset;
-                }
-            }
-        }
-        //Set the gravity distortion
-        mesh.SetVertices(result);
     }
 
     /// <summary>
@@ -275,6 +239,88 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void Save()
     {
+        using (var bWriter = new BinaryWriter(File.Open(savePath, FileMode.Create)))
+        {
+            GameDataWriter writer = new GameDataWriter(bWriter);
+            writer.Write(Cb.Count);
+            for (int i = 0; i < Cb.Count; i++)
+            {
+                CelestialBody body = Cb[i];
+                Transform t = body.transform;
 
+                //PlanetType Enum reference
+                writer.Write((int)body.MassReference);
+                writer.Write((int)body.RadiusReference);
+
+                //Planet property multipliers
+                writer.Write(body.MassMultiplier);
+                writer.Write(body.RadiusMultiplier);
+
+                //Position
+                writer.Write(t.position);
+
+                //Rotation
+                writer.Write(t.rotation);
+
+                //Velocity which will be used as starting velocity
+                writer.Write(body.Velocity);
+
+                //Planet Color
+                writer.Write(body.PlanetColor);
+
+                //Trail
+                writer.Write(body.TrailColor);
+                writer.Write(body.TrailWidth);
+
+                //Properties
+                writer.Write(body.IsKinematic);
+                writer.Write(body.IgnoreOwnType);
+                writer.Write(body.WarpGrid);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Load the saved app
+    /// </summary>
+    public void Load()
+    {
+        using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
+        {
+            GameDataReader reader = new GameDataReader(bReader);
+            int count = reader.ReadInt32();
+            for (int i = 0; i < count; i++)
+            {
+                CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
+                //Planet information such as radius, and mass
+                PlanetType mass = (PlanetType)reader.ReadInt32();
+                cb.MassReference = mass;
+                PlanetType rad = (PlanetType)reader.ReadInt32();
+                cb.RadiusReference = rad;
+
+                //Planet property multipliers
+                cb.MassMultiplier = reader.ReadFloat();
+                cb.RadiusMultiplier = reader.ReadFloat();
+
+                //Location and rotation of planet
+                cb.transform.position = reader.ReadVector3();
+                cb.transform.rotation = reader.ReadQuaternion();
+
+                //Set initial velocity
+                cb.InitialVelocity = reader.ReadDouble();
+
+                //Set Planet color
+                cb.PlanetColor = reader.ReadColor();
+
+                //Set Trail
+                cb.TrailColor = reader.ReadColor();
+                cb.TrailWidth = reader.ReadFloat();
+
+                //Set properties
+                cb.IsKinematic = reader.ReadBool();
+                cb.IgnoreOwnType = reader.ReadBool();
+                cb.WarpGrid = reader.ReadBool();
+            }
+        }
     }
 }

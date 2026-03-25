@@ -28,6 +28,7 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     float massMultiplier;
+    public float MassMultiplier { get { return massMultiplier; } set { massMultiplier = value; } }
 
     [SerializeField]
     PlanetType radiusReference;
@@ -35,6 +36,7 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     float radiusMultiplier;
+    public float RadiusMultiplier { get { return radiusMultiplier; } set { radiusMultiplier = value; } }
 
     public SpaceController sc { get; set; }
 
@@ -61,6 +63,7 @@ public class CelestialBody : MonoBehaviour
     [Header("In real world m/s")]
     [SerializeField]
     double initialVelocity;
+    public double InitialVelocity { get { return initialVelocity; } set { initialVelocity = value; } }
 
     //Show in game
     [SerializeField]
@@ -80,29 +83,33 @@ public class CelestialBody : MonoBehaviour
     [Header("Properties")]
     [SerializeField]
     Color planetColor;
-    public Color PlanetColor {  get { return planetColor; } }
+    public Color PlanetColor { get { return planetColor; } set { planetColor = value; } }
 
     [SerializeField]
     Color trailColor;
+    public Color TrailColor { get { return trailColor; } set { trailColor = value; } }
 
     [SerializeField]
     float trailWidth;
+    public float TrailWidth { get { return trailWidth; } set { trailWidth = value; } }
 
     [SerializeField]
     bool isKinematic;
-    public bool IsKinematic { get { return isKinematic; } }
+    public bool IsKinematic { get { return isKinematic; } set { IsKinematic = value; } }
 
     [SerializeField]
     bool warpGrid;
-    public bool WarpGrid { get { return warpGrid; } }
+    public bool WarpGrid { get { return warpGrid; } set { warpGrid = value; } }
 
     [SerializeField]
     bool ignoreOwnType;
+    public bool IgnoreOwnType { get { return ignoreOwnType; } set { ignoreOwnType = value; } }
 
     /// <summary>
     /// Real world velocity. Not scaled for Unity.
     /// </summary>
-    public double3 Velocity { get; set; }
+    double3 velocity;
+    public double3 Velocity { get { return velocity; } }
 
     /// <summary>
     /// The max acceleration is set to the radius of the planet
@@ -184,7 +191,7 @@ public class CelestialBody : MonoBehaviour
         double3 transformForward = new(transform.forward.x, transform.forward.y, transform.forward.z);
 
         //Clamp initialvelocity and set to Velocity
-        Velocity = math.clamp(initialVelocity, 0d, c * 0.99999d) * transformForward;
+        velocity = math.clamp(initialVelocity, 0d, c * 0.99999d) * transformForward;
 
         //Set position double to the transform at start
         double3 transformPosition = new(transform.position.x, transform.position.y, transform.position.z);
@@ -246,13 +253,13 @@ public class CelestialBody : MonoBehaviour
                 if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
                 {
                     //Calculate the velocity of the cb being evaluated
-                    double3 iv1 = cb1.Velocity;
-                    double3 iv2 = cb2.Velocity;
+                    double3 iv1 = cb1.velocity;
+                    double3 iv2 = cb2.velocity;
                     double3 v1 = Reflect(difference, iv1, iv2, cb1.Mass, cb2.Mass);
-                    cb1.Velocity = v1;
+                    cb1.velocity = v1;
                     //Calculate the velocity of the other cb that was contacted
                     double3 v2 = Reflect(difference, iv2, iv1, cb2.Mass, cb1.Mass);
-                    cb2.Velocity = v2;
+                    cb2.velocity = v2;
                     cb2.ContactChecked = true;
                 }
             }
@@ -331,7 +338,7 @@ public class CelestialBody : MonoBehaviour
     /// <param name="totalAcceleration"></param>
     public void SetVelocity()
     {
-        Velocity += TotalAcceleration * (double)Time.fixedDeltaTime * sc.TimeScale;
+        velocity += TotalAcceleration * (double)Time.fixedDeltaTime * sc.TimeScale;
     }
 
     /// <summary>
@@ -344,7 +351,7 @@ public class CelestialBody : MonoBehaviour
         double relativity = 1d / math.pow(LorentzFactor, 3);
 
         //Distance due to acceleration formula.
-        double3 distance = (Velocity * (double)Time.fixedDeltaTime * sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * sc.TimeScale, 2)));
+        double3 distance = (velocity * (double)Time.fixedDeltaTime * sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * sc.TimeScale, 2)));
         distance = distance * SD * relativity;
 
         //Scale the result
@@ -416,7 +423,7 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void UpdateSpeed()
     {
-        float velocityMagnitude = (float)math.length(Velocity);
+        float velocityMagnitude = (float)math.length(velocity);
         Speed = velocityMagnitude;
     }
 
