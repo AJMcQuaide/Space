@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4641584250157092756
+--- !u!1 &1756803845072603336
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,41 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8951013086523765913}
-  - component: {fileID: 6568198696250428661}
-  - component: {fileID: 2855373127211811114}
+  - component: {fileID: 1157681615321809837}
+  - component: {fileID: 3994081352235850873}
+  - component: {fileID: 3275199303190110336}
+  - component: {fileID: -7715442787225214565}
   m_Layer: 0
-  m_Name: Jupiter
+  m_Name: Mars
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8951013086523765913
+--- !u!4 &1157681615321809837
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4641584250157092756}
+  m_GameObject: {fileID: 1756803845072603336}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4851617673108357248}
+  - {fileID: 1184647529385060774}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!96 &6568198696250428661
+--- !u!96 &3994081352235850873
 TrailRenderer:
   serializedVersion: 3
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4641584250157092756}
+  m_GameObject: {fileID: 1756803845072603336}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -138,42 +139,64 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &2855373127211811114
+--- !u!135 &3275199303190110336
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1756803845072603336}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.05
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7715442787225214565
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4641584250157092756}
+  m_GameObject: {fileID: 1756803845072603336}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
+  m_Script: {fileID: 11500000, guid: ac102391e1159204e80b8aafa3684047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  massReference: 5
+  massReference: 4
   massMultiplier: 0
-  radiusReference: 5
+  radiusReference: 4
   radiusMultiplier: 0
-  model: {fileID: 8650843036777241464}
-  mass: 1.898e+27
-  massIncrease: 0
-  radius: 71492000
+  model: {fileID: 7500205305633094099}
+  mass: 0
+  lorentzFactor: 1
+  radius: 0
   initialVelocity: 0
   speed: 0
   totalAcceleration:
     x: 0
     y: 0
     z: 0
-  planetColor: {r: 0.81568635, g: 0.67058825, b: 0.4901961, a: 0}
+  planetColor: {r: 1, g: 0, b: 0, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0.1
+  trailWidth: 0
   isKinematic: 0
-  warpGrid: 1
+  warpGrid: 0
   ignoreOwnType: 0
-  useRelativeMass: 1
-  showGravityArrow: 1
-  gravityArrowSize: 1
---- !u!1 &8650843036777241464
+  sR: 0
+  density: 0
+  physicsArrow: 1
+  ArrowSize: 1
+--- !u!1 &7500205305633094099
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -181,9 +204,9 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4851617673108357248}
-  - component: {fileID: 37320908953326424}
-  - component: {fileID: 2354093095870876199}
+  - component: {fileID: 1184647529385060774}
+  - component: {fileID: 2153622287186790977}
+  - component: {fileID: 5004136238436009268}
   m_Layer: 0
   m_Name: Sphere
   m_TagString: Untagged
@@ -191,36 +214,36 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4851617673108357248
+--- !u!4 &1184647529385060774
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8650843036777241464}
+  m_GameObject: {fileID: 7500205305633094099}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 14.2984, y: 14.2984, z: 14.2984}
+  m_LocalScale: {x: 0.6787, y: 0.6787, z: 0.6787}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 8951013086523765913}
+  m_Father: {fileID: 1157681615321809837}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &37320908953326424
+--- !u!33 &2153622287186790977
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8650843036777241464}
+  m_GameObject: {fileID: 7500205305633094099}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &2354093095870876199
+--- !u!23 &5004136238436009268
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8650843036777241464}
+  m_GameObject: {fileID: 7500205305633094099}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1

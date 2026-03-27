@@ -93,7 +93,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1370999813883757260}
   - component: {fileID: 2373680087620436960}
-  - component: {fileID: 325302185602280355}
+  - component: {fileID: 3802445361716187507}
+  - component: {fileID: 8135351009268756631}
   m_Layer: 0
   m_Name: Saturn
   m_TagString: Untagged
@@ -221,7 +222,28 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 1
---- !u!114 &325302185602280355
+--- !u!135 &3802445361716187507
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8707894496157572774}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.05
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8135351009268756631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -230,7 +252,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8707894496157572774}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1cf8badcece3b4644b86bb7042cce78d, type: 3}
+  m_Script: {fileID: 11500000, guid: ac102391e1159204e80b8aafa3684047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   massReference: 6
@@ -238,21 +260,22 @@ MonoBehaviour:
   radiusReference: 6
   radiusMultiplier: 0
   model: {fileID: 7613660950022451549}
-  mass: 5.68e+26
-  massIncrease: 0
-  radius: 60268000
+  mass: 0
+  lorentzFactor: 1
+  radius: 0
   initialVelocity: 0
   speed: 0
   totalAcceleration:
     x: 0
     y: 0
     z: 0
-  planetColor: {r: 0.80392164, g: 0.6156863, b: 0.38431376, a: 0}
+  planetColor: {r: 1, g: 0.84127635, b: 0.40251565, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0.1
+  trailWidth: 0
   isKinematic: 0
-  warpGrid: 1
+  warpGrid: 0
   ignoreOwnType: 0
-  useRelativeMass: 1
-  showGravityArrow: 1
-  gravityArrowSize: 1
+  sR: 0
+  density: 0
+  physicsArrow: 1
+  ArrowSize: 1

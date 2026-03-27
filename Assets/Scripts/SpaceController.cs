@@ -99,6 +99,8 @@ public class SpaceController : MonoBehaviour
 
     string savePath;
 
+    public Color[] arrowColors = new Color[(int)ArrowType.Count];
+
     void Awake()
     {
         //Singleton
@@ -235,8 +237,20 @@ public class SpaceController : MonoBehaviour
     }
 
     /// <summary>
+    /// Remove all Celestial Bodies from the app
+    /// </summary>
+    public void Clear()
+    {
+        foreach (CelestialBody cb in Cb)
+        {
+            Destroy(cb);
+        }
+    }
+
+    /// <summary>
     /// Save the current state of the app
     /// </summary>
+    /// 
     public void Save()
     {
         using (var bWriter = new BinaryWriter(File.Open(savePath, FileMode.Create)))
@@ -285,6 +299,7 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void Load()
     {
+        Clear();
         using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
         {
             GameDataReader reader = new GameDataReader(bReader);

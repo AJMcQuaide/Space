@@ -5,7 +5,6 @@ public class CameraController : MonoBehaviour
 {
     Camera cam;
 
-    [SerializeField]
     GameObject target;
 
     /// <summary>
@@ -61,6 +60,11 @@ public class CameraController : MonoBehaviour
             else { Debug.LogError("Highlight prefab was not instantiated"); }
         }
         else { Debug.LogError("Missing highlight prefab"); }
+        if (target == null && SpaceController.Instance.Cb[0] != null)
+        {
+            target = SpaceController.Instance.Cb[0].gameObject;
+            Debug.Log("Set camera target to the first Celestial Body on the list");
+        }
     }
 
     private void Update()
@@ -76,11 +80,14 @@ public class CameraController : MonoBehaviour
         //No Lerp
         //cam.transform.position = target.transform.position + CameraOrbit();
 
-        //Lerp
-        transform.position = Vector3.Lerp(transform.position, target.transform.position + CameraOrbit(), Time.deltaTime * 25f);
+        if (target  != null)
+        {
+            //Lerp
+            transform.position = Vector3.Lerp(transform.position, target.transform.position + CameraOrbit(), Time.deltaTime * 25f);
 
-        //No Slerp
-        transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
+            //No Slerp
+            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
+        }
 
         //Slerp
         //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up), 1f);

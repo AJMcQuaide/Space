@@ -87,7 +87,7 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     Color trailColor;
-    public Color TrailColor { get { return trailColor; } set { trailColor = value; } }
+    public Color TrailColor { get { return new Color(trailColor.r, trailColor.g, trailColor.b, 1f); } set { trailColor = value; } }
 
     [SerializeField]
     float trailWidth;
@@ -137,12 +137,27 @@ public class CelestialBody : MonoBehaviour
     public bool PhysicsArrows { get { return physicsArrow; } }
 
     [SerializeField, Range(0.1f, 10f)]
-    float ArrowSize = 1f;
+    float arrowSize = 0.5f;
 
     Vector3 previousPosition;
     public Vector3 PreviousPosition { get { return previousPosition; } }
 
     public bool ContactChecked { get; set; } = false;
+
+
+    private void FixedUpdate()
+    {
+        if (sc.Play && Application.isPlaying && sc.Frames < sc.simulationLength && IsKinematic == false)
+        {
+            UpdateSpeed();
+            SetPosition();
+            RelativeMass = Mass * LorentzFactor;
+            if (PhysicsArrows)
+            {
+                PositionArrow(TotalAcceleration, Velocity);
+            }
+        }
+    }
 
     //Set scale and color among other things
     public void SetProperties()
@@ -178,6 +193,7 @@ public class CelestialBody : MonoBehaviour
         MaterialPropertyBlock trailProperty = new();
         trailProperty.SetColor("_Color", trailColor);
         tr.SetPropertyBlock(trailProperty);
+        trailWidth = trailWidth == 0 ? 0.02f : trailWidth;
         tr.widthMultiplier = trailWidth;
         tr.time = sc.UniversalTrailLength;
 
@@ -205,10 +221,10 @@ public class CelestialBody : MonoBehaviour
         {
             accelerationArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
             accelerationArrow.transform.SetParent(transform, false);
-            accelerationArrow.Color = Color.yellow;
+            accelerationArrow.ArrowType = ArrowType.Acceleration;
             velocityArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
             velocityArrow.transform.SetParent(transform, false);
-            velocityArrow.Color = Color.white;
+            velocityArrow.ArrowType = ArrowType.Velocity;
         }
 
         //Set sR
@@ -369,7 +385,7 @@ public class CelestialBody : MonoBehaviour
     public void PositionArrow(double3 a, double3 v)
     {
         //Point arrow at average gravity
-        if (math.lengthsq(a) >= 0.0001d)
+        if (math.lengthsq(a) >= 0.001d)
         {
             if (accelerationArrow.gameObject.activeSelf == false)
             {
@@ -381,7 +397,7 @@ public class CelestialBody : MonoBehaviour
         {
             accelerationArrow.gameObject.SetActive(false);
         }
-        if (math.lengthsq(v) >= 0.0001d)
+        if (math.lengthsq(v) >= 0.001d)
         {
             if (velocityArrow.gameObject.activeSelf == false)
             {
@@ -404,7 +420,7 @@ public class CelestialBody : MonoBehaviour
         Vector3 pos = rad * dir + offset + transform.position;
         Quaternion lookAt = Quaternion.LookRotation(dir, Vector3.up);
         arrow.transform.SetPositionAndRotation(pos, lookAt);
-        arrow.transform.localScale = new Vector3(ArrowSize, ArrowSize, ArrowSize);
+        arrow.transform.localScale = new Vector3(arrowSize, arrowSize, arrowSize);
     }
 
     /// <summary>
@@ -465,5 +481,16 @@ public class CelestialBody : MonoBehaviour
         {
             SpaceController.Instance.Cb.Remove(this);
         }
+    }
+
+    private void OnDisable()
+    {
+        DeRegister();
+    }
+
+    private void OnEnable()
+    {
+        SetProperties();
+        Register(this);
     }
 }

@@ -4,31 +4,32 @@ public class Moon : CelestialBody
 {
     private void Awake()
     {
-        sc = SpaceController.Instance;
+        //sc = SpaceController.Instance;
     }
 
     private void FixedUpdate()
     {
-        if (sc.Play && Application.isPlaying && sc.Frames < sc.simulationLength && IsKinematic == false)
-        {
-            UpdateSpeed();
-            SetPosition();
-            RelativeMass = Mass * LorentzFactor;
-            if (PhysicsArrows)
-            {
-                PositionArrow(TotalAcceleration, Velocity);
-            }
-        }
+        Debug.LogWarning("Using non CB");
+        //if (sc.Play && Application.isPlaying && sc.Frames < sc.simulationLength && IsKinematic == false)
+        //{
+        //    UpdateSpeed();
+        //    SetPosition();
+        //    RelativeMass = Mass * LorentzFactor;
+        //    if (PhysicsArrows)
+        //    {
+        //        PositionArrow(TotalAcceleration, Velocity);
+        //    }
+        //}
     }
 
     private void OnDisable()
     {
-        DeRegister();
+        //DeRegister();
     }
 
     private void OnEnable()
     {
-        SetProperties();
-        Register(this);
+        //SetProperties();
+        //Register(this);
     }
 }
