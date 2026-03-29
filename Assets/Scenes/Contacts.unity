@@ -408,7 +408,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
-      value: 1500
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1658,7 +1658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
-      value: 200
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: arrowColors.Array.size
@@ -1915,7 +1915,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
-      value: 2000
+      value: 2250
       objectReference: {fileID: 0}
     - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalPosition.x

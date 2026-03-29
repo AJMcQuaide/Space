@@ -35,12 +35,6 @@ public class SpaceController : MonoBehaviour
     //Testing below
     [SerializeField]
     GameObject grid;
-
-    readonly List<Vector3> initial = new();
-
-    List<Vector3> result = new();
-
-    MeshFilter meshFilter;
     MeshRenderer meshRenderer;
 
     /// <summary>
@@ -117,6 +111,7 @@ public class SpaceController : MonoBehaviour
             Time.fixedDeltaTime = physicsTimeStep;
             savePath = Path.Combine(Application.persistentDataPath, "saveFile");
         }
+        Debug.Log("Cb Count: " + Cb.Count);
     }
 
     void FixedUpdate()
@@ -241,9 +236,10 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void Clear()
     {
-        foreach (CelestialBody cb in Cb)
+        for (int i = Cb.Count - 1; i >= 0 ; i--)
         {
-            Destroy(cb);
+            Debug.Log("Called destroy: " + i + " Cb Count: " + Cb.Count);
+            Destroy(Cb[i].gameObject);
         }
     }
 
@@ -300,42 +296,42 @@ public class SpaceController : MonoBehaviour
     public void Load()
     {
         Clear();
-        using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
-        {
-            GameDataReader reader = new GameDataReader(bReader);
-            int count = reader.ReadInt32();
-            for (int i = 0; i < count; i++)
-            {
-                CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
-                //Planet information such as radius, and mass
-                PlanetType mass = (PlanetType)reader.ReadInt32();
-                cb.MassReference = mass;
-                PlanetType rad = (PlanetType)reader.ReadInt32();
-                cb.RadiusReference = rad;
+        //using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
+        //{
+        //    GameDataReader reader = new GameDataReader(bReader);
+        //    int count = reader.ReadInt32();
+        //    for (int i = 0; i < count; i++)
+        //    {
+        //        CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
+        //        //Planet information such as radius, and mass
+        //        PlanetType mass = (PlanetType)reader.ReadInt32();
+        //        cb.MassReference = mass;
+        //        PlanetType rad = (PlanetType)reader.ReadInt32();
+        //        cb.RadiusReference = rad;
 
-                //Planet property multipliers
-                cb.MassMultiplier = reader.ReadFloat();
-                cb.RadiusMultiplier = reader.ReadFloat();
+        //        //Planet property multipliers
+        //        cb.MassMultiplier = reader.ReadFloat();
+        //        cb.RadiusMultiplier = reader.ReadFloat();
 
-                //Location and rotation of planet
-                cb.transform.position = reader.ReadVector3();
-                cb.transform.rotation = reader.ReadQuaternion();
+        //        //Location and rotation of planet
+        //        cb.transform.position = reader.ReadVector3();
+        //        cb.transform.rotation = reader.ReadQuaternion();
 
-                //Set initial velocity
-                cb.InitialVelocity = reader.ReadDouble();
+        //        //Set initial velocity
+        //        cb.InitialVelocity = reader.ReadDouble();
 
-                //Set Planet color
-                cb.PlanetColor = reader.ReadColor();
+        //        //Set Planet color
+        //        cb.PlanetColor = reader.ReadColor();
 
-                //Set Trail
-                cb.TrailColor = reader.ReadColor();
-                cb.TrailWidth = reader.ReadFloat();
+        //        //Set Trail
+        //        cb.TrailColor = reader.ReadColor();
+        //        cb.TrailWidth = reader.ReadFloat();
 
-                //Set properties
-                cb.IsKinematic = reader.ReadBool();
-                cb.IgnoreOwnType = reader.ReadBool();
-                cb.WarpGrid = reader.ReadBool();
-            }
-        }
+        //        //Set properties
+        //        cb.IsKinematic = reader.ReadBool();
+        //        cb.IgnoreOwnType = reader.ReadBool();
+        //        cb.WarpGrid = reader.ReadBool();
+        //    }
+        //}
     }
 }
