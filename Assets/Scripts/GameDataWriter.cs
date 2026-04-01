@@ -43,6 +43,11 @@ public class GameDataWriter
         writer.Write(value.z);
     }
 
+    public void Write(double value)
+    {
+        writer.Write(value);
+    }
+
     public void Write(Color value)
     {
         writer.Write(value.r);

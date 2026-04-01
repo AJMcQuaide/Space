@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using Unity.Mathematics;
 
 public class SpaceController : MonoBehaviour
 {
@@ -238,7 +239,6 @@ public class SpaceController : MonoBehaviour
     {
         for (int i = Cb.Count - 1; i >= 0 ; i--)
         {
-            Debug.Log("Called destroy: " + i + " Cb Count: " + Cb.Count);
             Destroy(Cb[i].gameObject);
         }
     }
@@ -249,6 +249,7 @@ public class SpaceController : MonoBehaviour
     /// 
     public void Save()
     {
+        Debug.Log("Save App");
         using (var bWriter = new BinaryWriter(File.Open(savePath, FileMode.Create)))
         {
             GameDataWriter writer = new GameDataWriter(bWriter);
@@ -266,14 +267,12 @@ public class SpaceController : MonoBehaviour
                 writer.Write(body.MassMultiplier);
                 writer.Write(body.RadiusMultiplier);
 
-                //Position
+                //Position and Rotation
                 writer.Write(t.position);
-
-                //Rotation
                 writer.Write(t.rotation);
 
                 //Velocity which will be used as starting velocity
-                writer.Write(body.Velocity);
+                writer.Write(math.length(body.Velocity));
 
                 //Planet Color
                 writer.Write(body.PlanetColor);
@@ -295,43 +294,54 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void Load()
     {
-        Clear();
-        //using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
-        //{
-        //    GameDataReader reader = new GameDataReader(bReader);
-        //    int count = reader.ReadInt32();
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
-        //        //Planet information such as radius, and mass
-        //        PlanetType mass = (PlanetType)reader.ReadInt32();
-        //        cb.MassReference = mass;
-        //        PlanetType rad = (PlanetType)reader.ReadInt32();
-        //        cb.RadiusReference = rad;
+        if (File.Exists(savePath))
+        {
+            Debug.Log("Load App");
+            Clear();
 
-        //        //Planet property multipliers
-        //        cb.MassMultiplier = reader.ReadFloat();
-        //        cb.RadiusMultiplier = reader.ReadFloat();
+            using (var bReader = new BinaryReader(File.Open(savePath, FileMode.Open)))
+            {
+                GameDataReader reader = new(bReader);
+                int count = reader.ReadInt32();
 
-        //        //Location and rotation of planet
-        //        cb.transform.position = reader.ReadVector3();
-        //        cb.transform.rotation = reader.ReadQuaternion();
+                for (int i = 0; i < count; i++)
+                {
+                    CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
 
-        //        //Set initial velocity
-        //        cb.InitialVelocity = reader.ReadDouble();
+                    //PlanetType Enum reference
+                    PlanetType mass = (PlanetType)reader.ReadInt32();
+                    PlanetType rad = (PlanetType)reader.ReadInt32();
+                    cb.MassReference = mass;
+                    cb.RadiusReference = rad;
 
-        //        //Set Planet color
-        //        cb.PlanetColor = reader.ReadColor();
+                    //Planet property multipliers
+                    cb.MassMultiplier = reader.ReadFloat();
+                    cb.RadiusMultiplier = reader.ReadFloat();
 
-        //        //Set Trail
-        //        cb.TrailColor = reader.ReadColor();
-        //        cb.TrailWidth = reader.ReadFloat();
+                    //Location and rotation of planet
+                    cb.transform.position = reader.ReadVector3();
+                    cb.transform.rotation = reader.ReadQuaternion();
 
-        //        //Set properties
-        //        cb.IsKinematic = reader.ReadBool();
-        //        cb.IgnoreOwnType = reader.ReadBool();
-        //        cb.WarpGrid = reader.ReadBool();
-        //    }
-        //}
+                    //Set initial velocity
+                    cb.InitialVelocity = reader.ReadDouble();
+
+                    //Set Planet color
+                    cb.PlanetColor = reader.ReadColor();
+
+                    //Set Trail
+                    cb.TrailColor = reader.ReadColor();
+                    cb.TrailWidth = reader.ReadFloat();
+
+                    //Set properties
+                    cb.IsKinematic = reader.ReadBool();
+                    cb.IgnoreOwnType = reader.ReadBool();
+                    cb.WarpGrid = reader.ReadBool();
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("No save file to load");
+        }
     }
 }

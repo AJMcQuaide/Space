@@ -38,7 +38,18 @@ public class CelestialBody : MonoBehaviour
     float radiusMultiplier;
     public float RadiusMultiplier { get { return radiusMultiplier; } set { radiusMultiplier = value; } }
 
-    public SpaceController sc { get; set; }
+    SpaceController sc;
+    public SpaceController Sc
+    {
+        get
+        {
+            if (sc == null)
+            {
+                sc = SpaceController.Instance;
+            }
+            return sc;
+        }
+    }
 
     [SerializeField]
     GameObject model;
@@ -95,7 +106,7 @@ public class CelestialBody : MonoBehaviour
 
     [SerializeField]
     bool isKinematic;
-    public bool IsKinematic { get { return isKinematic; } set { IsKinematic = value; } }
+    public bool IsKinematic { get { return isKinematic; } set { isKinematic = value; } }
 
     [SerializeField]
     bool warpGrid;
@@ -136,6 +147,8 @@ public class CelestialBody : MonoBehaviour
     bool physicsArrow = true;
     public bool PhysicsArrows { get { return physicsArrow; } }
 
+    bool physicsArrowCreated;
+
     [SerializeField, Range(0.1f, 10f)]
     float arrowSize = 0.5f;
 
@@ -144,15 +157,14 @@ public class CelestialBody : MonoBehaviour
 
     public bool ContactChecked { get; set; } = false;
 
-
     private void FixedUpdate()
     {
-        if (sc.Play && Application.isPlaying && sc.Frames < sc.simulationLength && IsKinematic == false)
+        if (Sc.Play && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
         {
             UpdateSpeed();
             SetPosition();
             RelativeMass = Mass * LorentzFactor;
-            if (PhysicsArrows)
+            if (physicsArrowCreated)
             {
                 PositionArrow(TotalAcceleration, Velocity);
             }
@@ -162,21 +174,18 @@ public class CelestialBody : MonoBehaviour
     //Set scale and color among other things
     public void SetProperties()
     {
-        //Get space controller reference
-        sc = SpaceController.Instance;
-
         //Get reference to use for mass
         if (MassReference != PlanetType.EnterManually)
         {
             if (massMultiplier ==  0) { massMultiplier = 1; }
-            Mass = massMultiplier * sc.GetMass(MassReference);
+            Mass = massMultiplier * Sc.GetMass(MassReference);
         }
 
         //Get reference to use for diameter
         if (RadiusReference != PlanetType.EnterManually)
         {
             if (radiusMultiplier == 0) { radiusMultiplier = 1; }
-            Radius = radiusMultiplier * sc.GetDiameter(RadiusReference);
+            Radius = radiusMultiplier * Sc.GetDiameter(RadiusReference);
         }
 
         //Set the scale of the model
@@ -195,7 +204,7 @@ public class CelestialBody : MonoBehaviour
         tr.SetPropertyBlock(trailProperty);
         trailWidth = trailWidth == 0 ? 0.02f : trailWidth;
         tr.widthMultiplier = trailWidth;
-        tr.time = sc.UniversalTrailLength;
+        tr.time = Sc.UniversalTrailLength;
 
         //Set Max acceleration based on mass and radius
         maxAcceleration = GetAcceleration(Radius / S, Mass);
@@ -225,6 +234,8 @@ public class CelestialBody : MonoBehaviour
             velocityArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
             velocityArrow.transform.SetParent(transform, false);
             velocityArrow.ArrowType = ArrowType.Velocity;
+
+            physicsArrowCreated = true;
         }
 
         //Set sR
@@ -256,7 +267,7 @@ public class CelestialBody : MonoBehaviour
         }
 
         //Loop this (cb1) through other (cb2)
-        foreach (CelestialBody cb2 in sc.Cb)
+        foreach (CelestialBody cb2 in Sc.Cb)
         {
             if (cb2 != cb1)
             {
@@ -301,14 +312,14 @@ public class CelestialBody : MonoBehaviour
     public double3 SetAcceleration(CelestialBody _thisCB)
     {
         double3 accelerationVector = double3.zero;
-        if (sc.UseGravity == false)
+        if (Sc.UseGravity == false)
         {
             return accelerationVector;
         }
         int celestialBodiesEvaluated = 0;
 
         //Loop this Cb through all other Cb's
-        foreach (CelestialBody cb in sc.Cb)
+        foreach (CelestialBody cb in Sc.Cb)
         {
             if (cb != _thisCB && _thisCB.isKinematic == false && _thisCB.ignoreOwnType == false || _thisCB.ignoreOwnType && cb.massReference != _thisCB.massReference)
             {
@@ -320,9 +331,19 @@ public class CelestialBody : MonoBehaviour
                 //Acceleration
                 celestialBodiesEvaluated++;
                 double magnitude = math.length(difference);
+                if (magnitude == 0)
+                {
+                    Debug.LogWarning("When calculating acceleration, the distance between objects was zero and therefore returned zero acceleration");
+                    return new double3(0d, 0d, 0d);
+                }
                 double acceleration = GetAcceleration(magnitude, cb.RelativeMass);
                 acceleration = Math.Clamp(acceleration, 0d, cb.MaxAcceleration);
                 accelerationVector += acceleration * math.normalize(difference);
+
+                if (math.isnan(accelerationVector).x)
+                {
+                    Debug.Log("Nan " + difference);
+                }
             }
         }
         return accelerationVector;
@@ -354,7 +375,7 @@ public class CelestialBody : MonoBehaviour
     /// <param name="totalAcceleration"></param>
     public void SetVelocity()
     {
-        velocity += TotalAcceleration * (double)Time.fixedDeltaTime * sc.TimeScale;
+        velocity += TotalAcceleration * (double)Time.fixedDeltaTime * Sc.TimeScale;
     }
 
     /// <summary>
@@ -367,7 +388,7 @@ public class CelestialBody : MonoBehaviour
         double relativity = 1d / math.pow(LorentzFactor, 3);
 
         //Distance due to acceleration formula.
-        double3 distance = (velocity * (double)Time.fixedDeltaTime * sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * sc.TimeScale, 2)));
+        double3 distance = (velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
         distance = distance * SD * relativity;
 
         //Scale the result
