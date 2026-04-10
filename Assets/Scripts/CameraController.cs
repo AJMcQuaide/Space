@@ -5,7 +5,11 @@ public class CameraController : MonoBehaviour
 {
     Camera cam;
 
-    GameObject target;
+    [SerializeField]
+    Transform target;
+
+    [SerializeField]
+    Vector3 defaultCameraPos;
 
     /// <summary>
     /// Camera radius/distance target from focus target
@@ -60,11 +64,10 @@ public class CameraController : MonoBehaviour
             else { Debug.LogError("Highlight prefab was not instantiated"); }
         }
         else { Debug.LogError("Missing highlight prefab"); }
-        if (target == null && SpaceController.Instance.Cb[0] != null)
-        {
-            target = SpaceController.Instance.Cb[0].gameObject;
-            Debug.Log("Set camera target to the first Celestial Body on the list");
-        }
+
+        //Set the camera to Vector3.zero by default
+        target = new GameObject().transform;
+        target.transform.position = defaultCameraPos;
     }
 
     private void Update()
@@ -77,20 +80,11 @@ public class CameraController : MonoBehaviour
     {
         GetMouseDrag();
 
-        //No Lerp
-        //cam.transform.position = target.transform.position + CameraOrbit();
+        //Lerp
+        transform.position = Vector3.Lerp(transform.position, target.position + CameraOrbit(), Time.deltaTime * 25f);
 
-        if (target  != null)
-        {
-            //Lerp
-            transform.position = Vector3.Lerp(transform.position, target.transform.position + CameraOrbit(), Time.deltaTime * 25f);
-
-            //No Slerp
-            transform.rotation = Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up);
-        }
-
-        //Slerp
-        //transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(target.transform.position - transform.position, Vector3.up), 1f);
+        //No Slerp
+        transform.rotation = Quaternion.LookRotation(target.position - transform.position, Vector3.up);
     }
 
     Vector3 CameraOrbit()
@@ -192,7 +186,7 @@ public class CameraController : MonoBehaviour
             {
                 if (Mouse.current.leftButton.wasPressedThisFrame)
                 {
-                    target = hit.collider.gameObject;
+                    target = hit.collider.gameObject.transform;
                 }
             }
             previousPickedCB = pickedCB;

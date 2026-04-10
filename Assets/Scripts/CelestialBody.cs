@@ -20,23 +20,23 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// Scale factor in decimel form, the length of 1 meter in Unity
     /// </summary>
-    public const double SD = 0.0000001f;
+    public const double SD = 1 / S;
 
     [SerializeField]
-    PlanetType massReference;
-    public PlanetType MassReference { get { return massReference; } set { massReference = value; } }
-
-    [SerializeField]
-    float massMultiplier;
-    public float MassMultiplier { get { return massMultiplier; } set { massMultiplier = value; } }
-
-    [SerializeField]
-    PlanetType radiusReference;
-    public PlanetType RadiusReference { get { return radiusReference; } set { radiusReference = value; } }
-
-    [SerializeField]
-    float radiusMultiplier;
-    public float RadiusMultiplier { get { return radiusMultiplier; } set { radiusMultiplier = value; } }
+    CelestialBodyType thisCelestialBody;
+    public CelestialBodyType ThisCelestialBody
+    {
+        get { return thisCelestialBody; }
+        set
+        {
+            if (thisCelestialBody != value)
+            {
+                thisCelestialBody = value;
+                Debug.LogWarning("Celestial body changed");
+                UpdateCelestialBodyParameters(value);
+            }
+        }
+    }
 
     SpaceController sc;
     public SpaceController Sc
@@ -51,43 +51,26 @@ public class CelestialBody : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    GameObject model;
-
-    [Header("Kg")]
+    [Header("Mass in kg")]
     [SerializeField]
     double mass;
     public double Mass { get { return mass; } set { mass = value; } }
 
-    //Show in game
-    [SerializeField]
-    double lorentzFactor = 1d;
-    public double LorentzFactor { get { return lorentzFactor; } }
-
-    public double RelativeMass { get; set; }
-
-    [Header("meters")]
+    [Header("Radius in meters")]
     [SerializeField]
     float radius;
     public float Radius { get { return radius; } set { radius = value; } }
 
-    [Header("In real world m/s")]
-    [SerializeField]
-    double initialVelocity;
-    public double InitialVelocity { get { return initialVelocity; } set { initialVelocity = value; } }
+    public double RelativeMass { get; set; }
 
-    //Show in game
+    [Header("Speed in m/s, direction is transform.forward")]
     [SerializeField]
-    float speed;
-    public float Speed { get { return speed; } set { speed = value; } }
+    double initialSpeed;
+    public double InitialSpeed { get { return initialSpeed; } set { initialSpeed = value; } }
 
     /// <summary>
-    /// The sum of all accelerations on the object
+    /// Double 3 verison of transform.position to pair wiht and aid in accurate calculations
     /// </summary>
-    [SerializeField]
-    double3 totalAcceleration;
-    public double3 TotalAcceleration { get { return totalAcceleration; } set { totalAcceleration = value; } }
-
     double3 position;
     public double3 Position { get { return position; } set { position = value; } }
 
@@ -113,8 +96,29 @@ public class CelestialBody : MonoBehaviour
     public bool WarpGrid { get { return warpGrid; } set { warpGrid = value; } }
 
     [SerializeField]
-    bool ignoreOwnType;
-    public bool IgnoreOwnType { get { return ignoreOwnType; } set { ignoreOwnType = value; } }
+    bool physicsArrow = true;
+    public bool PhysicsArrows { get { return physicsArrow; } }
+
+    bool physicsArrowCreated;
+
+    [SerializeField, Range(0.1f, 10f)]
+    float arrowSize = 0.5f;
+
+    [Header("Reference")]
+    [SerializeField]
+    double lorentzFactor = 1d;
+    public double LorentzFactor { get { return lorentzFactor; } }
+
+    [SerializeField]
+    float speed;
+    public float Speed { get { return speed; } set { speed = value; } }
+
+    /// <summary>
+    /// The sum of all accelerations on the object
+    /// </summary>
+    [SerializeField]
+    double3 totalAcceleration;
+    public double3 TotalAcceleration { get { return totalAcceleration; } set { totalAcceleration = value; } }
 
     /// <summary>
     /// Real world velocity. Not scaled for Unity.
@@ -143,19 +147,19 @@ public class CelestialBody : MonoBehaviour
     Arrow accelerationArrow;
     Arrow velocityArrow;
 
-    [SerializeField]
-    bool physicsArrow = true;
-    public bool PhysicsArrows { get { return physicsArrow; } }
-
-    bool physicsArrowCreated;
-
-    [SerializeField, Range(0.1f, 10f)]
-    float arrowSize = 0.5f;
-
     Vector3 previousPosition;
     public Vector3 PreviousPosition { get { return previousPosition; } }
 
     public bool ContactChecked { get; set; } = false;
+
+    [Header("Unity References")]
+    [SerializeField]
+    GameObject model;
+
+    private void Start()
+    {
+        SetProperties();
+    }
 
     private void FixedUpdate()
     {
@@ -163,6 +167,7 @@ public class CelestialBody : MonoBehaviour
         {
             UpdateSpeed();
             SetPosition();
+            UpdateRotation();
             RelativeMass = Mass * LorentzFactor;
             if (physicsArrowCreated)
             {
@@ -174,24 +179,6 @@ public class CelestialBody : MonoBehaviour
     //Set scale and color among other things
     public void SetProperties()
     {
-        //Get reference to use for mass
-        if (MassReference != PlanetType.EnterManually)
-        {
-            if (massMultiplier ==  0) { massMultiplier = 1; }
-            Mass = massMultiplier * Sc.GetMass(MassReference);
-        }
-
-        //Get reference to use for diameter
-        if (RadiusReference != PlanetType.EnterManually)
-        {
-            if (radiusMultiplier == 0) { radiusMultiplier = 1; }
-            Radius = radiusMultiplier * Sc.GetDiameter(RadiusReference);
-        }
-
-        //Set the scale of the model
-        float scale = (Radius * 2) / (float)S;
-        model.transform.localScale = new Vector3(scale, scale, scale);
-
         //Set Color
         MaterialPropertyBlock colorProperty = new();
         colorProperty.SetColor("_Color", planetColor);
@@ -216,11 +203,10 @@ public class CelestialBody : MonoBehaviour
         double3 transformForward = new(transform.forward.x, transform.forward.y, transform.forward.z);
 
         //Clamp initialvelocity and set to Velocity
-        velocity = math.clamp(initialVelocity, 0d, c * 0.99999d) * transformForward;
+        velocity = math.clamp(initialSpeed, 0d, c * 0.99999d) * transformForward;
 
         //Set position double to the transform at start
-        double3 transformPosition = new(transform.position.x, transform.position.y, transform.position.z);
-        Position = transformPosition;
+        Position = sc.Vector3ToDouble3(transform.position);
 
         //Set previous position equal to starting position
         previousPosition = transform.position;
@@ -246,11 +232,6 @@ public class CelestialBody : MonoBehaviour
 
         //Set Layer
         gameObject.layer = LayerMask.NameToLayer("CelestialBody");
-
-        //Set collider
-        SphereCollider collider = GetComponent<SphereCollider>();
-        collider.isTrigger = true;
-        collider.radius = scale * 0.5f;
     }
 
     /// <summary>
@@ -267,7 +248,7 @@ public class CelestialBody : MonoBehaviour
         }
 
         //Loop this (cb1) through other (cb2)
-        foreach (CelestialBody cb2 in Sc.Cb)
+        foreach (CelestialBody cb2 in Sc.CelestialBodiesInScene)
         {
             if (cb2 != cb1)
             {
@@ -319,12 +300,12 @@ public class CelestialBody : MonoBehaviour
         int celestialBodiesEvaluated = 0;
 
         //Loop this Cb through all other Cb's
-        foreach (CelestialBody cb in Sc.Cb)
+        foreach (CelestialBody _otherCB in Sc.CelestialBodiesInScene)
         {
-            if (cb != _thisCB && _thisCB.isKinematic == false && _thisCB.ignoreOwnType == false || _thisCB.ignoreOwnType && cb.massReference != _thisCB.massReference)
+            if (_otherCB != _thisCB && _thisCB.isKinematic == false)
             {
                //Convert to double
-                double3 otherCB = new(cb.PreviousPosition.x, cb.PreviousPosition.y, cb.PreviousPosition.z);
+                double3 otherCB = new(_otherCB.PreviousPosition.x, _otherCB.PreviousPosition.y, _otherCB.PreviousPosition.z);
                 double3 thisCB = new(_thisCB.transform.position.x, _thisCB.transform.position.y, _thisCB.transform.position.z);
                 double3 difference = otherCB - thisCB;
 
@@ -336,8 +317,8 @@ public class CelestialBody : MonoBehaviour
                     Debug.LogWarning("When calculating acceleration, the distance between objects was zero and therefore returned zero acceleration");
                     return new double3(0d, 0d, 0d);
                 }
-                double acceleration = GetAcceleration(magnitude, cb.RelativeMass);
-                acceleration = Math.Clamp(acceleration, 0d, cb.MaxAcceleration);
+                double acceleration = GetAcceleration(magnitude, _otherCB.RelativeMass);
+                acceleration = Math.Clamp(acceleration, 0d, _otherCB.MaxAcceleration);
                 accelerationVector += acceleration * math.normalize(difference);
 
                 if (math.isnan(accelerationVector).x)
@@ -385,22 +366,25 @@ public class CelestialBody : MonoBehaviour
     {
         //Percentage of energy contributing to acceleration
         SetLorentzFactor();
-        double relativity = 1d / math.pow(LorentzFactor, 3);
 
-        //Distance due to acceleration formula.
-        double3 distance = (velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
-        distance = distance * SD * relativity;
-
-        //Scale the result
-        position += distance;
+        position += GetPosition();
 
         //Update the velocity, which is to be used in the next frame and used as "initial velocity"
         SetVelocity();
 
         previousPosition = transform.position;
         transform.position = new Vector3((float)position.x, (float)position.y, (float)position.z);
+    }
 
-        //Debug.Log("Frames: " + sc.Frames + " Object: " + gameObject.name + " Moved");
+    /// <summary>
+    /// Positional offset of object due to gravity using formula
+    /// </summary>
+    double3 GetPosition()
+    {
+        //Raw offset
+        double3 unScaled = (velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
+        //Consider reletivity, less and less offset nearing the speed of light as more of the energy goes to mass increase
+        return unScaled * SD * (1d / math.pow(LorentzFactor, 3));
     }
 
     public void PositionArrow(double3 a, double3 v)
@@ -465,11 +449,46 @@ public class CelestialBody : MonoBehaviour
     }
 
     /// <summary>
+    /// Point forward in the direction of velocity
+    /// </summary>
+    public void UpdateRotation()
+    {
+        if (math.lengthsq(Velocity) > 0)
+        {
+            Vector3 velVector = new((float)Velocity.x, (float)Velocity.y, (float)Velocity.z);
+            transform.rotation = Quaternion.LookRotation(velVector.normalized, Vector3.up);
+        }
+    }
+
+    /// <summary>
     /// Calculate the density of the celestrial body
     /// </summary>
     public void UpdateDensity()
     {
         density = (float)Mass / (1.333333f * math.PI * (Radius * Radius * Radius));
+    }
+
+    /// <summary>
+    /// Set the scale / radius, mass and colliders of a celestial body to a given prefab example
+    /// </summary>
+    /// <param name="type"></param>
+    public void UpdateCelestialBodyParameters(CelestialBodyType type)
+    {
+        CelestialBody cb = Sc.GetCelestialBodyPrefab((int)type);
+
+        //Set scale/radius
+        float scale = (cb.Radius * 2) / (float)S;
+        model.transform.localScale = new Vector3(scale, scale, scale);
+
+        //Set collider
+        SphereCollider collider = GetComponent<SphereCollider>();
+        collider.isTrigger = true;
+        collider.radius = scale * 0.5f;
+
+        //Set mass
+        mass = cb.mass;
+
+        Debug.LogWarning("Current scale: " + model.transform.parent.gameObject.name + " " + model.transform.localScale + " New scale: " + cb.model.transform.parent.gameObject.name + " " + cb.model.transform.localScale);
     }
 
     /// <summary>
@@ -490,7 +509,7 @@ public class CelestialBody : MonoBehaviour
         SpaceController Instance = SpaceController.Instance;
         if (Instance != null)
         {
-            SpaceController.Instance.Cb.Add(celestialBody);
+            SpaceController.Instance.CelestialBodiesInScene.Add(celestialBody);
         }
     }
 
@@ -500,7 +519,7 @@ public class CelestialBody : MonoBehaviour
         SpaceController Instance = SpaceController.Instance;
         if (Instance != null)
         {
-            SpaceController.Instance.Cb.Remove(this);
+            SpaceController.Instance.CelestialBodiesInScene.Remove(this);
         }
     }
 
@@ -511,7 +530,6 @@ public class CelestialBody : MonoBehaviour
 
     private void OnEnable()
     {
-        SetProperties();
         Register(this);
     }
 }

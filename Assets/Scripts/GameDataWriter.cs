@@ -60,4 +60,9 @@ public class GameDataWriter
     {
         writer.Write(value);
     }
+
+    public void Write(string value)
+    {
+        writer.Write(value);
+    }
 }

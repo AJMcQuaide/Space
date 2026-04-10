@@ -158,7 +158,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05
+  m_Radius: 0.637
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &5668306745816874056
 MonoBehaviour:
@@ -172,30 +172,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac102391e1159204e80b8aafa3684047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  massReference: 3
-  massMultiplier: 0
-  radiusReference: 3
-  radiusMultiplier: 0
-  model: {fileID: 8696404929733803896}
-  mass: 0
+  thisCelestialBody: 5
+  mass: 5.972e+24
+  radius: 6370000
+  initialSpeed: 0
+  planetColor: {r: 0, g: 0.5598335, b: 1, a: 0}
+  trailColor: {r: 1, g: 1, b: 1, a: 0}
+  trailWidth: 0
+  isKinematic: 0
+  warpGrid: 1
+  physicsArrow: 1
+  arrowSize: 0.5
   lorentzFactor: 1
-  radius: 0
-  initialVelocity: 0
   speed: 0
   totalAcceleration:
     x: 0
     y: 0
     z: 0
-  planetColor: {r: 0, g: 0.5598335, b: 1, a: 0}
-  trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0
-  isKinematic: 0
-  warpGrid: 0
-  ignoreOwnType: 0
   sR: 0
   density: 0
-  physicsArrow: 1
-  ArrowSize: 1
+  model: {fileID: 8696404929733803896}
 --- !u!1 &8696404929733803896
 GameObject:
   m_ObjectHideFlags: 0
@@ -224,7 +220,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.2742, y: 1.2742, z: 1.2742}
+  m_LocalScale: {x: 1.274, y: 1.274, z: 1.274}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2643581611323900166}
@@ -257,7 +253,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42b0112958b2eef46a83e1085cb8b096, type: 2}
+  - {fileID: 2100000, guid: 873e9aa1373bedb48aec222e86f59e7b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

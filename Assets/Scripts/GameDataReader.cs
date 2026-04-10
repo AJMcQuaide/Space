@@ -42,11 +42,11 @@ public class GameDataReader
 
     public double3 ReadDouble3()
     {
-        double3 vector;
-        vector.x = reader.ReadSingle();
-        vector.y = reader.ReadSingle();
-        vector.z = reader.ReadSingle();
-        return vector;
+        double3 d3;
+        d3.x = reader.ReadDouble();
+        d3.y = reader.ReadDouble();
+        d3.z = reader.ReadDouble();
+        return d3;
     }
 
     public double ReadDouble()
@@ -67,5 +67,10 @@ public class GameDataReader
     public bool ReadBool()
     {
         return reader.ReadBoolean();
+    }
+
+    public string ReadString()
+    {
+        return reader.ReadString();
     }
 }

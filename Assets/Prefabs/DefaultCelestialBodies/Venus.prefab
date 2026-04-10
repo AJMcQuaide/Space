@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 42b0112958b2eef46a83e1085cb8b096, type: 2}
+  - {fileID: 2100000, guid: 165478115259b214d9abd80a28c44b98, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -241,7 +241,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.05
+  m_Radius: 0.605
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8466402046135708708
 MonoBehaviour:
@@ -255,27 +255,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac102391e1159204e80b8aafa3684047, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  massReference: 2
-  massMultiplier: 0
-  radiusReference: 2
-  radiusMultiplier: 0
-  model: {fileID: 1777191042576064004}
-  mass: 0
-  lorentzFactor: 1
-  radius: 0
-  initialVelocity: 0
-  speed: 0
-  totalAcceleration:
-    x: 0
-    y: 0
-    z: 0
+  thisCelestialBody: 4
+  mass: 4.86732e+24
+  radius: 6051800
+  initialSpeed: 0
   planetColor: {r: 1, g: 0.490574, b: 0, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
   trailWidth: 0
   isKinematic: 0
   warpGrid: 0
-  ignoreOwnType: 0
+  physicsArrow: 1
+  arrowSize: 0.5
+  lorentzFactor: 1
+  speed: 0
+  totalAcceleration:
+    x: 0
+    y: 0
+    z: 0
   sR: 0
   density: 0
-  physicsArrow: 1
-  ArrowSize: 1
+  model: {fileID: 1777191042576064004}

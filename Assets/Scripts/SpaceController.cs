@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using System.IO;
-using UnityEngine;
 using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SpaceController : MonoBehaviour
 {
@@ -14,17 +15,15 @@ public class SpaceController : MonoBehaviour
     }
 
     /// <summary>
-    /// List of default planets in the solar system to reference or instantiate
+    /// Celestial body prefabs of various planets, moons or stars
     /// </summary>
     [SerializeField]
-    GameObject[] DefaultCelestialBodies;
+    GameObject[] CelestialBodyPrefabs;
 
-    [SerializeField]
-    float[] MassArray;
-    //Make method for indexer*
-
-    [SerializeField]
-    float[] RadiusArray;
+    /// <summary>
+    /// Celestial Bodies that are loaded/instantiated into the scene
+    /// </summary>
+    public List<CelestialBody> CelestialBodiesInScene { get; set; } = new();
 
     [SerializeField, Range(0f, 1000f)]
     float gridMultiplier;
@@ -39,17 +38,11 @@ public class SpaceController : MonoBehaviour
     MeshRenderer meshRenderer;
 
     /// <summary>
-    /// Celestial Body list
-    /// </summary>
-    public List<CelestialBody> Cb { get; set; } = new();
-
-    /// <summary>
     /// A list of the positions of Celestial bodies which have Warp grid set to true
     /// </summary>
-    
     public List<Vector4> CBWarpPos { get; set; } = new();
     /// <summary>
-    /// A list of the positions of Celestial bodies which have Warp grid set to true
+    /// A list of the mass of Celestial bodies which have Warp grid set to true
     /// </summary>
     public List<float> CBWarpMass { get; set; } = new();
     /// <summary>
@@ -88,7 +81,6 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     float physicsTimeStep;
 
-    [SerializeField]
     bool play;
     public bool Play { get { return play; } set { play = value; } }
 
@@ -112,7 +104,8 @@ public class SpaceController : MonoBehaviour
             Time.fixedDeltaTime = physicsTimeStep;
             savePath = Path.Combine(Application.persistentDataPath, "saveFile");
         }
-        Debug.Log("Cb Count: " + Cb.Count);
+        Debug.Log("Cb Count: " + CelestialBodiesInScene.Count);
+        Debug.Log("Save Path: " + savePath);
     }
 
     void FixedUpdate()
@@ -124,7 +117,7 @@ public class SpaceController : MonoBehaviour
         SetShader(meshRenderer.material);
 
         //FPS
-        if (Frames < simulationLength)
+        if (Frames < simulationLength && Play)
         {
             Frames++;
         }
@@ -145,7 +138,7 @@ public class SpaceController : MonoBehaviour
         CBWarpPos.Clear();
         CBWarpMass.Clear();
         CBMaxAccel.Clear();
-        foreach (CelestialBody cb in Cb)
+        foreach (CelestialBody cb in CelestialBodiesInScene)
         {
             if (cb.WarpGrid)
             {
@@ -172,13 +165,13 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void SetPhysics()
     {
-        for (int i = 0; i < Cb.Count; i++)
+        for (int i = 0; i < CelestialBodiesInScene.Count; i++)
         {
             //Determine overall acceleration based on all celestial bodies
-            Cb[i].TotalAcceleration = Cb[i].SetAcceleration(Cb[i]);
+            CelestialBodiesInScene[i].TotalAcceleration = CelestialBodiesInScene[i].SetAcceleration(CelestialBodiesInScene[i]);
 
             //Alter velocity of this object, and the object contacted if there is contact
-            Cb[i].SetContact(Cb[i]);
+            CelestialBodiesInScene[i].SetContact(CelestialBodiesInScene[i]);
         }
     }
 
@@ -203,28 +196,6 @@ public class SpaceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Get the real world mass in kg of a input planet
-    /// </summary>
-    /// <param name="planet"></param>
-    /// <returns></returns>
-    public float GetMass(PlanetType planet)
-    {
-        float mass = MassArray[(int)planet];
-        return mass;
-    }
-
-    /// <summary>
-    /// Get the real world radius in m of a input planet
-    /// </summary>
-    /// <param name="planet"></param>
-    /// <returns></returns>
-    public float GetDiameter(PlanetType planet)
-    {
-        float diameter = RadiusArray[(int)planet];
-        return diameter;
-    }
-
-    /// <summary>
     /// Start and pause the simulation
     /// </summary>
     public void PlayPause()
@@ -237,10 +208,26 @@ public class SpaceController : MonoBehaviour
     /// </summary>
     public void Clear()
     {
-        for (int i = Cb.Count - 1; i >= 0 ; i--)
+        for (int i = CelestialBodiesInScene.Count - 1; i >= 0 ; i--)
         {
-            Destroy(Cb[i].gameObject);
+            Destroy(CelestialBodiesInScene[i].gameObject);
         }
+    }
+
+    /// <summary>
+    /// Return a CelestialBody prefab which contains properties. For example, return sun prefab, so that the sun's mass and radius can be read.
+    /// </summary>
+    /// <param name="index"></param>
+    /// <returns></returns>
+    public CelestialBody GetCelestialBodyPrefab(int index)
+    {
+        return CelestialBodyPrefabs[index].GetComponent<CelestialBody>();
+    }
+
+    public double3 Vector3ToDouble3(Vector3 vector3)
+    {
+        double3 double3 = new(vector3.x, vector3.y, vector3.z);
+        return double3;
     }
 
     /// <summary>
@@ -253,38 +240,36 @@ public class SpaceController : MonoBehaviour
         using (var bWriter = new BinaryWriter(File.Open(savePath, FileMode.Create)))
         {
             GameDataWriter writer = new GameDataWriter(bWriter);
-            writer.Write(Cb.Count);
-            for (int i = 0; i < Cb.Count; i++)
+            writer.Write(CelestialBodiesInScene.Count);
+            for (int i = 0; i < CelestialBodiesInScene.Count; i++)
             {
-                CelestialBody body = Cb[i];
-                Transform t = body.transform;
+                CelestialBody cb = CelestialBodiesInScene[i];
+                Transform t = cb.transform;
 
-                //PlanetType Enum reference
-                writer.Write((int)body.MassReference);
-                writer.Write((int)body.RadiusReference);
+                //Save what type of celestial body this is
+                int body = (int)cb.ThisCelestialBody;
+                writer.Write(body);
 
-                //Planet property multipliers
-                writer.Write(body.MassMultiplier);
-                writer.Write(body.RadiusMultiplier);
+                //Save Name
+                writer.Write(cb.gameObject.name);
 
                 //Position and Rotation
                 writer.Write(t.position);
                 writer.Write(t.rotation);
 
                 //Velocity which will be used as starting velocity
-                writer.Write(math.length(body.Velocity));
+                writer.Write(cb.Velocity);
 
                 //Planet Color
-                writer.Write(body.PlanetColor);
+                writer.Write(cb.PlanetColor);
 
                 //Trail
-                writer.Write(body.TrailColor);
-                writer.Write(body.TrailWidth);
+                writer.Write(cb.TrailColor);
+                writer.Write(cb.TrailWidth);
 
                 //Properties
-                writer.Write(body.IsKinematic);
-                writer.Write(body.IgnoreOwnType);
-                writer.Write(body.WarpGrid);
+                writer.Write(cb.IsKinematic);
+                writer.Write(cb.WarpGrid);
             }
         }
     }
@@ -306,24 +291,22 @@ public class SpaceController : MonoBehaviour
 
                 for (int i = 0; i < count; i++)
                 {
-                    CelestialBody cb = Instantiate(DefaultCelestialBodies[(int)PlanetType.EnterManually].GetComponent<CelestialBody>());
+                    //Instantiate and set Radius reference
+                    int body = reader.ReadInt32();
+                    CelestialBody cb = Instantiate(CelestialBodyPrefabs[body].GetComponent<CelestialBody>());
 
-                    //PlanetType Enum reference
-                    PlanetType mass = (PlanetType)reader.ReadInt32();
-                    PlanetType rad = (PlanetType)reader.ReadInt32();
-                    cb.MassReference = mass;
-                    cb.RadiusReference = rad;
-
-                    //Planet property multipliers
-                    cb.MassMultiplier = reader.ReadFloat();
-                    cb.RadiusMultiplier = reader.ReadFloat();
+                    //Load Name
+                    cb.gameObject.name = reader.ReadString();
 
                     //Location and rotation of planet
                     cb.transform.position = reader.ReadVector3();
+                    cb.Position = Vector3ToDouble3(cb.transform.position);
+
                     cb.transform.rotation = reader.ReadQuaternion();
 
                     //Set initial velocity
-                    cb.InitialVelocity = reader.ReadDouble();
+                    double3 vel = reader.ReadDouble3();
+                    cb.InitialSpeed = math.length(vel);
 
                     //Set Planet color
                     cb.PlanetColor = reader.ReadColor();
@@ -334,7 +317,6 @@ public class SpaceController : MonoBehaviour
 
                     //Set properties
                     cb.IsKinematic = reader.ReadBool();
-                    cb.IgnoreOwnType = reader.ReadBool();
                     cb.WarpGrid = reader.ReadBool();
                 }
             }
