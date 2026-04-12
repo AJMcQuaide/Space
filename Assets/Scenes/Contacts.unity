@@ -240,6 +240,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5668306745816874056, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+      propertyPath: isKinematic
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5668306745816874056, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: thisCelestialBody
       value: 5
       objectReference: {fileID: 0}
@@ -249,6 +253,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7367360741140010079, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8851373310055480275, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
+      propertyPath: arrowType
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1018,6 +1026,18 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: planetColor.b
+      value: 0.17845678
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: planetColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: planetColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialVelocity
       value: 2500
       objectReference: {fileID: 0}
@@ -1759,7 +1779,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: simulationLength
-      value: 5000
+      value: 750
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: arrowColors.Array.data[0].a

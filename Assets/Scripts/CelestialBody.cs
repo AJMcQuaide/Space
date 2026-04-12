@@ -99,11 +99,6 @@ public class CelestialBody : MonoBehaviour
     bool physicsArrow = true;
     public bool PhysicsArrows { get { return physicsArrow; } }
 
-    bool physicsArrowCreated;
-
-    [SerializeField, Range(0.1f, 10f)]
-    float arrowSize = 0.5f;
-
     [Header("Reference")]
     [SerializeField]
     double lorentzFactor = 1d;
@@ -144,9 +139,6 @@ public class CelestialBody : MonoBehaviour
     [SerializeField]
     float density;
 
-    Arrow accelerationArrow;
-    Arrow velocityArrow;
-
     Vector3 previousPosition;
     public Vector3 PreviousPosition { get { return previousPosition; } }
 
@@ -169,10 +161,6 @@ public class CelestialBody : MonoBehaviour
             SetPosition();
             UpdateRotation();
             RelativeMass = Mass * LorentzFactor;
-            if (physicsArrowCreated)
-            {
-                PositionArrow(TotalAcceleration, Velocity);
-            }
         }
     }
 
@@ -210,19 +198,6 @@ public class CelestialBody : MonoBehaviour
 
         //Set previous position equal to starting position
         previousPosition = transform.position;
-
-        //Arrows
-        if (PhysicsArrows)
-        {
-            accelerationArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
-            accelerationArrow.transform.SetParent(transform, false);
-            accelerationArrow.ArrowType = ArrowType.Acceleration;
-            velocityArrow = Instantiate(SpaceController.Instance.ArrowPrefab).GetComponent<Arrow>();
-            velocityArrow.transform.SetParent(transform, false);
-            velocityArrow.ArrowType = ArrowType.Velocity;
-
-            physicsArrowCreated = true;
-        }
 
         //Set sR
         SchwarzschildRadius();
@@ -385,47 +360,6 @@ public class CelestialBody : MonoBehaviour
         double3 unScaled = (velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
         //Consider reletivity, less and less offset nearing the speed of light as more of the energy goes to mass increase
         return unScaled * SD * (1d / math.pow(LorentzFactor, 3));
-    }
-
-    public void PositionArrow(double3 a, double3 v)
-    {
-        //Point arrow at average gravity
-        if (math.lengthsq(a) >= 0.001d)
-        {
-            if (accelerationArrow.gameObject.activeSelf == false)
-            {
-                accelerationArrow.gameObject.SetActive(true);
-            }
-            Arrow(a, accelerationArrow);
-        }
-        else
-        {
-            accelerationArrow.gameObject.SetActive(false);
-        }
-        if (math.lengthsq(v) >= 0.001d)
-        {
-            if (velocityArrow.gameObject.activeSelf == false)
-            {
-                velocityArrow.gameObject.SetActive(true);
-            }
-            Arrow(v, velocityArrow);
-        }
-        else
-        {
-            velocityArrow.gameObject.SetActive(false);
-        }
-    }
-
-    void Arrow(double3 i, Arrow arrow)
-    {
-        Vector3 Vector = new((float)i.x, (float)i.y, (float)i.z);
-        Vector3 dir = Vector.normalized;
-        Vector3 offset = dir * 0.1f;
-        float rad = Radius * (float)SD;
-        Vector3 pos = rad * dir + offset + transform.position;
-        Quaternion lookAt = Quaternion.LookRotation(dir, Vector3.up);
-        arrow.transform.SetPositionAndRotation(pos, lookAt);
-        arrow.transform.localScale = new Vector3(arrowSize, arrowSize, arrowSize);
     }
 
     /// <summary>

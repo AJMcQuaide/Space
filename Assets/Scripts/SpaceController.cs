@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.IO;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class SpaceController : MonoBehaviour
 {
@@ -85,8 +84,6 @@ public class SpaceController : MonoBehaviour
     public bool Play { get { return play; } set { play = value; } }
 
     string savePath;
-
-    public Color[] arrowColors = new Color[(int)ArrowType.Count];
 
     void Awake()
     {
