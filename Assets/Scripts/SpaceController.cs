@@ -50,10 +50,6 @@ public class SpaceController : MonoBehaviour
     public List<float> CBMaxAccel { get; set; } = new();
 
     [SerializeField]
-    GameObject arrowPrefab;
-    public GameObject ArrowPrefab { get { return arrowPrefab; } }
-
-    [SerializeField]
     float frames = 0;
     public float Frames { get { return frames; } set { frames = value; } }
 

@@ -12,6 +12,9 @@ public class Arrow : MonoBehaviour
 
     MeshRenderer mr;
 
+    [SerializeField, Range(0f, 2f)]
+    float size;
+
     bool show;
     public bool Show
     {
@@ -63,5 +66,7 @@ public class Arrow : MonoBehaviour
     void ShowHide(bool show)
     {
         mr.enabled = show;
+        mr.material.color = arrowType == ArrowType.Velocity ? Color.grey : Color.white;
+        transform.localScale = new Vector3(size, size, size);
     }
 }
