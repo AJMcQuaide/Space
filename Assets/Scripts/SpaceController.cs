@@ -253,9 +253,6 @@ public class SpaceController : MonoBehaviour
                 //Velocity which will be used as starting velocity
                 writer.Write(cb.Velocity);
 
-                //Planet Color
-                writer.Write(cb.PlanetColor);
-
                 //Trail
                 writer.Write(cb.TrailColor);
                 writer.Write(cb.TrailWidth);
@@ -300,9 +297,6 @@ public class SpaceController : MonoBehaviour
                     //Set initial velocity
                     double3 vel = reader.ReadDouble3();
                     cb.InitialSpeed = math.length(vel);
-
-                    //Set Planet color
-                    cb.PlanetColor = reader.ReadColor();
 
                     //Set Trail
                     cb.TrailColor = reader.ReadColor();

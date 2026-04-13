@@ -75,9 +75,6 @@ public class CelestialBody : MonoBehaviour
     public double3 Position { get { return position; } set { position = value; } }
 
     [Header("Properties")]
-    [SerializeField]
-    Color planetColor;
-    public Color PlanetColor { get { return planetColor; } set { planetColor = value; } }
 
     [SerializeField]
     Color trailColor;
@@ -167,11 +164,6 @@ public class CelestialBody : MonoBehaviour
     //Set scale and color among other things
     public void SetProperties()
     {
-        //Set Color
-        MaterialPropertyBlock colorProperty = new();
-        colorProperty.SetColor("_Color", planetColor);
-        model.GetComponent<MeshRenderer>().SetPropertyBlock(colorProperty);
-
         //Set trail renderer color
         TrailRenderer tr = GetComponent<TrailRenderer>();
         MaterialPropertyBlock trailProperty = new();
