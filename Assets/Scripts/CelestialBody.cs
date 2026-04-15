@@ -59,6 +59,9 @@ public class CelestialBody : MonoBehaviour
     [Header("Radius in meters")]
     [SerializeField]
     float radius;
+    /// <summary>
+    /// Radius in real world meters
+    /// </summary>
     public float Radius { get { return radius; } set { radius = value; } }
 
     public double RelativeMass { get; set; }
