@@ -2,6 +2,7 @@ using UnityEngine;
 using TMPro;
 using System.Runtime.CompilerServices;
 
+//Old
 public class NameTag : MonoBehaviour
 {
     Canvas canvas;

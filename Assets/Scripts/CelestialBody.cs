@@ -454,11 +454,16 @@ public class CelestialBody : MonoBehaviour
 
     private void OnDisable()
     {
+        if (NameTagController.Instance != null)
+        {
+            NameTagController.Instance.DeRegister(this);
+        }
         DeRegister();
     }
 
     private void OnEnable()
     {
         Register(this);
+        NameTagController.Instance.Register(this);
     }
 }
