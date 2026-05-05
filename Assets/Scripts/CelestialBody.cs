@@ -151,6 +151,8 @@ public class CelestialBody : MonoBehaviour
     private void Start()
     {
         SetProperties();
+        Register(this);
+        NameTagController.Instance.Register(this);
     }
 
     private void FixedUpdate()
@@ -459,11 +461,5 @@ public class CelestialBody : MonoBehaviour
             NameTagController.Instance.DeRegister(this);
         }
         DeRegister();
-    }
-
-    private void OnEnable()
-    {
-        Register(this);
-        NameTagController.Instance.Register(this);
     }
 }

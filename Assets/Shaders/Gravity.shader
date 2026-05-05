@@ -93,7 +93,7 @@ Shader "Gravity"
                         offset = difference;
                     }
                     //Combine
-                    totalOffset += offset;
+                    totalOffset -= offset;
                 }
                 return totalOffset;
             }

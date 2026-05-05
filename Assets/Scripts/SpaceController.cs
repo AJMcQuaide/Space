@@ -97,6 +97,10 @@ public class SpaceController : MonoBehaviour
             Time.fixedDeltaTime = physicsTimeStep;
             savePath = Path.Combine(Application.persistentDataPath, "saveFile");
         }
+    }
+
+    private void Start()
+    {
         Debug.Log("Cb Count: " + CelestialBodiesInScene.Count);
         Debug.Log("Save Path: " + savePath);
     }

@@ -23,11 +23,8 @@ public class NameTagController : MonoBehaviour
 
     List<TextMeshProUGUI> nameTagList = new List<TextMeshProUGUI>();
 
-    [SerializeField]
-    float multiplier;
-
-    [SerializeField]
-    float multiplier2;
+    float multiplier = 50f;
+    float multiplier2 = 1500f;
 
     private void Awake()
     {
@@ -57,6 +54,10 @@ public class NameTagController : MonoBehaviour
             CelestialBody cb = sc.CelestialBodiesInScene[i];
 
             Vector3 screenPoint = cam.WorldToScreenPoint(cb.transform.position);
+            if (screenPoint.z < 0f)
+            {
+                continue;
+            }
             float radius = (cb.Radius * (float)CelestialBody.SD * multiplier2) / screenPoint.z;
             //Debug.LogWarning("nameTagPos: " + radius + " Rad: " + cb.Radius * (float)CelestialBody.SD + " Distance: " + screenPoint.z);
             screenPoint.z = 0;
@@ -90,12 +91,7 @@ public class NameTagController : MonoBehaviour
             if (index >= 0)
             {
                 nameTagList.RemoveAt(index);
-                Debug.LogWarning("Removed from nametag list " + nameTagList[index].text + " at index " + index);
             }
-        }
-        else
-        {
-            Debug.Log("No SpaceController on " + GetType().ToString() + " DeRegister");
         }
     }
 }

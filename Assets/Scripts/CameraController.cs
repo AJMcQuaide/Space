@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.HID;
 
 public class CameraController : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     Transform target;
+    public Transform Target { get { return target; } set { target = value; } }
 
     [SerializeField]
     Vector3 defaultCameraPos;
@@ -14,123 +16,99 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Camera radius/distance target from focus target
     /// </summary>
-    float rad = 0;
+    float camDistance = 0;
     /// <summary>
     /// Camera radius/distance target from focus target smoothed
     /// </summary>
-    float radSmoothed = 0;
-
-    float xPos = 0;
-    float yPos = 0;
-
-    Vector2 mouseDelta = Vector2.zero;
-    float mouseWheelOutput = 0;
-    Vector2 MousePos = Vector2.zero;
-    Vector2 prevMousePos = Vector2.zero;
+    float camDistanceSmooth = 0;
 
     [SerializeField, Range(0.1f, 10f)]
     float zoomSensativity;
-    [SerializeField, Range(0.1f, 10f)]
+    [SerializeField, Range(0.02f, 0.06f)]
     float rotateSensativity;
     [SerializeField, Range(0, 90f)]
     float verticalRotationMax;
     [SerializeField]
 
-    GameObject highlightPrefab;
-    GameObject highlightClone;
-
     /// <summary>
-    /// Current resolution of the screen
+    /// The 2d mouse drag input per frame, that is then turned into the 3d orbit Vector3
     /// </summary>
-    Vector2 screenSize;
+    Vector2 camPosInput = Vector2.zero;
 
-    CelestialBody pickedCB;
-    CelestialBody previousPickedCB;
+    GameObject picked;
+
+    public GameObject Picked
+    {
+        get { return picked; }
+        set
+        {
+            if (value != picked)
+            {
+                picked = value;
+                //Change the visibility once for the object selection highlighter
+                objectHighlight.ChangeState(picked);
+            }
+        }
+    }
+
+    [SerializeField]
+    Highlighter objectHighlight;
 
     private void Awake()
     {
         cam = GetComponent<Camera>();
         if (cam == null) { Debug.LogWarning("No camera"); }
-        if (rad == 0f) rad = 5f;
-        radSmoothed = rad;
-        if (highlightPrefab != null)
-        {
-            highlightClone = Instantiate(highlightPrefab, transform.position, Quaternion.identity);
-            if (highlightClone != null)
-            {
-                highlightClone.SetActive(false);
-                Debug.Log("Highlight active status: " + highlightClone.activeSelf);
-            }
-            else { Debug.LogError("Highlight prefab was not instantiated"); }
-        }
-        else { Debug.LogError("Missing highlight prefab"); }
+        if (camDistance == 0f) camDistance = 5f;
+        camDistanceSmooth = camDistance;
 
         //Set the camera to Vector3.zero by default
         target = new GameObject().transform;
         target.transform.position = defaultCameraPos;
+
+        if (objectHighlight ==  null)
+        {
+            objectHighlight = FindAnyObjectByType<Highlighter>();
+            Debug.Log("Found missing objectHighlighter in " + GetType());
+        }
     }
 
     private void Update()
     {
-        GetInput();
-        Picking();
+        CameraDistance(zoomSensativity);
+
+        //Set picked object
+        Picked = Picking();
+        //Go to object when clicked
+        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            target = picked.transform;
+        }
     }
 
     void FixedUpdate()
     {
-        GetMouseDrag();
-
         //Lerp
-        transform.position = Vector3.Lerp(transform.position, target.position + CameraOrbit(), Time.deltaTime * 25f);
+        transform.position = Vector3.Lerp(transform.position, target.position + CameraOrbitPos(), Time.deltaTime * 25f);
 
         //No Slerp
         transform.rotation = Quaternion.LookRotation(target.position - transform.position, Vector3.up);
     }
 
-    Vector3 CameraOrbit()
+    Vector3 CameraOrbitPos()
     {
-        radSmoothed = Mathf.Lerp(radSmoothed, rad, Time.fixedDeltaTime * 10f);
-        float x = radSmoothed * Mathf.Cos(yPos) * Mathf.Cos(xPos);
-        float y = radSmoothed * Mathf.Sin(yPos);
-        float z = radSmoothed * Mathf.Cos(yPos) * Mathf.Sin(xPos);
+        camPosInput += Inputs.Instance.MouseClickDrag() * rotateSensativity;
+        float yMax = verticalRotationMax * Mathf.Deg2Rad;
+        camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
+
+        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * 10f);
+        float x = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Cos(camPosInput.x);
+        float y = camDistanceSmooth * Mathf.Sin(camPosInput.y);
+        float z = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Sin(camPosInput.x);
         Vector3 orbit = new(x, y, z);
 
         return orbit;
     }
 
-    public void GetMouseDrag()
-    {
-        if (Mouse.current != null)
-        {                
-            if (Mouse.current.leftButton.isPressed)
-            {
-                Vector2 unscaledMouseDelta = MousePos - prevMousePos;
-                mouseDelta = 0.002f * rotateSensativity * unscaledMouseDelta;
-            
-                xPos -= mouseDelta.x;
-                yPos -= mouseDelta.y;
-                float yMax = verticalRotationMax * Mathf.Deg2Rad;
-                yPos = Mathf.Clamp(yPos, -yMax, yMax);
-            }
-        }
-        else { Debug.LogWarning("No Mouse!"); }
-    }
-
-    public void GetInput()
-    {
-        //Mouse wheel
-        mouseWheelOutput = Mouse.current.scroll.ReadValue().y;
-        rad -= mouseWheelOutput * Time.fixedDeltaTime * zoomSensativity;
-        rad = Mathf.Clamp(rad, 2f, 20f);
-
-        //Mouse position on screen
-        prevMousePos = MousePos;
-        MousePos = Mouse.current.position.ReadValue();
-        if (screenSize != null)
-        {
-            MousePos -= screenSize * 0.5f;
-        }
-    }
 
     /// <summary>
     /// Return a range between 0 and 1
@@ -145,21 +123,20 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Detect if the mouse is hovering over a celestial body
+    /// Detect if the mouse is hovering over a given layer, from the camera attached to this gameObject
     /// </summary>
-    public void Picking()
+    public GameObject Picking()
     {
         //float near = cam.nearClipPlane;
         float far = cam.farClipPlane;
         float fov = Camera.VerticalToHorizontalFieldOfView(cam.fieldOfView, cam.aspect);
-        screenSize = new Vector2(Screen.width, Screen.height);
 
         //What is the width of the far plane or near plane and compare that to the width of the screensize?
         float farWidth = far * Mathf.Tan(Mathf.Deg2Rad * fov * 0.5f);
-        float ratio = farWidth / screenSize.x * 2f;
+        float ratio = farWidth / Screen.width * 2f;
 
-        float a = MousePos.x * ratio;
-        float b = MousePos.y * ratio;
+        float a = (Mouse.current.position.ReadValue().x - (Screen.width * 0.5f)) * ratio;
+        float b = (Mouse.current.position.ReadValue().y - (Screen.height * 0.5f)) * ratio;
         Vector3 z = transform.forward * far;
         Vector3 y = transform.right * a;
         Vector3 x = transform.up * b;
@@ -167,42 +144,30 @@ public class CameraController : MonoBehaviour
         Vector3 total = x + y + z;
         //Debug.Log("raycast target: " +  total + " Mouse pos x: " + a + " Mouse pos y: " + b);
 
-        if (Physics.Raycast(transform.position, total, out RaycastHit hit, total.magnitude, 1<<6))
+        //If it hits something on the celestialBody level
+        if (Physics.Raycast(transform.position, total, out RaycastHit hit, total.magnitude, 1 << 6))
         {
-            highlightClone.transform.position = hit.collider.transform.position;
-            pickedCB = hit.collider.GetComponent<CelestialBody>();
-            if (pickedCB != previousPickedCB)
-            {
-                float scale;
-                scale = pickedCB.Radius * (float)CelestialBody.SD * 2f;
-                highlightClone.transform.localScale = new Vector3(scale, scale, scale);
-            }
-
-            if (highlightClone.activeSelf == false)
-            {
-                highlightClone.SetActive(true);
-            }
-            else
-            {
-                if (Mouse.current.leftButton.wasPressedThisFrame)
-                {
-                    target = hit.collider.gameObject.transform;
-                }
-            }
-            previousPickedCB = pickedCB;
+            return hit.collider.gameObject;
         }
         else
         {
-            //highlightClone.transform.position = transform.position;
-            if (highlightClone.activeSelf == true)
-            {
-                highlightClone.SetActive(false);
-            }
+            return null;
         }
 
         ////Debug the picking
         //Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
         //Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
         //Debug.DrawRay(transform.position, total, Color.blue);
+    }
+
+    /// <summary>
+    /// Camera distance from object controlled by inputs (not orbit data just distance)
+    /// </summary>
+    /// <param name="sensitivity"></param>
+    public void CameraDistance(float sensitivity)
+    {
+        //Mouse wheel
+        camDistance -= Mouse.current.scroll.ReadValue().y * Time.fixedDeltaTime * sensitivity;
+        camDistance = Mathf.Clamp(camDistance, 2f, 20f);
     }
 }
