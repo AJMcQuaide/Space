@@ -35,21 +35,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     Vector2 camPosInput = Vector2.zero;
 
-    GameObject picked;
-
-    public GameObject Picked
-    {
-        get { return picked; }
-        set
-        {
-            if (value != picked)
-            {
-                picked = value;
-                //Change the visibility once for the object selection highlighter
-                objectHighlight.ChangeState(picked);
-            }
-        }
-    }
+    Vector3 pickPos;
 
     [SerializeField]
     Highlighter objectHighlight;
@@ -75,10 +61,10 @@ public class CameraController : MonoBehaviour
     private void Update()
     {
         CameraDistance(zoomSensativity);
+        SetPickPos();
 
-        //Set picked object
-        Picked = Picking();
-        //Go to object when clicked
+        //Go to object when clicked on specified layer (Celestial Body)
+        GameObject picked = Picking(1 << 6);
         if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             target = picked.transform;
@@ -123,9 +109,29 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Detect if the mouse is hovering over a given layer, from the camera attached to this gameObject
+    /// Shoot a ray from this camear's designated pick position, and return the object on the given layer
     /// </summary>
-    public GameObject Picking()
+    public GameObject Picking(LayerMask mask)
+    {
+        if (Physics.Raycast(transform.position, pickPos, out RaycastHit hit, cam.farClipPlane, mask))
+        {
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            return null;
+        }
+
+        ////Debug the picking
+        //Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
+        //Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
+        //Debug.DrawRay(transform.position, total, Color.blue);
+    }
+
+    /// <summary>
+    /// Set this Camera Controller's pick position, the point at which the raycast starts from
+    /// </summary>
+    void SetPickPos()
     {
         //float near = cam.nearClipPlane;
         float far = cam.farClipPlane;
@@ -141,23 +147,8 @@ public class CameraController : MonoBehaviour
         Vector3 y = transform.right * a;
         Vector3 x = transform.up * b;
 
-        Vector3 total = x + y + z;
+        pickPos = x + y + z;
         //Debug.Log("raycast target: " +  total + " Mouse pos x: " + a + " Mouse pos y: " + b);
-
-        //If it hits something on the celestialBody level
-        if (Physics.Raycast(transform.position, total, out RaycastHit hit, total.magnitude, 1 << 6))
-        {
-            return hit.collider.gameObject;
-        }
-        else
-        {
-            return null;
-        }
-
-        ////Debug the picking
-        //Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
-        //Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
-        //Debug.DrawRay(transform.position, total, Color.blue);
     }
 
     /// <summary>

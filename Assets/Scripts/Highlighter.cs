@@ -6,6 +6,23 @@ public class Highlighter : MonoBehaviour
     CameraController cc;
     MeshRenderer mr;
 
+    GameObject picked;
+
+    bool show;
+    public bool Show
+    {
+        get { return show; }
+        set
+        {
+            if (value != show)
+            {
+                show = value;
+                ChangeState(picked);
+            }
+
+        }
+    }
+
     void Start()
     {
         if (cc == null)
@@ -19,7 +36,8 @@ public class Highlighter : MonoBehaviour
 
     void Update()
     {
-        SetPosition(cc.Picked);
+        picked = cc.Picking(1 << 6);
+        SetPosition(picked);
     }
 
     /// <summary>
@@ -27,14 +45,15 @@ public class Highlighter : MonoBehaviour
     /// </summary>
     void SetPosition(GameObject pick)
     {
-        if (pick != null)
+        Show = pick != null;
+        if (Show)
         {
             transform.position = pick.transform.position;
         }
     }
 
     /// <summary>
-    /// Change the scale and visibility of the highlighter once it see's a object to highlight
+    /// Change the scale and visibility of the highlighter object based on the picked object
     /// </summary>
     /// <param name="pick"></param>
     public void ChangeState(GameObject pick)

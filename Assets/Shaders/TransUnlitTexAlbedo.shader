@@ -1,4 +1,4 @@
-Shader "Unlit/TransparentUnlitTex"
+Shader "Unlit/TransparentUnlitTexAlbedo"
 {
     Properties
     {
