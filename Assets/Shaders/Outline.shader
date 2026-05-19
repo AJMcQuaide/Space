@@ -1,8 +1,10 @@
-Shader "Unlit/ColorOverlay"
+Shader "Outline"
 {
     Properties
     {
-        _Color ("Color", Color) = (1, 0, 0, 1)
+        _C ("Color", Color) = (0, 0, 0, 1)
+        _O ("OutlineColor", Color) = (1, 1, 1, 1)
+        _OT ("OutlineThickness", Range(0.001, 0.02)) = 0.01
     }
     SubShader
     {
@@ -13,6 +15,7 @@ Shader "Unlit/ColorOverlay"
         LOD 100
         ZWrite Off
         ZTest Always
+        Cull Off
 
         Pass
         {
@@ -35,25 +38,27 @@ Shader "Unlit/ColorOverlay"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float3 normal : TEXCOORD1;
-                float3 wPos: TEXCOORD2;
             };
 
-            float4 _Color;
+            float4 _C;
+            float4 _O;
+            float _OT;
 
             Interpolators vert (appdata v)
             {
                 Interpolators o;
-                v.vertex = float4(v.vertex.x, v.vertex.y * 1.25, v.vertex.z * 1.25, 1);
+
+                v.vertex += float4(normalize(v.normal) * _OT, 1);
+
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normal);
-                o.wPos = mul(unity_ObjectToWorld, v.vertex);
                 o.uv = v.uv;
                 return o;
             }
 
             fixed4 frag (Interpolators i) : SV_Target
             {
-                return float4(1, 1, 1, 1);
+                return _O;
             }
             ENDCG
         }
@@ -71,32 +76,29 @@ Shader "Unlit/ColorOverlay"
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
-                float3 normal : NORMAL;
             };
 
             struct Interpolators
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                float3 normal : TEXCOORD1;
-                float3 wPos: TEXCOORD2;
             };
 
-            float4 _Color;
+            float4 _C;
+            float4 _O;
+            float _OT;
 
             Interpolators vert (appdata v)
             {
                 Interpolators o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
-                o.normal = UnityObjectToWorldNormal(v.normal);
-                o.wPos = mul(unity_ObjectToWorld, v.vertex);
                 o.uv = v.uv;
                 return o;
             }
 
             fixed4 frag (Interpolators i) : SV_Target
             {
-                return _Color;
+                return _C;
             }
             ENDCG
         }

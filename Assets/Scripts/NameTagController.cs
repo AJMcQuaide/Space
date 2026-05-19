@@ -23,8 +23,10 @@ public class NameTagController : MonoBehaviour
 
     List<TextMeshProUGUI> nameTagList = new List<TextMeshProUGUI>();
 
-    float multiplier = 50f;
-    float multiplier2 = 1500f;
+    [SerializeField]
+    float multiplier = 70f;
+    [SerializeField]
+    float multiplier2 = 2300f;
 
     private void Awake()
     {
@@ -35,11 +37,6 @@ public class NameTagController : MonoBehaviour
             cam = FindAnyObjectByType<Camera>();
             sc = SpaceController.Instance;
         }
-    }
-
-    void Start()
-    {
-        
     }
 
     void FixedUpdate()
