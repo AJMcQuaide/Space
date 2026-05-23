@@ -1,5 +1,4 @@
-using TMPro;
-using UnityEditor.Experimental.GraphView;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -14,7 +13,6 @@ public class Manipulation : MonoBehaviour
     [SerializeField]
     CameraController cc;
 
-    //The 3 axis of manipulation
     [SerializeField]
     GameObject moveTool;
 
@@ -24,7 +22,8 @@ public class Manipulation : MonoBehaviour
     Vector3 normalScale = new (1f, 1f, 1f);
     Vector3 increasedScale = new (1.25f, 1.25f, 1.25f);
 
-    [SerializeField]
+    bool isDragging = false;
+
     GameObject picked;
     public GameObject Picked
     {
@@ -33,7 +32,6 @@ public class Manipulation : MonoBehaviour
         {
             if (value != picked)
             {
-
                 if (value == null | picked != null)
                 {
                     picked.transform.localScale = normalScale;
@@ -57,7 +55,7 @@ public class Manipulation : MonoBehaviour
             if (hide != value)
             {
                 hide = value;
-                HideThis(hide);
+                HideThis(!hide, moveTool);
             }
         }
     }
@@ -69,25 +67,35 @@ public class Manipulation : MonoBehaviour
             cc = FindAnyObjectByType<CameraController>();
             Debug.Log("Found missing Camera Controller in " + GetType());
         }
-        transform.position = cc.Target.position;
     }
 
     void Update()
     {
-        Picked = cc.Picking(1 << 7);
         //Set the visibility of the tool
         if (Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Hide = picked != null;
+            Hide = cc.ObjectHighlight.Picked == null;
         }
 
+        if (isDragging)
+        {
+            Debug.LogWarning("Dragging");
+        }
+
+        Picked = cc.Picking(1 << 7);
+        transform.position = cc.Target.position;
         if (Hide == false)
         {
             KeepSize();
-            if (picked != null)
+            if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
             {
-                picked.transform.localScale = increasedScale;
+                isDragging = true;
             }
+        }
+
+        if (Mouse.current.leftButton.wasReleasedThisFrame)
+        {
+            isDragging = false;
         }
     }
 
@@ -104,8 +112,23 @@ public class Manipulation : MonoBehaviour
     /// <summary>
     /// Hide the mesh renderer(s) for this object
     /// </summary>
-    void HideThis(bool show)
+    void HideThis(bool show, GameObject objectToHide)
     {
-        moveTool.SetActive(show);
+        objectToHide.SetActive(show);
+    }
+
+    void MouseDrag()
+    {
+        //The move tool axis is projected onto the camera plane, the projection still is 3D and exists in 3D space
+        Vector3 project = Vector3.ProjectOnPlane(picked.transform.localPosition, cc.Cam.transform.forward).normalized;
+
+        //The projection is transformed local to the camera so that when the camera moves around the vector doesnt change
+        Vector3 projectTransform = cc.Cam.transform.InverseTransformDirection(project);
+
+        //Remove the Z element, once it is transformed to the camera it essentially becomes 2D
+        Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
+
+        //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
+        float dot = Vector2.Dot(projectTransform2D, Inputs.Instance.MouseClickDrag());
     }
 }

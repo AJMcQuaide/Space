@@ -7,6 +7,7 @@ public class Highlighter : MonoBehaviour
     MeshRenderer mr;
 
     GameObject picked;
+    public GameObject Picked {  get { return picked; } }
 
     bool show;
     public bool Show
@@ -19,7 +20,6 @@ public class Highlighter : MonoBehaviour
                 show = value;
                 ChangeState(picked);
             }
-
         }
     }
 

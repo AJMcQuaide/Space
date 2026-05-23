@@ -27,11 +27,6 @@ public class Inputs : MonoBehaviour
         prevMousePos = mousePos;
     }
 
-    private void Update()
-    {
-        //MousePosition();
-    }
-
     /// <summary>
     /// Output the mouse delta each frame, if the left button is held down.
     /// </summary>
@@ -51,16 +46,4 @@ public class Inputs : MonoBehaviour
             return Vector2.zero;
         }
     }
-    
-    //public Vector2 MousePosition()
-    //{
-    //    //Mouse position on screen
-    //    Vector2 ss = UIController.Instance.ScreenSize;
-    //    prevMousePos = MousePos;
-    //    MousePos = Mouse.current.position.ReadValue();
-    //    if (ss != null)
-    //    {
-    //        MousePos -= ss * 0.5f;
-    //    }
-    //}
 }

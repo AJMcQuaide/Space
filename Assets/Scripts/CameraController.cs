@@ -5,6 +5,7 @@ using UnityEngine.InputSystem.HID;
 public class CameraController : MonoBehaviour
 {
     Camera cam;
+    public Camera Cam { get { return cam; } }
 
     [SerializeField]
     Transform target;
@@ -39,6 +40,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField]
     Highlighter objectHighlight;
+    public Highlighter ObjectHighlight { get { return objectHighlight; } }
 
     private void Awake()
     {
