@@ -19,6 +19,9 @@ public class Manipulation : MonoBehaviour
     //[SerializeField]
     //GameObject rotateTool;
 
+    [SerializeField, Range(1f, 10f)]
+    float moveSensativity = 5f;
+
     Vector3 normalScale = new (1f, 1f, 1f);
     Vector3 increasedScale = new (1.25f, 1.25f, 1.25f);
 
@@ -30,17 +33,22 @@ public class Manipulation : MonoBehaviour
         get { return picked; }
         set 
         {
-            if (value != picked)
+            if (value != picked && isDragging == false)
             {
-                if (value == null | picked != null)
+                if (value != null)
                 {
-                    picked.transform.localScale = normalScale;
+                    if (picked != null)
+                    {
+                        picked.transform.localScale = normalScale;
+                    }
                     picked = value;
+                    picked.transform.localScale = increasedScale;
+
                 }
                 else
                 {
+                    picked.transform.localScale = normalScale;
                     picked = value;
-                    picked.transform.localScale = increasedScale;
                 }
             }
         }
@@ -79,11 +87,11 @@ public class Manipulation : MonoBehaviour
 
         if (isDragging)
         {
-            Debug.LogWarning("Dragging");
+            MouseDrag();
+            cc.IsTracking = false;
         }
 
         Picked = cc.Picking(1 << 7);
-        transform.position = cc.Target.position;
         if (Hide == false)
         {
             KeepSize();
@@ -96,6 +104,14 @@ public class Manipulation : MonoBehaviour
         if (Mouse.current.leftButton.wasReleasedThisFrame)
         {
             isDragging = false;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (cc.IsTracking)
+        {
+            transform.position = cc.TrackedObject.position;
         }
     }
 
@@ -117,18 +133,30 @@ public class Manipulation : MonoBehaviour
         objectToHide.SetActive(show);
     }
 
+    /// <summary>
+    /// Move or rotate the object based the movement of the mouse compared to the manipulation axis
+    /// </summary>
     void MouseDrag()
     {
-        //The move tool axis is projected onto the camera plane, the projection still is 3D and exists in 3D space
+        //The move tool axis is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
         Vector3 project = Vector3.ProjectOnPlane(picked.transform.localPosition, cc.Cam.transform.forward).normalized;
 
-        //The projection is transformed local to the camera so that when the camera moves around the vector doesnt change
+        //The projection is transformed local to the camera space
         Vector3 projectTransform = cc.Cam.transform.InverseTransformDirection(project);
 
-        //Remove the Z element, once it is transformed to the camera it essentially becomes 2D
+        //Flatten the Vector to make it 2D
         Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
 
         //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
-        float dot = Vector2.Dot(projectTransform2D, Inputs.Instance.MouseClickDrag());
+        float dot = Vector2.Dot(Inputs.Instance.LeftMouseDragDir, projectTransform2D);
+
+        if (dot != 0)
+        {
+            //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
+            Vector3 move = dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
+            cc.TrackedObject.position += move;
+        }
+        //transform.position of the source target object, += the picked axis location (aka direction), and multiply by dot.
+        //And, disasble the camera rotate? Should the right mouse control the 
     }
 }

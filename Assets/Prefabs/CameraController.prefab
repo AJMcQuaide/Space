@@ -105,8 +105,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41c1d8c980c4e0e4bb15a65daf9f0b84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
   zoomSensativity: 2
-  rotateSensativity: 2.5
+  rotateSensativity: 0.06
   verticalRotationMax: 80
-  highlightPrefab: {fileID: 8686466336049168699, guid: 2d7b476dd5ebcd947afdf250a6240588, type: 3}
+  camPosInput: {x: 0, y: 0}
+  objectHighlight: {fileID: 0}

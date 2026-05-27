@@ -201,7 +201,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2643581611323900166, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 2643581611323900166, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: m_LocalPosition.y
@@ -837,6 +837,10 @@ PrefabInstance:
       propertyPath: cc
       value: 
       objectReference: {fileID: 2627957277315306263}
+    - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: moveSensativity
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 8182569105789298714, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: m_Name
       value: Manipulation

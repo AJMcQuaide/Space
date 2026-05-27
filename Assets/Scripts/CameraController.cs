@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.HID;
 
 public class CameraController : MonoBehaviour
 {
@@ -8,16 +7,30 @@ public class CameraController : MonoBehaviour
     public Camera Cam { get { return cam; } }
 
     [SerializeField]
-    Transform target;
-    public Transform Target { get { return target; } set { target = value; } }
+    Vector3 target;
+    public Vector3 Target { get { return target; } set { target = value; } }
 
-    [SerializeField]
-    Vector3 defaultCameraPos;
+    Transform trackedObject;
+    public Transform TrackedObject { get { return trackedObject; } set { trackedObject = value; } }
+
+    bool isTracking;
+    public bool IsTracking
+    {
+        get { return isTracking; }
+        set
+        {
+            if (value != isTracking)
+            {
+                isTracking = value;
+            }
+        }
+    }
 
     /// <summary>
     /// Camera radius/distance target from focus target
     /// </summary>
     float camDistance = 0;
+
     /// <summary>
     /// Camera radius/distance target from focus target smoothed
     /// </summary>
@@ -50,8 +63,7 @@ public class CameraController : MonoBehaviour
         camDistanceSmooth = camDistance;
 
         //Set the camera to Vector3.zero by default
-        target = new GameObject().transform;
-        target.transform.position = defaultCameraPos;
+        target = Vector3.zero;
 
         if (objectHighlight ==  null)
         {
@@ -69,22 +81,27 @@ public class CameraController : MonoBehaviour
         GameObject picked = Picking(1 << 6);
         if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            target = picked.transform;
+            IsTracking = true;
+            TrackedObject = picked.transform;
+        }
+        if (IsTracking)
+        {
+            Target = TrackedObject.position;
         }
     }
 
     void FixedUpdate()
     {
         //Lerp
-        transform.position = Vector3.Lerp(transform.position, target.position + CameraOrbitPos(), Time.deltaTime * 25f);
+        transform.position = Vector3.Lerp(transform.position, target + CameraOrbitPos(), Time.deltaTime * 25f);
 
         //No Slerp
-        transform.rotation = Quaternion.LookRotation(target.position - transform.position, Vector3.up);
+        transform.rotation = Quaternion.LookRotation(target - transform.position, Vector3.up);
     }
 
     Vector3 CameraOrbitPos()
     {
-        camPosInput += Inputs.Instance.MouseClickDrag() * rotateSensativity;
+        camPosInput -= Inputs.Instance.MiddleMouseDragDir * rotateSensativity;
         float yMax = verticalRotationMax * Mathf.Deg2Rad;
         camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
 
