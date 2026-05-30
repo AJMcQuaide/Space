@@ -1,6 +1,6 @@
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Unity.Mathematics;
 
 /// <summary>
 /// For manipulation of game objects in runtime
@@ -27,6 +27,7 @@ public class Manipulation : MonoBehaviour
 
     bool isDragging = false;
 
+    [SerializeField]
     GameObject picked;
     public GameObject Picked
     {
@@ -43,7 +44,6 @@ public class Manipulation : MonoBehaviour
                     }
                     picked = value;
                     picked.transform.localScale = increasedScale;
-
                 }
                 else
                 {
@@ -54,16 +54,16 @@ public class Manipulation : MonoBehaviour
         }
     }
 
-    bool hide;
-    public bool Hide
+    bool show;
+    public bool Show
     {
-        get { return hide; }
+        get { return show; }
         set
         {
-            if (hide != value)
+            if (show != value)
             {
-                hide = value;
-                HideThis(!hide, moveTool);
+                show = value;
+                ShowObject(show, moveTool);
             }
         }
     }
@@ -75,43 +75,42 @@ public class Manipulation : MonoBehaviour
             cc = FindAnyObjectByType<CameraController>();
             Debug.Log("Found missing Camera Controller in " + GetType());
         }
+        ShowObject(false, moveTool);
     }
 
     void Update()
     {
-        //Set the visibility of the tool
-        if (Mouse.current.leftButton.wasPressedThisFrame)
+        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            Hide = cc.ObjectHighlight.Picked == null;
+            isDragging = true;
         }
 
         if (isDragging)
         {
             MouseDrag();
             cc.IsTracking = false;
-        }
-
-        Picked = cc.Picking(1 << 7);
-        if (Hide == false)
-        {
-            KeepSize();
-            if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
-                isDragging = true;
+                isDragging = false;
+            }
+        }
+        else
+        {
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+            {
+                Show = cc.Picked != null;
             }
         }
 
-        if (Mouse.current.leftButton.wasReleasedThisFrame)
-        {
-            isDragging = false;
-        }
+        Picked = cc.Picking(1 << 7);
+        KeepSize();
     }
 
-    private void FixedUpdate()
+    private void LateUpdate()
     {
-        if (cc.IsTracking)
+        if (cc.CameraTrackedObject != null)
         {
-            transform.position = cc.TrackedObject.position;
+            transform.position = cc.CameraTrackedObject.transform.position;
         }
     }
 
@@ -128,7 +127,7 @@ public class Manipulation : MonoBehaviour
     /// <summary>
     /// Hide the mesh renderer(s) for this object
     /// </summary>
-    void HideThis(bool show, GameObject objectToHide)
+    void ShowObject(bool show, GameObject objectToHide)
     {
         objectToHide.SetActive(show);
     }
@@ -153,10 +152,10 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
-            cc.TrackedObject.position += move;
+            Vector3 move = dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized * cc.CamDistance;
+
+            cc.CameraTrackedObject.transform.position += move;
+            cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
         }
-        //transform.position of the source target object, += the picked axis location (aka direction), and multiply by dot.
-        //And, disasble the camera rotate? Should the right mouse control the 
     }
 }

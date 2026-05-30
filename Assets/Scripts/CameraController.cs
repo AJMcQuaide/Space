@@ -10,10 +10,17 @@ public class CameraController : MonoBehaviour
     Vector3 target;
     public Vector3 Target { get { return target; } set { target = value; } }
 
-    Transform trackedObject;
-    public Transform TrackedObject { get { return trackedObject; } set { trackedObject = value; } }
+    CelestialBody cameraTrackedObject;
+    public CelestialBody CameraTrackedObject { get { return cameraTrackedObject; } set { cameraTrackedObject = value; } }
 
+    /// <summary>
+    /// Camera tracking of object
+    /// </summary>
+    
     bool isTracking;
+    /// <summary>
+    /// Camera tracking of object
+    /// </summary>
     public bool IsTracking
     {
         get { return isTracking; }
@@ -30,6 +37,7 @@ public class CameraController : MonoBehaviour
     /// Camera radius/distance target from focus target
     /// </summary>
     float camDistance = 0;
+    public float CamDistance { get { return camDistance; } }
 
     /// <summary>
     /// Camera radius/distance target from focus target smoothed
@@ -55,6 +63,10 @@ public class CameraController : MonoBehaviour
     Highlighter objectHighlight;
     public Highlighter ObjectHighlight { get { return objectHighlight; } }
 
+    [SerializeField]
+    GameObject picked;
+    public GameObject Picked { get { return picked; } set { picked = value; } }
+
     private void Awake()
     {
         cam = GetComponent<Camera>();
@@ -78,15 +90,15 @@ public class CameraController : MonoBehaviour
         SetPickPos();
 
         //Go to object when clicked on specified layer (Celestial Body)
-        GameObject picked = Picking(1 << 6);
-        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
+        Picked = Picking(1 << 6);
+        if (Picked != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             IsTracking = true;
-            TrackedObject = picked.transform;
+            CameraTrackedObject = Picked.GetComponent<CelestialBody>();
         }
         if (IsTracking)
         {
-            Target = TrackedObject.position;
+            Target = CameraTrackedObject.transform.position;
         }
     }
 

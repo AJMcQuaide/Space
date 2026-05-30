@@ -658,7 +658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
-      value: 50
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: arrowColors.Array.data[0].a
@@ -833,17 +833,37 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2713563339974720899, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3264492323363993672, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: cc
       value: 
       objectReference: {fileID: 2627957277315306263}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: moveSensativity
-      value: 2
+      value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6297452754483848128, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065810833762632486, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8182569105789298714, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: m_Name
       value: Manipulation
+      objectReference: {fileID: 0}
+    - target: {fileID: 8406464222232051199, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
