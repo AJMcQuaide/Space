@@ -245,7 +245,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 811b893faf0fe9c4e973916a5673e984, type: 2}
     - target: {fileID: 5668306745816874056, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: initialSpeed
-      value: 5000
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5668306745816874056, guid: 59584721b9cb01e45acd3ee50e16bf61, type: 3}
       propertyPath: thisCelestialBody
@@ -658,7 +658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: arrowColors.Array.data[0].a
@@ -847,7 +847,7 @@ PrefabInstance:
       objectReference: {fileID: 2627957277315306263}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: moveSensativity
-      value: 1.25
+      value: 1.15
       objectReference: {fileID: 0}
     - target: {fileID: 6297452754483848128, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: m_ConstrainProportionsScale

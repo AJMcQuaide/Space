@@ -19,8 +19,8 @@ public class Manipulation : MonoBehaviour
     //[SerializeField]
     //GameObject rotateTool;
 
-    [SerializeField, Range(1f, 10f)]
-    float moveSensativity = 5f;
+    [SerializeField, Range(1f, 2f)]
+    float moveSensativity;
 
     Vector3 normalScale = new (1f, 1f, 1f);
     Vector3 increasedScale = new (1.25f, 1.25f, 1.25f);
@@ -80,9 +80,11 @@ public class Manipulation : MonoBehaviour
 
     void Update()
     {
-        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame && Keyboard.current.leftShiftKey.IsPressed())
         {
             isDragging = true;
+            //SpaceController.Instance.Play = false;
+            UIController.Instance.PlayPauseButton();
         }
 
         if (isDragging)
@@ -152,7 +154,7 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized * cc.CamDistance;
+            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
 
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);

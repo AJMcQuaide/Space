@@ -192,13 +192,13 @@ public class SpaceController : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// Start and pause the simulation
-    /// </summary>
-    public void PlayPause()
-    {
-        play = !play;
-    }
+    ///// <summary>
+    ///// Start and pause the simulation
+    ///// </summary>
+    //public void PlayPause()
+    //{
+    //    play = !play;
+    //}
 
     /// <summary>
     /// Remove all Celestial Bodies from the app
