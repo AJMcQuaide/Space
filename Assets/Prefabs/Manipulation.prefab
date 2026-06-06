@@ -48,7 +48,7 @@ MonoBehaviour:
   size: 4
   cc: {fileID: 0}
   moveTool: {fileID: 3264492323363993672}
-  moveSensativity: 5
+  moveSensativity: 1.15
   picked: {fileID: 0}
 --- !u!1001 &695972456316971862
 PrefabInstance:
@@ -101,6 +101,22 @@ PrefabInstance:
     - target: {fileID: 3170556376783886037, guid: 2d736c0901dd17541882593d1264eb1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3170556376783886037, guid: 2d736c0901dd17541882593d1264eb1e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6831288458597238934, guid: 2d736c0901dd17541882593d1264eb1e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7369880734146881648, guid: 2d736c0901dd17541882593d1264eb1e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9007575190259979945, guid: 2d736c0901dd17541882593d1264eb1e, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

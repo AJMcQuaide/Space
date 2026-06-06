@@ -10,8 +10,24 @@ public class CameraController : MonoBehaviour
     Vector3 target;
     public Vector3 Target { get { return target; } set { target = value; } }
 
+    [SerializeField]
     CelestialBody cameraTrackedObject;
-    public CelestialBody CameraTrackedObject { get { return cameraTrackedObject; } set { cameraTrackedObject = value; } }
+    public CelestialBody CameraTrackedObject
+    {
+        get { return cameraTrackedObject; } 
+        set
+        {
+            if (cameraTrackedObject != value)
+            {
+                if (cameraTrackedObject != null)
+                {
+                    cameraTrackedObject.Selected = false;
+                }
+                cameraTrackedObject = value;
+                cameraTrackedObject.Selected = true;
+            }
+        }
+    }
 
     /// <summary>
     /// Camera tracking of object

@@ -148,11 +148,38 @@ public class CelestialBody : MonoBehaviour
     [SerializeField]
     GameObject model;
 
+    MeshRenderer mr;
+
+    bool selected;
+    public bool Selected
+    {
+        get { return selected; }
+        set
+        {
+            if (value != selected)
+            {
+                selected = value;
+                if (selected)
+                {
+                    mr.material.EnableKeyword("_SELECTED");
+                }
+                else
+                {
+                    mr.material.DisableKeyword("_SELECTED");
+                }
+            }
+        }
+    }
+
     private void Start()
     {
         SetProperties();
         Register(this);
         NameTagController.Instance.Register(this);
+        if (model != null)
+        {
+            mr = model.GetComponent<MeshRenderer>();
+        }
     }
 
     private void FixedUpdate()
