@@ -83,8 +83,12 @@ public class Manipulation : MonoBehaviour
         if (picked != null && Mouse.current.leftButton.wasPressedThisFrame && Keyboard.current.leftShiftKey.IsPressed())
         {
             isDragging = true;
-            //SpaceController.Instance.Play = false;
-            UIController.Instance.PlayPauseButton();
+
+            //Pause when dragging objects if in Play mode
+            if (SpaceController.Instance.Play)
+            {
+                UIController.Instance.PlayPauseButton();
+            }
         }
 
         if (isDragging)

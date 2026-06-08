@@ -178,7 +178,6 @@ MonoBehaviour:
   mass: 1.898e+27
   radius: 71492000
   initialSpeed: 0
-  planetColor: {r: 0.41402388, g: 0, b: 1, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
   trailWidth: 0
   isKinematic: 0
@@ -254,7 +253,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5cd8a8e9038400949a94700800c2c033, type: 2}
+  - {fileID: 2100000, guid: abad0748e765adb4e805edfec6f3001b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

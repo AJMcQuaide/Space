@@ -51,9 +51,9 @@ Shader "Custom/OutlineSurfaceShader"
             {
                 Interpolators o;
 
-                #ifdef _SELECTED
+                //#ifdef _SELECTED
                     v.vertex += float4(normalize(v.normal) * _OT, 1);
-                #endif
+                //#endif
 
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.normal = UnityObjectToWorldNormal(v.normal);
@@ -64,10 +64,10 @@ Shader "Custom/OutlineSurfaceShader"
             fixed4 frag (Interpolators i) : SV_Target
             {
                 #ifdef _SELECTED
-                    return _O;
+                    return float4(1,1,0,1);
                 #else
-                    discard;
-                    return float4(0,0,0,0);
+                    //discard;
+                    return float4(1,1,1,1);
                 #endif
             }
             ENDCG

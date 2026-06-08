@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a7273e52174d63346807244164ae7ec1, type: 2}
+  - {fileID: 2100000, guid: 8e065015393f43747ae22fb501ea9522, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -261,7 +261,6 @@ MonoBehaviour:
   mass: 3.3011e+23
   radius: 2439700
   initialSpeed: 0
-  planetColor: {r: 0.7830189, g: 0.613355, b: 0, a: 0}
   trailColor: {r: 1, g: 1, b: 1, a: 0}
   trailWidth: 0
   isKinematic: 0
