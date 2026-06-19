@@ -6,9 +6,7 @@ Shader "Custom/OutlineSurfaceShader"
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
-        _C ("Color", Color) = (0, 0, 0, 1)
         _O ("OutlineColor", Color) = (1, 1, 1, 1)
-        _OT ("OutlineThickness", Range(0.001, 0.05)) = 0.01
     }
     SubShader
     {
@@ -46,13 +44,21 @@ Shader "Custom/OutlineSurfaceShader"
             float4 _C;
             float4 _O;
             float _OT;
+            float _Scale;
 
             Interpolators vert (appdata v)
             {
                 Interpolators o;
 
+                //Camera distance from this object center
+                float3 diff = unity_ObjectToWorld._m03_m13_m23 - _WorldSpaceCameraPos;
+                float cameraDist = length(diff);
+                //float3 worldNormal = UnityObjectToWorldNormal(v.normal);
+                //float3 vertexWorld = worldNormal * cameraDist * 0.01;
+                float3 offset = (normalize(v.normal) / _Scale) * cameraDist;
+
                 //#ifdef _SELECTED
-                    v.vertex += float4(normalize(v.normal) * _OT, 1);
+                v.vertex += float4(offset  * 0.0005 * _OT, 1);
                 //#endif
 
                 o.vertex = UnityObjectToClipPos(v.vertex);

@@ -16,6 +16,9 @@ public class Manipulation : MonoBehaviour
     [SerializeField]
     GameObject moveTool;
 
+    [SerializeField]
+    GameObject rotationTool;
+
     //[SerializeField]
     //GameObject rotateTool;
 

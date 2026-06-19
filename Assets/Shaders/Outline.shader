@@ -1,10 +1,11 @@
+//Show an outline on an object of solid color
 Shader "Outline"
 {
     Properties
     {
         _C ("Color", Color) = (0, 0, 0, 1)
         _O ("OutlineColor", Color) = (1, 1, 1, 1)
-        _OT ("OutlineThickness", Range(0.001, 0.02)) = 0.01
+        _OT ("OutlineThickness", Range(0, 0.02)) = 0.01
     }
     SubShader
     {

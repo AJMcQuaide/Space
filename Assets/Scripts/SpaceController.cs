@@ -81,6 +81,10 @@ public class SpaceController : MonoBehaviour
 
     string savePath;
 
+    [SerializeField, Range(1, 10)]
+    float _outlineThickness;
+    public float _OutlineThickness {  get { return _outlineThickness; } }
+
     void Awake()
     {
         //Singleton

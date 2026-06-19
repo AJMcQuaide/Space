@@ -1,6 +1,7 @@
 using System;
-using UnityEngine;
 using Unity.Mathematics;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 [RequireComponent(typeof(SphereCollider))]
 public class CelestialBody : MonoBehaviour
@@ -180,6 +181,12 @@ public class CelestialBody : MonoBehaviour
         {
             mr = model.GetComponent<MeshRenderer>();
         }
+
+        //Send scale to shader
+        mr.material.SetFloat("_Scale", model.transform.localScale.x);
+
+        //Send outline thickness to shader
+        mr.material.SetFloat("_OT", sc._OutlineThickness);
     }
 
     private void FixedUpdate()
