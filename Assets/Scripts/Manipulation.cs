@@ -25,10 +25,16 @@ public class Manipulation : MonoBehaviour
     [SerializeField, Range(1f, 2f)]
     float moveSensativity;
 
-    Vector3 normalScale = new (1f, 1f, 1f);
-    Vector3 increasedScale = new (1.25f, 1.25f, 1.25f);
+    Vector3 normalScale = new(1f, 1f, 1f);
+    Vector3 increasedScale = new(1.25f, 1.25f, 1.25f);
 
     bool isDragging = false;
+
+    /// <summary>
+    /// If true, manipulation is in move made, if false, it is in rotate mode
+    /// </summary>
+    [SerializeField]
+    bool moveToolActive = false;
 
     [SerializeField]
     GameObject picked;
@@ -66,7 +72,14 @@ public class Manipulation : MonoBehaviour
             if (show != value)
             {
                 show = value;
-                ShowObject(show, moveTool);
+                if (moveToolActive)
+                {
+                    ShowObject(show, moveTool);
+                }
+                else
+                {
+                    ShowObject(show, rotationTool);
+                }
             }
         }
     }
@@ -79,6 +92,7 @@ public class Manipulation : MonoBehaviour
             Debug.Log("Found missing Camera Controller in " + GetType());
         }
         ShowObject(false, moveTool);
+        ShowObject(false, rotationTool);
     }
 
     void Update()
@@ -96,8 +110,18 @@ public class Manipulation : MonoBehaviour
 
         if (isDragging)
         {
-            MouseDrag();
-            cc.IsTracking = false;
+            //Perform the move action
+            if (moveToolActive)
+            {
+                MoveTool();
+            }
+            //Perform the rotation action
+            else
+            {
+                //RotationTool
+            }
+
+                cc.IsTracking = false;
             if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
                 isDragging = false;
@@ -142,9 +166,9 @@ public class Manipulation : MonoBehaviour
     }
 
     /// <summary>
-    /// Move or rotate the object based the movement of the mouse compared to the manipulation axis
+    /// Move the object based the movement of the mouse compared to the manipulation axis
     /// </summary>
-    void MouseDrag()
+    void MoveTool()
     {
         //The move tool axis is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
         Vector3 project = Vector3.ProjectOnPlane(picked.transform.localPosition, cc.Cam.transform.forward).normalized;

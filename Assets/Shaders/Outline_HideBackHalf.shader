@@ -10,11 +10,14 @@ Shader "Outline_HideBackSide"
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags
+        {
+            "RendereQueue"="Overlay"
+        }
         LOD 100
-        // ZWrite Off
-        //ZTest Always
-        //Cull Off
+        ZWrite Off
+        ZTest Always
+        Cull Off
         //Cull Front
         // ZWrite On
         // ZTest LEqual

@@ -151,6 +151,7 @@ public class CelestialBody : MonoBehaviour
 
     MeshRenderer mr;
 
+    [SerializeField]
     bool selected;
     public bool Selected
     {

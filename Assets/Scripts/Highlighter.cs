@@ -6,6 +6,7 @@ public class Highlighter : MonoBehaviour
     CameraController cc;
     MeshRenderer mr;
 
+    [SerializeField]
     GameObject picked;
     public GameObject Picked {  get { return picked; } }
 
@@ -18,7 +19,7 @@ public class Highlighter : MonoBehaviour
             if (value != show)
             {
                 show = value;
-                ChangeState(picked);
+                VisibilityAndScale(picked);
             }
         }
     }
@@ -37,7 +38,11 @@ public class Highlighter : MonoBehaviour
     void Update()
     {
         picked = cc.Picking(1 << 6);
-        SetPosition(picked);
+        Show = picked != null && picked.GetComponent<CelestialBody>().Selected == false;
+        if (Show)
+        {
+            SetPosition(picked);
+        }
     }
 
     /// <summary>
@@ -45,7 +50,6 @@ public class Highlighter : MonoBehaviour
     /// </summary>
     void SetPosition(GameObject pick)
     {
-        Show = pick != null;
         if (Show)
         {
             transform.position = pick.transform.position;
@@ -56,11 +60,11 @@ public class Highlighter : MonoBehaviour
     /// Change the scale and visibility of the highlighter object based on the picked object
     /// </summary>
     /// <param name="pick"></param>
-    public void ChangeState(GameObject pick)
+    public void VisibilityAndScale(GameObject pick)
     {
         if (pick != null)
         {
-            mr.enabled = true;
+            mr.enabled = Show;
             float scale;
             scale = pick.GetComponent<CelestialBody>().Radius * (float)CelestialBody.SD * 2f;
             transform.localScale = new Vector3(scale, scale, scale);
