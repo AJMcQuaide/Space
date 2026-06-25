@@ -38,10 +38,14 @@ public class Highlighter : MonoBehaviour
     void Update()
     {
         picked = cc.Picking(1 << 6);
-        Show = picked != null && picked.GetComponent<CelestialBody>().Selected == false;
-        if (Show)
+        Show = false;
+        if (picked != null && picked.TryGetComponent<CelestialBody>(out CelestialBody cb))
         {
-            SetPosition(picked);
+            if (cb.Selected == false)
+            {
+                Show = true;
+                SetPosition(picked);
+            }
         }
     }
 
