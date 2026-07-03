@@ -54,7 +54,7 @@ public class UIController : MonoBehaviour
     public void PlayPauseButton()
     {
         playPauseSelected = !playPauseSelected;
-        SpaceController.Instance.Play = !playPauseSelected;
+        SpaceController.Instance.InPlayMode = !playPauseSelected;
 
         SetSpriteState();
     }

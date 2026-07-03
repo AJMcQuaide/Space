@@ -896,6 +896,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f9703c6594644d9469790a8463301ef1, type: 3}
+--- !u!114 &1429844600 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+  m_PrefabInstance: {fileID: 1835062646}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90eb299e9d0219e47b8cd2b2bbe309df, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1651822361 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
@@ -1016,14 +1027,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3264492323363993672, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: cc
       value: 
       objectReference: {fileID: 2627957277315306263}
-    - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
-      propertyPath: moveToolActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8182569105789298714, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: m_Name
       value: Manipulation
@@ -1480,14 +1491,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2293877312245357281, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
-      propertyPath: multiplier
-      value: 70
-      objectReference: {fileID: 0}
-    - target: {fileID: 2293877312245357281, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
-      propertyPath: multiplier2
-      value: 2300
-      objectReference: {fileID: 0}
     - target: {fileID: 2715905377745387431, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
       propertyPath: m_Name
       value: Canvas
@@ -1500,6 +1503,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1651822361}
+    - target: {fileID: 5596786874530698987, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1429844600}
+    - target: {fileID: 5596786874530698987, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowDirectionTool
+      objectReference: {fileID: 0}
     - target: {fileID: 6114871547456040834, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -1512,6 +1523,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6103252648243364632}
+    - target: {fileID: 8046529442229997106, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1429844600}
+    - target: {fileID: 8046529442229997106, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ShowMoveTool
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -76,8 +76,8 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     float physicsTimeStep;
 
-    bool play;
-    public bool Play { get { return play; } set { play = value; } }
+    bool inPlayMode;
+    public bool InPlayMode { get { return inPlayMode; } set { inPlayMode = value; } }
 
     string savePath;
 
@@ -118,7 +118,7 @@ public class SpaceController : MonoBehaviour
         SetShader(meshRenderer.material);
 
         //FPS
-        if (Frames < simulationLength && Play)
+        if (Frames < simulationLength && InPlayMode)
         {
             Frames++;
         }

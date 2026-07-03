@@ -192,7 +192,7 @@ public class CelestialBody : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (Sc.Play && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
+        if (Sc.InPlayMode && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
         {
             UpdateSpeed();
             SetPosition();

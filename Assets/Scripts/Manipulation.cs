@@ -31,13 +31,25 @@ public class Manipulation : MonoBehaviour
     bool isDragging = false;
 
     /// <summary>
-    /// If true, manipulation is in move made, if false, it is in rotate mode
+    /// Change between move tool and rotation tool
     /// </summary>
-    [SerializeField]
-    bool moveToolActive = false;
+    bool moveToolActive = true;
+    public bool MoveToolActive
+    {
+        get
+        { return moveToolActive; }
+        set
+        {
+
+            moveToolActive = value;
+        }
+    }
 
     [SerializeField]
     GameObject picked;
+    /// <summary>
+    /// Returns whatever object the mouse pointer is hovering over, as long as it is on the specified layer
+    /// </summary>
     public GameObject Picked
     {
         get { return picked; }
@@ -63,27 +75,6 @@ public class Manipulation : MonoBehaviour
         }
     }
 
-    bool show;
-    public bool Show
-    {
-        get { return show; }
-        set
-        {
-            if (show != value)
-            {
-                show = value;
-                if (moveToolActive)
-                {
-                    ShowObject(show, moveTool);
-                }
-                else
-                {
-                    ShowObject(show, rotationTool);
-                }
-            }
-        }
-    }
-
     void Start()
     {
         if (cc == null)
@@ -91,56 +82,82 @@ public class Manipulation : MonoBehaviour
             cc = FindAnyObjectByType<CameraController>();
             Debug.Log("Found missing Camera Controller in " + GetType());
         }
-        ShowObject(false, moveTool);
-        ShowObject(false, rotationTool);
+        HideTools();
     }
 
     void Update()
     {
-        if (picked != null && Mouse.current.leftButton.wasPressedThisFrame && Keyboard.current.leftShiftKey.IsPressed())
-        {
-            isDragging = true;
+        Picked = cc.Picking(1 << 7);
+        KeepApparentSizeOnScreen();
 
-            //Pause when dragging objects if in Play mode
-            if (SpaceController.Instance.Play)
-            {
-                UIController.Instance.PlayPauseButton();
-            }
-        }
-
-        if (isDragging)
+        //If you click, and the camera is tracking an object, and the game is paused or stopped
+        if (Mouse.current.leftButton.wasPressedThisFrame && SpaceController.Instance.InPlayMode == false)
         {
-            //Perform the move action
-            if (moveToolActive)
+            //If the above also coresponds with hovering over a object on the appropriate layer
+            if (cc.Picked != null)
             {
-                MoveTool();
+                if (MoveToolActive)
+                {
+                    ShowMoveTool();
+                }
+                else
+                {
+                    ShowDirectionTool();
+                }
             }
-            //Perform the rotation action
+            //If not picking up an object, or clicking outside of one, then hide the manipulation tools
             else
             {
-                //RotationTool
-            }
-
-                cc.IsTracking = false;
-            if (Mouse.current.leftButton.wasReleasedThisFrame)
-            {
-                isDragging = false;
-            }
-        }
-        else
-        {
-            if (Mouse.current.leftButton.wasPressedThisFrame)
-            {
-                Show = cc.Picked != null;
+                HideTools();
             }
         }
 
-        Picked = cc.Picking(1 << 7);
-        KeepSize();
+        //Previous code below*********************
+
+        //if (picked != null && Mouse.current.leftButton.wasPressedThisFrame && Keyboard.current.leftShiftKey.IsPressed())
+        //{
+        //    isDragging = true;
+
+        //    //Pause when dragging objects if in Play mode
+        //    if (SpaceController.Instance.InPlayMode)
+        //    {
+        //        UIController.Instance.PlayPauseButton();
+        //    }
+        //}
+
+        //if (isDragging)
+        //{
+        //    //Perform the move action
+        //    if (MoveToolActive)
+        //    {
+        //        DragObject();
+        //    }
+        //    //Perform the rotation action
+        //    else
+        //    {
+        //        //RotationTool
+        //    }
+
+        //        cc.IsTracking = false;
+        //    if (Mouse.current.leftButton.wasReleasedThisFrame)
+        //    {
+        //        isDragging = false;
+        //    }
+        //}
+        //else
+        //{
+        //    if (Mouse.current.leftButton.wasPressedThisFrame)
+        //    {
+
+        //    }
+        //}
+
+
     }
 
     private void LateUpdate()
     {
+        //Set position to the camera tracked object
         if (cc.CameraTrackedObject != null)
         {
             transform.position = cc.CameraTrackedObject.transform.position;
@@ -150,7 +167,7 @@ public class Manipulation : MonoBehaviour
     /// <summary>
     /// Keep the aparent size of the object the same regardless of camera distance
     /// </summary>
-    public void KeepSize()
+    public void KeepApparentSizeOnScreen()
     {
         float distance = (transform.position - cc.transform.position).magnitude;
         float scale = distance / size;
@@ -168,7 +185,7 @@ public class Manipulation : MonoBehaviour
     /// <summary>
     /// Move the object based the movement of the mouse compared to the manipulation axis
     /// </summary>
-    void MoveTool()
+    void DragObject()
     {
         //The move tool axis is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
         Vector3 project = Vector3.ProjectOnPlane(picked.transform.localPosition, cc.Cam.transform.forward).normalized;
@@ -190,5 +207,34 @@ public class Manipulation : MonoBehaviour
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
         }
+    }
+
+    /// <summary>
+    /// Switch to MoveTool mode
+    /// </summary>
+    public void ShowMoveTool()
+    {
+        ShowObject(true, moveTool);
+        ShowObject(false, rotationTool);
+        MoveToolActive = true;
+    }
+
+    /// <summary>
+    /// Switch to DirectionTool mode
+    /// </summary>
+    public void ShowDirectionTool()
+    {
+        ShowObject(false, moveTool);
+        ShowObject(true, rotationTool);
+        MoveToolActive = false;
+    }
+
+    /// <summary>
+    /// Hide all manipulation tools
+    /// </summary>
+    public void HideTools()
+    {
+        ShowObject(false, moveTool);
+        ShowObject(false, rotationTool);
     }
 }
