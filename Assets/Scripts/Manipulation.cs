@@ -57,10 +57,13 @@ public class Manipulation : MonoBehaviour
         {
             if (value != picked && isDragging == false)
             {
+                //Debug.Log("1");
                 if (value != null)
                 {
+                    //Debug.Log("Increased");
                     if (picked != null)
                     {
+                        //Debug.Log("Normal 1");
                         picked.transform.localScale = normalScale;
                     }
                     picked = value;
@@ -68,6 +71,7 @@ public class Manipulation : MonoBehaviour
                 }
                 else
                 {
+                    //Debug.Log("Normal 2");
                     picked.transform.localScale = normalScale;
                     picked = value;
                 }
@@ -90,27 +94,52 @@ public class Manipulation : MonoBehaviour
         Picked = cc.Picking(1 << 7);
         KeepApparentSizeOnScreen();
 
-        //If you click, and the camera is tracking an object, and the game is paused or stopped
-        if (Mouse.current.leftButton.wasPressedThisFrame && SpaceController.Instance.InPlayMode == false)
+        if (SpaceController.Instance.InPlayMode == false)
         {
-            //If the above also coresponds with hovering over a object on the appropriate layer
-            if (cc.Picked != null)
+            if (isDragging)
             {
                 if (MoveToolActive)
                 {
-                    ShowMoveTool();
+                    DragObject();
                 }
                 else
                 {
-                    ShowDirectionTool();
+                    //Rotate the rotation tool
                 }
             }
-            //If not picking up an object, or clicking outside of one, then hide the manipulation tools
-            else
+            //If you click, and the camera is tracking an object, and the game is paused or stopped
+            else if (Mouse.current.leftButton.wasPressedThisFrame)
             {
-                HideTools();
+                //Check if there is a picked manipulation tool object if the tool is visible
+                if (Picked != null)
+                {
+                    isDragging = true;
+                }
+                //Check if there is a picked celestial body which can show/hide the manipulation tools
+                else if (cc.Picked != null)
+                {
+                    if (MoveToolActive)
+                    {
+                        ShowMoveTool();
+                    }
+                    else
+                    {
+                        ShowDirectionTool();
+                    }
+                }
+                //If not picking up an object, or clicking outside of one, then hide the manipulation tools
+                else
+                {
+                    HideTools();
+                }
+            }
+            //Any click release cancels dragging operation
+            else if (Mouse.current.leftButton.wasReleasedThisFrame)
+            {
+                isDragging = false;
             }
         }
+        Debug.Log("IsDragging: " + isDragging);
 
         //Previous code below*********************
 
