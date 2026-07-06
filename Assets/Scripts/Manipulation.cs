@@ -108,12 +108,14 @@ public class Manipulation : MonoBehaviour
                 }
             }
             //If you click, and the camera is tracking an object, and the game is paused or stopped
-            else if (Mouse.current.leftButton.wasPressedThisFrame)
+            if (Mouse.current.leftButton.wasPressedThisFrame)
             {
                 //Check if there is a picked manipulation tool object if the tool is visible
                 if (Picked != null)
                 {
                     isDragging = true;
+                    //Stop the camera from tracking the object on drag to reposition
+                    cc.TrackObject = false;
                 }
                 //Check if there is a picked celestial body which can show/hide the manipulation tools
                 else if (cc.Picked != null)
@@ -180,8 +182,6 @@ public class Manipulation : MonoBehaviour
 
         //    }
         //}
-
-
     }
 
     private void LateUpdate()

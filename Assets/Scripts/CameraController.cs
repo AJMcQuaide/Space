@@ -6,10 +6,17 @@ public class CameraController : MonoBehaviour
     Camera cam;
     public Camera Cam { get { return cam; } }
 
+    /// <summary>
+    /// The position of the camera tracked object
+    /// </summary>
     [SerializeField]
     Vector3 target;
     public Vector3 Target { get { return target; } set { target = value; } }
 
+
+    /// <summary>
+    /// The celestial body object that the camera is tracking
+    /// </summary>
     [SerializeField]
     CelestialBody cameraTrackedObject;
     public CelestialBody CameraTrackedObject
@@ -28,23 +35,19 @@ public class CameraController : MonoBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// Camera tracking of object
-    /// </summary>
     
-    bool isTracking;
+    bool trackObject;
     /// <summary>
-    /// Camera tracking of object
+    /// If the camera is tracking an object
     /// </summary>
-    public bool IsTracking
+    public bool TrackObject
     {
-        get { return isTracking; }
+        get { return trackObject; }
         set
         {
-            if (value != isTracking)
+            if (value != trackObject)
             {
-                isTracking = value;
+                trackObject = value;
             }
         }
     }
@@ -109,10 +112,10 @@ public class CameraController : MonoBehaviour
         Picked = Picking(1 << 6);
         if (Picked != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            IsTracking = true;
+            TrackObject = true;
             CameraTrackedObject = Picked.GetComponent<CelestialBody>();
         }
-        if (IsTracking)
+        if (TrackObject)
         {
             Target = CameraTrackedObject.transform.position;
         }
