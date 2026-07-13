@@ -159,6 +159,25 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
+    /// Shoot a ray from this camear's designated pick position, and return the object on the given layer.
+    /// Also returns the picked objects normalized local hit position from the raycast
+    /// </summary>
+    public GameObject Picking(LayerMask mask, out Vector3 hitPos)
+    {
+        if (Physics.Raycast(transform.position, pickPos, out RaycastHit hit, cam.farClipPlane, mask))
+        {
+            //hitPos = hit.transform.InverseTransformPoint(hit.point).normalized;
+            hitPos = hit.point - hit.transform.position;
+            return hit.collider.gameObject;
+        }
+        else
+        {
+            hitPos = Vector3.zero;
+            return null;
+        }
+    }
+
+    /// <summary>
     /// Shoot a ray from this camear's designated pick position, and return the object on the given layer
     /// </summary>
     public GameObject Picking(LayerMask mask)

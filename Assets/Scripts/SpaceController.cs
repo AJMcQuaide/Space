@@ -85,6 +85,10 @@ public class SpaceController : MonoBehaviour
     float _outlineThickness;
     public float _OutlineThickness {  get { return _outlineThickness; } }
 
+    [SerializeField]
+    Manipulation objectManipulationTool;
+    public Manipulation ObjectManipulationTool { get { return objectManipulationTool; } }
+
     void Awake()
     {
         //Singleton

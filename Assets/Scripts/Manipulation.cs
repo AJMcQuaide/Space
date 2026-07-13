@@ -19,11 +19,11 @@ public class Manipulation : MonoBehaviour
     [SerializeField]
     GameObject rotationTool;
 
-    //[SerializeField]
-    //GameObject rotateTool;
-
     [SerializeField, Range(1f, 2f)]
     float moveSensativity;
+
+    [SerializeField, Range(100f, 300f)]
+    float rotateSensativity;
 
     Vector3 normalScale = new(1f, 1f, 1f);
     Vector3 increasedScale = new(1.25f, 1.25f, 1.25f);
@@ -48,7 +48,7 @@ public class Manipulation : MonoBehaviour
     [SerializeField]
     GameObject picked;
     /// <summary>
-    /// Returns whatever object the mouse pointer is hovering over, as long as it is on the specified layer
+    /// Stores the current picked object
     /// </summary>
     public GameObject Picked
     {
@@ -79,6 +79,16 @@ public class Manipulation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// The hit location the Picking tool, updated every frame as an output of the Picking tool
+    /// </summary>
+    Vector3 hitPos;
+
+    /// <summary>
+    /// The hit location the Picking tool, frozen when you click the mouse on the obejct and not updated until clicking again
+    /// </summary>
+    Vector3 hitPosFrozen;
+
     void Start()
     {
         if (cc == null)
@@ -91,7 +101,7 @@ public class Manipulation : MonoBehaviour
 
     void Update()
     {
-        Picked = cc.Picking(1 << 7);
+        Picked = cc.Picking(1 << 7, out hitPos);
         KeepApparentSizeOnScreen();
 
         if (SpaceController.Instance.InPlayMode == false)
@@ -104,7 +114,7 @@ public class Manipulation : MonoBehaviour
                 }
                 else
                 {
-                    //Rotate the rotation tool
+                    RotateObject();
                 }
             }
             //If you click, and the camera is tracking an object, and the game is paused or stopped
@@ -116,6 +126,8 @@ public class Manipulation : MonoBehaviour
                     isDragging = true;
                     //Stop the camera from tracking the object on drag to reposition
                     cc.TrackObject = false;
+                    //Grab the clicked location once there is a click
+                    hitPosFrozen = hitPos;
                 }
                 //Check if there is a picked celestial body which can show/hide the manipulation tools
                 else if (cc.Picked != null)
@@ -141,47 +153,12 @@ public class Manipulation : MonoBehaviour
                 isDragging = false;
             }
         }
-        Debug.Log("IsDragging: " + isDragging);
 
-        //Previous code below*********************
-
-        //if (picked != null && Mouse.current.leftButton.wasPressedThisFrame && Keyboard.current.leftShiftKey.IsPressed())
-        //{
-        //    isDragging = true;
-
-        //    //Pause when dragging objects if in Play mode
-        //    if (SpaceController.Instance.InPlayMode)
-        //    {
-        //        UIController.Instance.PlayPauseButton();
-        //    }
-        //}
-
-        //if (isDragging)
-        //{
-        //    //Perform the move action
-        //    if (MoveToolActive)
-        //    {
-        //        DragObject();
-        //    }
-        //    //Perform the rotation action
-        //    else
-        //    {
-        //        //RotationTool
-        //    }
-
-        //        cc.IsTracking = false;
-        //    if (Mouse.current.leftButton.wasReleasedThisFrame)
-        //    {
-        //        isDragging = false;
-        //    }
-        //}
-        //else
-        //{
-        //    if (Mouse.current.leftButton.wasPressedThisFrame)
-        //    {
-
-        //    }
-        //}
+        //Debug
+        if (cc.CameraTrackedObject != null)
+        {
+            Debug.DrawLine(cc.CameraTrackedObject.transform.position, cc.CameraTrackedObject.transform.position + hitPosFrozen, Color.red);
+        }
     }
 
     private void LateUpdate()
@@ -216,18 +193,7 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     void DragObject()
     {
-        //The move tool axis is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
-        Vector3 project = Vector3.ProjectOnPlane(picked.transform.localPosition, cc.Cam.transform.forward).normalized;
-
-        //The projection is transformed local to the camera space
-        Vector3 projectTransform = cc.Cam.transform.InverseTransformDirection(project);
-
-        //Flatten the Vector to make it 2D
-        Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
-
-        //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
-        float dot = Vector2.Dot(Inputs.Instance.LeftMouseDragDir, projectTransform2D);
-
+        float dot = MouseDragAngleDotProduct(picked.transform.localPosition);
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
@@ -236,6 +202,45 @@ public class Manipulation : MonoBehaviour
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
         }
+    }
+
+    /// <summary>
+    /// Compare the angle of the mouse drag, to the 'flattened' local Vector of the object, and return the dot product
+    /// </summary>
+    /// <param name="mousePos"></param>
+    float MouseDragAngleDotProduct(Vector3 mousePos)
+    {
+        //The local vector3 is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
+        Vector3 project = Vector3.ProjectOnPlane(mousePos, cc.Cam.transform.forward).normalized;
+
+        //The projection is transformed local to the camera space
+        Vector3 projectTransform = cc.Cam.transform.InverseTransformDirection(project);
+
+        //Flatten the Vector to make it 2D
+        Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
+
+        //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
+        return Vector2.Dot(Inputs.Instance.LeftMouseDragDir, projectTransform2D);
+    }
+
+    /// <summary>
+    /// Rotate the object with click and drag
+    /// </summary>
+    void RotateObject()
+    {
+        //Create cross product from camera foward, hitPos, and the output goes into the method.
+        Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen);
+
+        //The local click position on the object, compared to mouse drag
+        float dot = MouseDragAngleDotProduct(cross);
+
+        //Rotate the object based on the vector3 information stored in the object
+        Vector3 rotation = picked.GetComponent<Vector3Variable>().Value * rotateSensativity * -dot * Time.deltaTime;
+        rotationTool.transform.Rotate(rotation);
+
+        //Debug
+        Debug.Log("Rotation value " + rotation);
+        //Debug.DrawRay(picked.transform.position, hitPosFrozen, Color.red);
     }
 
     /// <summary>

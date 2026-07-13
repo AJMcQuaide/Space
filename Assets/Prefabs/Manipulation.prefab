@@ -51,7 +51,7 @@ MonoBehaviour:
   moveTool: {fileID: 3264492323363993672}
   rotationTool: {fileID: 9203609685225315751}
   moveSensativity: 1.15
-  moveToolActive: 0
+  rotateSensativity: 110
   picked: {fileID: 0}
 --- !u!1001 &695972456316971862
 PrefabInstance:
@@ -164,6 +164,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 2526398197741288300, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
+      propertyPath: value.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2647749059674192757, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
       propertyPath: m_Name
       value: X_Collider
@@ -187,6 +191,14 @@ PrefabInstance:
     - target: {fileID: 4798697668605011296, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5154994990725918352, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
+      propertyPath: value.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5334943615449179660, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
+      propertyPath: value.z
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 6995460179389280870, guid: 390819defb082fe4d98bf4f92f7e89a2, type: 3}
       propertyPath: m_Layer

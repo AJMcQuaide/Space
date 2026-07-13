@@ -1,7 +1,6 @@
 using System;
 using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 [RequireComponent(typeof(SphereCollider))]
 public class CelestialBody : MonoBehaviour
@@ -196,7 +195,10 @@ public class CelestialBody : MonoBehaviour
         {
             UpdateSpeed();
             SetPosition();
-            UpdateRotation();
+
+            //No longer needed, as the celestial body should rotate on it's own and not 'point forward'
+            //UpdateRotation();
+
             RelativeMass = Mass * LorentzFactor;
         }
     }
@@ -219,11 +221,11 @@ public class CelestialBody : MonoBehaviour
         //Set relative mass equal to mass to start
         RelativeMass = Mass;
 
-        //Starting velocity
-        double3 transformForward = new(transform.forward.x, transform.forward.y, transform.forward.z);
-
-        //Clamp initialvelocity and set to Velocity
-        velocity = math.clamp(initialSpeed, 0d, c * 0.99999d) * transformForward;
+        //Starting velocity, using the manipulation (rotate/move) tool, to pull 'forward' direction for the celestial body
+        //Then multiply by the speed, and clamp from zero to near speed of light
+        Manipulation tool = SpaceController.Instance.ObjectManipulationTool;
+        double3 manipulationToolForward = new(tool.transform.forward.x, tool.transform.forward.y, tool.transform.forward.z);
+        velocity = math.clamp(initialSpeed, 0d, c * 0.99999d) * manipulationToolForward;
 
         //Set position double to the transform at start
         Position = sc.Vector3ToDouble3(transform.position);
@@ -414,17 +416,17 @@ public class CelestialBody : MonoBehaviour
         Speed = velocityMagnitude;
     }
 
-    /// <summary>
-    /// Point forward in the direction of velocity
-    /// </summary>
-    public void UpdateRotation()
-    {
-        if (math.lengthsq(Velocity) > 0)
-        {
-            Vector3 velVector = new((float)Velocity.x, (float)Velocity.y, (float)Velocity.z);
-            transform.rotation = Quaternion.LookRotation(velVector.normalized, Vector3.up);
-        }
-    }
+    ///// <summary>
+    ///// Point forward in the direction of velocity
+    ///// </summary>
+    //public void UpdateRotation()
+    //{
+    //    if (math.lengthsq(Velocity) > 0)
+    //    {
+    //        Vector3 velVector = new((float)Velocity.x, (float)Velocity.y, (float)Velocity.z);
+    //        transform.rotation = Quaternion.LookRotation(velVector.normalized, Vector3.up);
+    //    }
+    //}
 
     /// <summary>
     /// Calculate the density of the celestrial body
