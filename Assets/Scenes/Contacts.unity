@@ -840,6 +840,10 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
+      propertyPath: objectManipulation
+      value: 
+      objectReference: {fileID: 1429844600}
+    - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
       value: 3
       objectReference: {fileID: 0}

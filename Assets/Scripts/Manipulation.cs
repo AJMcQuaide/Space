@@ -15,9 +15,11 @@ public class Manipulation : MonoBehaviour
 
     [SerializeField]
     GameObject moveTool;
+    public GameObject MoveTool {  get { return moveTool; } }
 
     [SerializeField]
     GameObject rotationTool;
+    public GameObject RotationTool { get { return rotationTool; } }
 
     [SerializeField, Range(1f, 2f)]
     float moveSensativity;
@@ -36,13 +38,8 @@ public class Manipulation : MonoBehaviour
     bool moveToolActive = true;
     public bool MoveToolActive
     {
-        get
-        { return moveToolActive; }
-        set
-        {
-
-            moveToolActive = value;
-        }
+        get { return moveToolActive; }
+        set { moveToolActive = value; }
     }
 
     [SerializeField]
@@ -150,15 +147,20 @@ public class Manipulation : MonoBehaviour
             //Any click release cancels dragging operation
             else if (Mouse.current.leftButton.wasReleasedThisFrame)
             {
+                if (moveToolActive == false)
+                {
+                    //Update the velocity of the celestiabl body after using rotation tool
+                    //cc.CameraTrackedObject.ResetVelocity();
+                }
                 isDragging = false;
             }
         }
 
         //Debug
-        if (cc.CameraTrackedObject != null)
-        {
-            Debug.DrawLine(cc.CameraTrackedObject.transform.position, cc.CameraTrackedObject.transform.position + hitPosFrozen, Color.red);
-        }
+        //if (cc.CameraTrackedObject != null)
+        //{
+        //    Debug.DrawLine(cc.CameraTrackedObject.transform.position, cc.CameraTrackedObject.transform.position + hitPosFrozen, Color.red);
+        //}
     }
 
     private void LateUpdate()
@@ -238,8 +240,11 @@ public class Manipulation : MonoBehaviour
         Vector3 rotation = picked.GetComponent<Vector3Variable>().Value * rotateSensativity * -dot * Time.deltaTime;
         rotationTool.transform.Rotate(rotation);
 
+        //Update the velocity of the celestiabl body after using rotation tool
+        cc.CameraTrackedObject.ResetVelocity(cc.CameraTrackedObject.Speed);
+
         //Debug
-        Debug.Log("Rotation value " + rotation);
+        //Debug.Log("Rotation value " + rotation);
         //Debug.DrawRay(picked.transform.position, hitPosFrozen, Color.red);
     }
 
@@ -261,6 +266,11 @@ public class Manipulation : MonoBehaviour
         ShowObject(false, moveTool);
         ShowObject(true, rotationTool);
         MoveToolActive = false;
+
+        //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
+        CelestialBody cb = cc.CameraTrackedObject;
+        Vector3 cbDirection = new ((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
+        transform.rotation = Quaternion.LookRotation(cbDirection, Vector3.up);
     }
 
     /// <summary>

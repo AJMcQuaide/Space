@@ -118,6 +118,7 @@ public class CelestialBody : MonoBehaviour
     /// <summary>
     /// Real world velocity. Not scaled for Unity.
     /// </summary>
+    [SerializeField]
     double3 velocity;
     public double3 Velocity { get { return velocity; } }
 
@@ -221,11 +222,8 @@ public class CelestialBody : MonoBehaviour
         //Set relative mass equal to mass to start
         RelativeMass = Mass;
 
-        //Starting velocity, using the manipulation (rotate/move) tool, to pull 'forward' direction for the celestial body
-        //Then multiply by the speed, and clamp from zero to near speed of light
-        Manipulation tool = SpaceController.Instance.ObjectManipulationTool;
-        double3 manipulationToolForward = new(tool.transform.forward.x, tool.transform.forward.y, tool.transform.forward.z);
-        velocity = math.clamp(initialSpeed, 0d, c * 0.99999d) * manipulationToolForward;
+        //Set direction and velocity based on manipulation rotation tool
+        ResetVelocity(InitialSpeed);
 
         //Set position double to the transform at start
         Position = sc.Vector3ToDouble3(transform.position);
@@ -391,7 +389,7 @@ public class CelestialBody : MonoBehaviour
     double3 GetPosition()
     {
         //Raw offset
-        double3 unScaled = (velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
+        double3 unScaled = (Velocity * (double)Time.fixedDeltaTime * Sc.TimeScale) + (0.5f * (TotalAcceleration * Math.Pow((double)Time.fixedDeltaTime * Sc.TimeScale, 2)));
         //Consider reletivity, less and less offset nearing the speed of light as more of the energy goes to mass increase
         return unScaled * SD * (1d / math.pow(LorentzFactor, 3));
     }
@@ -457,6 +455,19 @@ public class CelestialBody : MonoBehaviour
         mass = cb.mass;
 
         Debug.LogWarning("Current scale: " + model.transform.parent.gameObject.name + " " + model.transform.localScale + " New scale: " + cb.model.transform.parent.gameObject.name + " " + cb.model.transform.localScale);
+    }
+
+    /// <summary>
+    /// Set the direction of the celestial body based on the manipulation tool's 'forward' direction.
+    /// If the user rotates the object update the direction and velocity.
+    /// </summary>
+    public void ResetVelocity(double speed)
+    {
+        //Set velocity, then multiply by the speed, and clamp from zero to near speed of light
+        GameObject tool = SpaceController.Instance.ObjectManipulation.RotationTool;
+        double3 manipulationToolForward = new(tool.transform.forward.x, tool.transform.forward.y, tool.transform.forward.z);
+
+        velocity = math.clamp(speed, 0d, c * 0.99999d) * manipulationToolForward;
     }
 
     /// <summary>

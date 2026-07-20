@@ -85,9 +85,12 @@ public class SpaceController : MonoBehaviour
     float _outlineThickness;
     public float _OutlineThickness {  get { return _outlineThickness; } }
 
+    /// <summary>
+    /// The game object which deals with moving and rotating celestial bodies
+    /// </summary>
     [SerializeField]
-    Manipulation objectManipulationTool;
-    public Manipulation ObjectManipulationTool { get { return objectManipulationTool; } }
+    Manipulation objectManipulation;
+    public Manipulation ObjectManipulation { get { return objectManipulation; } }
 
     void Awake()
     {
@@ -104,6 +107,11 @@ public class SpaceController : MonoBehaviour
             }
             Time.fixedDeltaTime = physicsTimeStep;
             savePath = Path.Combine(Application.persistentDataPath, "saveFile");
+            if (ObjectManipulation == null)
+            {
+                Debug.LogWarning("No Manipulation object - searching for one");
+                objectManipulation = FindAnyObjectByType<Manipulation>();
+            }
         }
     }
 
