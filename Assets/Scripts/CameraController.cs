@@ -110,7 +110,7 @@ public class CameraController : MonoBehaviour
 
         //Go to object when clicked on specified layer (Celestial Body)
         Picked = Picking(1 << 6);
-        if (Picked != null && Mouse.current.leftButton.wasPressedThisFrame)
+        if (Picked != null && Mouse.current.leftButton.wasPressedThisFrame && SpaceController.Instance.ObjectManipulation.IsDragging == false)
         {
             TrackObject = true;
             CameraTrackedObject = Picked.GetComponent<CelestialBody>();

@@ -21,7 +21,7 @@ public class Manipulation : MonoBehaviour
     GameObject rotationTool;
     public GameObject RotationTool { get { return rotationTool; } }
 
-    [SerializeField, Range(1f, 2f)]
+    [SerializeField, Range(0.01f, 0.50f)]
     float moveSensativity;
 
     [SerializeField, Range(100f, 300f)]
@@ -31,6 +31,7 @@ public class Manipulation : MonoBehaviour
     Vector3 increasedScale = new(1.25f, 1.25f, 1.25f);
 
     bool isDragging = false;
+    public bool IsDragging { get { return isDragging; } }
 
     /// <summary>
     /// Change between move tool and rotation tool
@@ -161,6 +162,7 @@ public class Manipulation : MonoBehaviour
         //{
         //    Debug.DrawLine(cc.CameraTrackedObject.transform.position, cc.CameraTrackedObject.transform.position + hitPosFrozen, Color.red);
         //}
+        //Debug.LogWarning("Mouse Position: " + Mouse.current.delta.ReadValue().magnitude);
     }
 
     private void LateUpdate()
@@ -199,7 +201,7 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
+            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized * Mouse.current.delta.ReadValue().magnitude;
 
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
@@ -270,7 +272,7 @@ public class Manipulation : MonoBehaviour
         //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
         CelestialBody cb = cc.CameraTrackedObject;
         Vector3 cbDirection = new ((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
-        transform.rotation = Quaternion.LookRotation(cbDirection, Vector3.up);
+        rotationTool.transform.rotation = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
     }
 
     /// <summary>
