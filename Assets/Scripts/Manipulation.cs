@@ -233,13 +233,17 @@ public class Manipulation : MonoBehaviour
     void RotateObject()
     {
         //Create cross product from camera foward, hitPos, and the output goes into the method.
-        Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen);
+        Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen).normalized;
+
+        //The dot product that helps get the right orientiaton, so that pushing/pulling goes in the right direction
+        float orientation = Vector3.Dot(cc.transform.forward, Picked.transform.up);
+        float flipOrientation = orientation < 0 ? -1 : 1;
 
         //The local click position on the object, compared to mouse drag
         float dot = MouseDragAngleDotProduct(cross);
 
         //Rotate the object based on the vector3 information stored in the object
-        Vector3 rotation = picked.GetComponent<Vector3Variable>().Value * rotateSensativity * -dot * Time.deltaTime;
+        Vector3 rotation = picked.GetComponent<Vector3Variable>().Value * rotateSensativity * dot * Time.deltaTime * flipOrientation;
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestiabl body after using rotation tool
@@ -247,7 +251,10 @@ public class Manipulation : MonoBehaviour
 
         //Debug
         //Debug.Log("Rotation value " + rotation);
-        //Debug.DrawRay(picked.transform.position, hitPosFrozen, Color.red);
+        Debug.DrawLine(picked.transform.position, picked.transform.position + hitPosFrozen, Color.red);
+        Debug.DrawLine(picked.transform.position + hitPosFrozen, picked.transform.position + hitPosFrozen + cross, Color.yellow);
+        Debug.DrawLine(picked.transform.position, picked.transform.position + picked.transform.forward, Color.blue);
+        //Debug.LogWarning("Dot mouse drag and cross: " + dot);
     }
 
     /// <summary>
@@ -272,7 +279,11 @@ public class Manipulation : MonoBehaviour
         //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
         CelestialBody cb = cc.CameraTrackedObject;
         Vector3 cbDirection = new ((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
-        rotationTool.transform.rotation = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
+        if (cbDirection.sqrMagnitude > 0)
+        {
+            Quaternion look = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
+            rotationTool.transform.rotation = look;
+        }
     }
 
     /// <summary>
