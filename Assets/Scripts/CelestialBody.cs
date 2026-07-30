@@ -177,6 +177,7 @@ public class CelestialBody : MonoBehaviour
     {
         SetProperties();
         Register(this);
+        UpdateSpeed();
         NameTagController.Instance.Register(this);
         if (model != null)
         {
@@ -196,9 +197,6 @@ public class CelestialBody : MonoBehaviour
         {
             UpdateSpeed();
             SetPosition();
-
-            //No longer needed, as the celestial body should rotate on it's own and not 'point forward'
-            //UpdateRotation();
 
             RelativeMass = Mass * LorentzFactor;
         }

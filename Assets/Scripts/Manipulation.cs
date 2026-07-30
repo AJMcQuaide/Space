@@ -24,7 +24,7 @@ public class Manipulation : MonoBehaviour
     [SerializeField, Range(0.01f, 0.50f)]
     float moveSensativity;
 
-    [SerializeField, Range(100f, 300f)]
+    [SerializeField, Range(5f, 30f)]
     float rotateSensativity;
 
     Vector3 normalScale = new(1f, 1f, 1f);
@@ -201,7 +201,7 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized * Mouse.current.delta.ReadValue().magnitude;
+            Vector3 move = cc.CamDistance * dot * Mouse.current.delta.ReadValue().magnitude * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
 
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
@@ -234,27 +234,36 @@ public class Manipulation : MonoBehaviour
     {
         //Create cross product from camera foward, hitPos, and the output goes into the method.
         Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen).normalized;
+        //The rotation vector stored in the picked object, which tells it how to rotate when clicking and dragging
+        Vector3 pickedVector = picked.GetComponent<Vector3Variable>().Value;
 
+        ///Start The following code is designed to make sure the rotation rings pull in the intended direction in all viewpoints or orientations
         //The dot product that helps get the right orientiaton, so that pushing/pulling goes in the right direction
         float orientation = Vector3.Dot(cc.transform.forward, Picked.transform.up);
-        float flipOrientation = orientation < 0 ? -1 : 1;
+        float flipOrientation = orientation < 0 ? 1 : -1;
+        //Only the "Y" ring needs fliped opposite of the others
+        if (pickedVector == Vector3.up)
+        {
+            flipOrientation = -flipOrientation;
+        }
+        ///End
 
         //The local click position on the object, compared to mouse drag
         float dot = MouseDragAngleDotProduct(cross);
 
-        //Rotate the object based on the vector3 information stored in the object
-        Vector3 rotation = picked.GetComponent<Vector3Variable>().Value * rotateSensativity * dot * Time.deltaTime * flipOrientation;
+        //Rotate the object based on the vector3 information stored in the object, in this case it stores rotation information for X, Y, and Z
+        Vector3 rotation = dot * flipOrientation * rotateSensativity * Mouse.current.delta.ReadValue().magnitude * Time.deltaTime * pickedVector;
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestiabl body after using rotation tool
         cc.CameraTrackedObject.ResetVelocity(cc.CameraTrackedObject.Speed);
 
-        //Debug
-        //Debug.Log("Rotation value " + rotation);
-        Debug.DrawLine(picked.transform.position, picked.transform.position + hitPosFrozen, Color.red);
-        Debug.DrawLine(picked.transform.position + hitPosFrozen, picked.transform.position + hitPosFrozen + cross, Color.yellow);
-        Debug.DrawLine(picked.transform.position, picked.transform.position + picked.transform.forward, Color.blue);
-        //Debug.LogWarning("Dot mouse drag and cross: " + dot);
+        ////Debug
+        ////Debug.Log("Rotation value " + rotation);
+        //Debug.DrawLine(picked.transform.position, picked.transform.position + hitPosFrozen, Color.red);
+        //Debug.DrawLine(picked.transform.position + hitPosFrozen, picked.transform.position + hitPosFrozen + cross, Color.yellow);
+        //Debug.DrawLine(picked.transform.position, picked.transform.position + picked.transform.forward, Color.blue);
+        ////Debug.LogWarning("Dot mouse drag and cross: " + dot);
     }
 
     /// <summary>
