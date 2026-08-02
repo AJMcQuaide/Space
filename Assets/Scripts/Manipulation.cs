@@ -21,6 +21,8 @@ public class Manipulation : MonoBehaviour
     GameObject rotationTool;
     public GameObject RotationTool { get { return rotationTool; } }
 
+    Vector3Variable rotationAxis = null;
+
     [SerializeField, Range(0.01f, 0.50f)]
     float moveSensativity;
 
@@ -154,6 +156,7 @@ public class Manipulation : MonoBehaviour
                     //cc.CameraTrackedObject.ResetVelocity();
                 }
                 isDragging = false;
+                rotationAxis = null;
             }
         }
 
@@ -235,14 +238,21 @@ public class Manipulation : MonoBehaviour
         //Create cross product from camera foward, hitPos, and the output goes into the method.
         Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen).normalized;
         //The rotation vector stored in the picked object, which tells it how to rotate when clicking and dragging
-        Vector3 pickedVector = picked.GetComponent<Vector3Variable>().Value;
+
+        //Vector3 rotationAxis = picked.transform.up;
+        //Debug.LogWarning("Rotation Axis: " + rotationAxis);
+        if (rotationAxis == null)
+        {
+            Debug.LogWarning("GetComponent Rotation Axis");
+            rotationAxis = picked.GetComponent<Vector3Variable>();
+        }
 
         ///Start The following code is designed to make sure the rotation rings pull in the intended direction in all viewpoints or orientations
         //The dot product that helps get the right orientiaton, so that pushing/pulling goes in the right direction
         float orientation = Vector3.Dot(cc.transform.forward, Picked.transform.up);
         float flipOrientation = orientation < 0 ? 1 : -1;
         //Only the "Y" ring needs fliped opposite of the others
-        if (pickedVector == Vector3.up)
+        if (rotationAxis.Value == Vector3.up)
         {
             flipOrientation = -flipOrientation;
         }
@@ -252,7 +262,9 @@ public class Manipulation : MonoBehaviour
         float dot = MouseDragAngleDotProduct(cross);
 
         //Rotate the object based on the vector3 information stored in the object, in this case it stores rotation information for X, Y, and Z
-        Vector3 rotation = dot * flipOrientation * rotateSensativity * Mouse.current.delta.ReadValue().magnitude * Time.deltaTime * pickedVector;
+        Vector3 rotation = (dot * flipOrientation * rotateSensativity * Mouse.current.delta.ReadValue().magnitude * Time.deltaTime) * rotationAxis.Value;
+
+        //rotationTool.transform.Rotate(rotation);
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestiabl body after using rotation tool
