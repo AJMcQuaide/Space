@@ -201,7 +201,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -7715442787225214565, guid: dc7b7ee3c73ee8048b19aace5111ef42, type: 3}
       propertyPath: initialSpeed
-      value: 2000
+      value: 5500
       objectReference: {fileID: 0}
     - target: {fileID: 1157681615321809837, guid: dc7b7ee3c73ee8048b19aace5111ef42, type: 3}
       propertyPath: m_LocalPosition.x
@@ -253,7 +253,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1756803845072603336, guid: dc7b7ee3c73ee8048b19aace5111ef42, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -397,6 +397,75 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc35a9ec95f782e439ae1456c10c0e59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &583869091
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 544062071155166443, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_Name
+      value: EarthMoon (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: speed
+      value: 3500
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: initialSpeed
+      value: 3500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2574969562597380028, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.786
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.479
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90
+      objectReference: {fileID: 0}
+    - target: {fileID: 6669117431865974009, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
 --- !u!1 &648756670 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5648895489923285096, guid: 4b02bde0de160204496bcc4c86445566, type: 3}
@@ -845,7 +914,7 @@ PrefabInstance:
       objectReference: {fileID: 1429844600}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: universalTrailLength
-      value: 3
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 5826854149017364299, guid: f9703c6594644d9469790a8463301ef1, type: 3}
       propertyPath: objectManipulationTool
@@ -1130,8 +1199,12 @@ PrefabInstance:
       value: EarthMoon
       objectReference: {fileID: 0}
     - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
+      propertyPath: speed
+      value: 3500
+      objectReference: {fileID: 0}
+    - target: {fileID: 765952794564876197, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: initialSpeed
-      value: 5000
+      value: 3500
       objectReference: {fileID: 0}
     - target: {fileID: 2574969562597380028, guid: ab25919e282f1ac4a950e80376533e23, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1564,6 +1637,7 @@ SceneRoots:
   - {fileID: 1835062646}
   - {fileID: 817597546}
   - {fileID: 2059034856}
+  - {fileID: 583869091}
   - {fileID: 1833354687}
   - {fileID: 68195905}
   - {fileID: 683975881}

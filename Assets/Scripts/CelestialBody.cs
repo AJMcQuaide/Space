@@ -66,10 +66,10 @@ public class CelestialBody : MonoBehaviour
 
     public double RelativeMass { get; set; }
 
-    [Header("Speed in m/s, direction is transform.forward")]
-    [SerializeField]
-    double initialSpeed;
-    public double InitialSpeed { get { return initialSpeed; } set { initialSpeed = value; } }
+    //[Header("Speed in m/s")]
+    //[SerializeField]
+    //double initialSpeed;
+    //public double InitialSpeed { get { return initialSpeed; } set { initialSpeed = value; } }
 
     /// <summary>
     /// Double 3 verison of transform.position to pair wiht and aid in accurate calculations
@@ -195,8 +195,8 @@ public class CelestialBody : MonoBehaviour
     {
         if (Sc.InPlayMode && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
         {
-            UpdateSpeed();
             SetPosition();
+            UpdateSpeed();
 
             RelativeMass = Mass * LorentzFactor;
         }
@@ -221,7 +221,7 @@ public class CelestialBody : MonoBehaviour
         RelativeMass = Mass;
 
         //Set direction and velocity based on manipulation rotation tool
-        ResetVelocity(InitialSpeed);
+        ResetVelocity(Speed);
 
         //Set position double to the transform at start
         Position = sc.Vector3ToDouble3(transform.position);

@@ -316,7 +316,7 @@ public class SpaceController : MonoBehaviour
 
                     //Set initial velocity
                     double3 vel = reader.ReadDouble3();
-                    cb.InitialSpeed = math.length(vel);
+                    cb.Speed = (float)math.length(vel);
 
                     //Set Trail
                     cb.TrailColor = reader.ReadColor();

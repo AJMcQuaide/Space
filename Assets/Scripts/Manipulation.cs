@@ -237,13 +237,9 @@ public class Manipulation : MonoBehaviour
     {
         //Create cross product from camera foward, hitPos, and the output goes into the method.
         Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen).normalized;
-        //The rotation vector stored in the picked object, which tells it how to rotate when clicking and dragging
-
-        //Vector3 rotationAxis = picked.transform.up;
-        //Debug.LogWarning("Rotation Axis: " + rotationAxis);
+        //Get the rotation vector stored in the picked object
         if (rotationAxis == null)
         {
-            Debug.LogWarning("GetComponent Rotation Axis");
             rotationAxis = picked.GetComponent<Vector3Variable>();
         }
 
