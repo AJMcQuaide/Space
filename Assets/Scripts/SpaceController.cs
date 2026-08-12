@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using TMPro;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -92,6 +93,10 @@ public class SpaceController : MonoBehaviour
     Manipulation objectManipulation;
     public Manipulation ObjectManipulation { get { return objectManipulation; } }
 
+    //FPS
+    [SerializeField]
+    TextMeshProUGUI FPS_Text;
+
     void Awake()
     {
         //Singleton
@@ -138,7 +143,7 @@ public class SpaceController : MonoBehaviour
 
     private void Update()
     {
-        //FPS();
+        FPS();
     }
 
     /// <summary>
@@ -197,7 +202,8 @@ public class SpaceController : MonoBehaviour
         //Use in Update
         if (timeCount >= 1f)
         {
-            //Debug.Log("FPS: " + frames / timeCount);
+            int fps = (int)(frames / timeCount);
+            FPS_Text.text = fps.ToString();
             timeCount = 0;
             frames = 0;
         }
