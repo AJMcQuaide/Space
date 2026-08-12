@@ -119,15 +119,19 @@ public class CameraController : MonoBehaviour
         {
             Target = CameraTrackedObject.transform.position;
         }
-    }
 
-    void FixedUpdate()
-    {
+        //Debug.LogError("Camera updated");
         //Lerp
-        transform.position = Vector3.Lerp(transform.position, target + CameraOrbitPos(), Time.deltaTime * 25f);
+        transform.position = Vector3.Lerp(transform.position, target + CameraOrbitPos(), 1f);
 
         //No Slerp
-        transform.rotation = Quaternion.LookRotation(target - transform.position, Vector3.up);
+        Quaternion targetRot = Quaternion.LookRotation(target - transform.position, Vector3.up);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 1f);
+    }
+
+    void LateUpdate()
+    {
+
     }
 
     Vector3 CameraOrbitPos()

@@ -193,11 +193,11 @@ public class CelestialBody : MonoBehaviour
 
     private void FixedUpdate()
     {
+        //Debug.LogError("CB updated");
         if (Sc.InPlayMode && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
         {
             SetPosition();
             UpdateSpeed();
-
             RelativeMass = Mass * LorentzFactor;
         }
     }

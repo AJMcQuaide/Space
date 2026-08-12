@@ -159,6 +159,10 @@ public class Manipulation : MonoBehaviour
                 rotationAxis = null;
             }
         }
+        else
+        {
+            HideTools();
+        }
 
         //Debug
         //if (cc.CameraTrackedObject != null)

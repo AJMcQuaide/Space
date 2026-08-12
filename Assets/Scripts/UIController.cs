@@ -75,6 +75,7 @@ public class UIController : MonoBehaviour
         SpaceController.Instance.TimeScale *= 0.5f;
     }
 
+    //Set state of the game mode (Play/Pause) control buttons in the UI
     public void SetSpriteState()
     {
         //Standard sprite

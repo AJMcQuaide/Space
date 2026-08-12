@@ -39,7 +39,7 @@ public class NameTagController : MonoBehaviour
         }
     }
 
-    void FixedUpdate()
+    void LateUpdate()
     {
         PositionNameTags();
     }

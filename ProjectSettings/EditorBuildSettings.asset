@@ -4,5 +4,8 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Contacts.unity
+    guid: 69a931c8c0c34c842b2db3f1f7b88872
   m_configObjects: {}
