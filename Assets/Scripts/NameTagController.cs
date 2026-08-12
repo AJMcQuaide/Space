@@ -51,17 +51,38 @@ public class NameTagController : MonoBehaviour
             CelestialBody cb = sc.CelestialBodiesInScene[i];
 
             Vector3 screenPoint = cam.WorldToScreenPoint(cb.transform.position);
-            if (screenPoint.z < 0f)
+
+            //Debug.Log("Screen Pos: " + sc.CelestialBodiesInScene[i].name + screenPoint);
+
+
+
+            //Object is ON screen
+            if (screenPoint.x > 0f && screenPoint.y > 0f && screenPoint.z > 0f)
             {
-                continue;
+                //Show if hidden
+                if (nameTagList[i].gameObject.activeSelf == false)
+                {
+                    Debug.LogWarning("Show");
+                    nameTagList[i].gameObject.SetActive(true);
+                }
+
+                float radius = (cb.Radius * (float)CelestialBody.SD * multiplier2) / screenPoint.z;
+                //Debug.LogWarning("nameTagPos: " + radius + " Rad: " + cb.Radius * (float)CelestialBody.SD + " Distance: " + screenPoint.z);
+                screenPoint.z = 0;
+                screenPoint.x += radius + multiplier;
+                screenPoint.y += radius + multiplier;
+                //Debug.LogWarning("Radius: " + radius);
+                nameTagList[i].rectTransform.position = screenPoint;
             }
-            float radius = (cb.Radius * (float)CelestialBody.SD * multiplier2) / screenPoint.z;
-            //Debug.LogWarning("nameTagPos: " + radius + " Rad: " + cb.Radius * (float)CelestialBody.SD + " Distance: " + screenPoint.z);
-            screenPoint.z = 0;
-            screenPoint.x += radius + multiplier;
-            screenPoint.y += radius + multiplier;
-            //Debug.LogWarning("Radius: " + radius);
-            nameTagList[i].rectTransform.position = screenPoint;
+            else
+            {
+                //Hide if shown
+                if (nameTagList[i].gameObject.activeSelf == true)
+                {
+                    Debug.LogWarning("Hidden");
+                    nameTagList[i].gameObject.SetActive(false);
+                }
+            }
         }
     }
 
