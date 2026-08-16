@@ -193,7 +193,7 @@ public class CelestialBody : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //Debug.LogError("CB updated");
+        //Update in FixedUpdate, the position of the celestial bodies should be early in the frame
         if (Sc.InPlayMode && Application.isPlaying && Sc.Frames < Sc.simulationLength && IsKinematic == false)
         {
             SetPosition();

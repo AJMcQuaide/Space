@@ -208,7 +208,7 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = cc.CamDistance * dot * Mouse.current.delta.ReadValue().magnitude * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
+            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
 
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
@@ -231,7 +231,7 @@ public class Manipulation : MonoBehaviour
         Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
 
         //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
-        return Vector2.Dot(Inputs.Instance.LeftMouseDragDir, projectTransform2D);
+        return Vector2.Dot(Inputs.Instance.MouseDrag, projectTransform2D);
     }
 
     /// <summary>

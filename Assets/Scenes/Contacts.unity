@@ -1485,7 +1485,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4613822729691006517, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: rotateSensativity
-      value: 0.035
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6405498177538066956, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: m_Name

@@ -65,11 +65,12 @@ public class CameraController : MonoBehaviour
 
     [SerializeField, Range(0.1f, 10f)]
     float zoomSensativity;
-    [SerializeField, Range(0.02f, 0.06f)]
+    [SerializeField, Range(1f, 2f)]
     float rotateSensativity;
+    float rotationModifier = 0.0013f;
     [SerializeField, Range(0, 90f)]
     float verticalRotationMax;
-    [SerializeField]
+    Vector3 orbitPos;
 
     /// <summary>
     /// The 2d mouse drag input per frame, that is then turned into the 3d orbit Vector3
@@ -120,25 +121,20 @@ public class CameraController : MonoBehaviour
             Target = CameraTrackedObject.transform.position;
         }
 
-        //Debug.LogError("Camera updated");
-        //Lerp
-        transform.position = Vector3.Lerp(transform.position, target + CameraOrbitPos(), 1f);
-
-        //No Slerp
+        //Set Position and Rotation for camera (In Update - positioning celestial bodies are in Fixed Update (earlier))
+        transform.position = target + CameraOrbitPos();
         Quaternion targetRot = Quaternion.LookRotation(target - transform.position, Vector3.up);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRot, 1f);
-    }
-
-    void LateUpdate()
-    {
-
+        transform.rotation = targetRot;
     }
 
     Vector3 CameraOrbitPos()
     {
-        camPosInput -= Inputs.Instance.MiddleMouseDragDir * rotateSensativity;
-        float yMax = verticalRotationMax * Mathf.Deg2Rad;
-        camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
+        if (Mouse.current.middleButton.isPressed)
+        {
+            camPosInput -= Inputs.Instance.MouseDrag * (rotationModifier * rotateSensativity);
+            float yMax = verticalRotationMax * Mathf.Deg2Rad;
+            camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
+        }
 
         camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * 10f);
         float x = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Cos(camPosInput.x);
@@ -148,7 +144,6 @@ public class CameraController : MonoBehaviour
 
         return orbit;
     }
-
 
     /// <summary>
     /// Return a range between 0 and 1

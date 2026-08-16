@@ -19,37 +19,46 @@ public class Inputs : MonoBehaviour
     Vector2 prevMousePos;
     Vector2 mousePos;
 
-    //The direction of a mouse right click and drag, returns zero if not
-    Vector2 rightMouseDragDir;
-    public Vector2 RightMouseDragDir
-    {
-        get { return rightMouseDragDir; }
-        set { 
-            if ( rightMouseDragDir != value )
-            {
-                rightMouseDragDir = value; } }
-    }
+    ////The direction of a mouse right click and drag, returns zero if not
+    //Vector2 rightMouseDragDir;
+    //public Vector2 RightMouseDragDir
+    //{
+    //    get { return rightMouseDragDir; }
+    //    set
+    //    { 
+    //        if ( rightMouseDragDir != value )
+    //        {
+    //            rightMouseDragDir = value;
+    //        }
+    //    }
+    //}
 
-    //The direction of a mouse left click and drag, returns zero if not
-    Vector2 leftMouseDragDir;
-    public Vector2 LeftMouseDragDir
-    {
-        get { return leftMouseDragDir; }
-        set {
-            if (leftMouseDragDir != value)
-            {
-                leftMouseDragDir = value; } }
-    }
+    ////The direction of a mouse left click and drag, returns zero if not
+    //Vector2 leftMouseDragDir;
+    //public Vector2 LeftMouseDragDir
+    //{
+    //    get { return leftMouseDragDir; }
+    //    set
+    //    {
+    //        if (leftMouseDragDir != value)
+    //        {
+    //            leftMouseDragDir = value;
+    //        }
+    //    }
+    //}
 
     //The direction of a mouse middle click and drag, returns zero if not
-    Vector2 middleMouseDragDir;
-    public Vector2 MiddleMouseDragDir
+    Vector2 mouseDrag;
+    public Vector2 MouseDrag
     {
-        get { return middleMouseDragDir; }
-        set {
-            if (middleMouseDragDir != value)
+        get { return mouseDrag; }
+        set
+        {
+            if (mouseDrag != value)
             {
-                middleMouseDragDir = value; } }
+                mouseDrag = value; 
+            }
+        }
     }
 
     private void Awake()
@@ -62,9 +71,7 @@ public class Inputs : MonoBehaviour
 
     private void Update()
     {
-        RightMouseDragDir = MouseClickDrag(Mouse.current.rightButton.isPressed);
-        LeftMouseDragDir = MouseClickDrag(Mouse.current.leftButton.isPressed);
-        MiddleMouseDragDir = MouseClickDrag(Mouse.current.middleButton.isPressed);
+        MouseDrag = MouseClickDrag();
     }
 
     /// <summary>
@@ -72,18 +79,11 @@ public class Inputs : MonoBehaviour
     /// </summary>
     /// <param name="dragSensativity"></param>
     /// <returns></returns>
-    public Vector2 MouseClickDrag(bool mousePress)
+    public Vector2 MouseClickDrag()
     {
-        if (mousePress)
-        {
-            prevMousePos = mousePos;
-            mousePos = Mouse.current.position.ReadValue();
-            Vector2 normalizedDelta = (mousePos - prevMousePos).normalized;
-            return normalizedDelta;
-        }
-        else
-        {
-            return Vector2.zero;
-        }
+        prevMousePos = mousePos;
+        mousePos = Mouse.current.position.ReadValue();
+        Vector2 delta = mousePos - prevMousePos;
+        return delta;
     }
 }

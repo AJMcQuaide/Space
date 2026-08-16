@@ -41,9 +41,13 @@ public class NameTagController : MonoBehaviour
 
     void LateUpdate()
     {
+        //In Late Update because the name tags depend on the camera, which is in Update
         PositionNameTags();
     }
 
+    /// <summary>
+    /// Position the nametags with respect to the celestial bodies
+    /// </summary>
     void PositionNameTags()
     {
         for (int i = 0; i < nameTagList.Count; i++)
@@ -52,17 +56,12 @@ public class NameTagController : MonoBehaviour
 
             Vector3 screenPoint = cam.WorldToScreenPoint(cb.transform.position);
 
-            //Debug.Log("Screen Pos: " + sc.CelestialBodiesInScene[i].name + screenPoint);
-
-
-
             //Object is ON screen
             if (screenPoint.x > 0f && screenPoint.y > 0f && screenPoint.z > 0f)
             {
                 //Show if hidden
                 if (nameTagList[i].gameObject.activeSelf == false)
                 {
-                    Debug.LogWarning("Show");
                     nameTagList[i].gameObject.SetActive(true);
                 }
 
@@ -79,7 +78,6 @@ public class NameTagController : MonoBehaviour
                 //Hide if shown
                 if (nameTagList[i].gameObject.activeSelf == true)
                 {
-                    Debug.LogWarning("Hidden");
                     nameTagList[i].gameObject.SetActive(false);
                 }
             }
