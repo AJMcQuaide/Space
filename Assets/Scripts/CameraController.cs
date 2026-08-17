@@ -65,9 +65,9 @@ public class CameraController : MonoBehaviour
 
     [SerializeField, Range(0.1f, 10f)]
     float zoomSensativity;
-    [SerializeField, Range(1f, 2f)]
+    [SerializeField, Range(1f, 10f)]
     float rotateSensativity;
-    float rotationModifier = 0.0013f;
+    readonly float rotateModifier = 0.0005f;
     [SerializeField, Range(0, 90f)]
     float verticalRotationMax;
     Vector3 orbitPos;
@@ -131,7 +131,7 @@ public class CameraController : MonoBehaviour
     {
         if (Mouse.current.middleButton.isPressed)
         {
-            camPosInput -= Inputs.Instance.MouseDrag * (rotationModifier * rotateSensativity);
+            camPosInput -= rotateModifier * rotateSensativity * Inputs.Instance.MouseDrag;
             float yMax = verticalRotationMax * Mathf.Deg2Rad;
             camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
         }

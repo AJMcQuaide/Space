@@ -108,7 +108,7 @@ public class SpaceController : MonoBehaviour
             //Set Fixed Update
             if (physicsTimeStep == 0)
             {
-                physicsTimeStep = 0.01f;
+                Debug.LogError("Physics time set not set!");
             }
             Time.fixedDeltaTime = physicsTimeStep;
             savePath = Path.Combine(Application.persistentDataPath, "saveFile");
@@ -122,6 +122,10 @@ public class SpaceController : MonoBehaviour
 
     private void Start()
     {
+        //Testing frame rate control
+        QualitySettings.vSyncCount = 0;
+        Application.targetFrameRate = -1;
+
         Debug.Log("Cb Count: " + CelestialBodiesInScene.Count);
         Debug.Log("Save Path: " + savePath);
     }

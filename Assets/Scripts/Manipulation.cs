@@ -7,8 +7,10 @@ using Unity.Mathematics;
 /// </summary>
 public class Manipulation : MonoBehaviour
 {
-    [SerializeField]
-    float size;
+    /// <summary>
+    /// Size of the manipulation tool on screen
+    /// </summary>
+    readonly float sizeOfTool = 5f;
 
     [SerializeField]
     CameraController cc;
@@ -23,11 +25,13 @@ public class Manipulation : MonoBehaviour
 
     Vector3Variable rotationAxis = null;
 
-    [SerializeField, Range(0.01f, 0.50f)]
+    [SerializeField, Range(1f, 10f)]
     float moveSensativity;
+    readonly float moveMultipier = 0.00007f;
 
-    [SerializeField, Range(5f, 30f)]
+    [SerializeField, Range(1f, 10f)]
     float rotateSensativity;
+    readonly float rotateMultiplier = 0.05f;
 
     Vector3 normalScale = new(1f, 1f, 1f);
     Vector3 increasedScale = new(1.25f, 1.25f, 1.25f);
@@ -45,7 +49,6 @@ public class Manipulation : MonoBehaviour
         set { moveToolActive = value; }
     }
 
-    [SerializeField]
     GameObject picked;
     /// <summary>
     /// Stores the current picked object
@@ -57,13 +60,10 @@ public class Manipulation : MonoBehaviour
         {
             if (value != picked && isDragging == false)
             {
-                //Debug.Log("1");
                 if (value != null)
                 {
-                    //Debug.Log("Increased");
                     if (picked != null)
                     {
-                        //Debug.Log("Normal 1");
                         picked.transform.localScale = normalScale;
                     }
                     picked = value;
@@ -71,7 +71,6 @@ public class Manipulation : MonoBehaviour
                 }
                 else
                 {
-                    //Debug.Log("Normal 2");
                     picked.transform.localScale = normalScale;
                     picked = value;
                 }
@@ -163,13 +162,6 @@ public class Manipulation : MonoBehaviour
         {
             HideTools();
         }
-
-        //Debug
-        //if (cc.CameraTrackedObject != null)
-        //{
-        //    Debug.DrawLine(cc.CameraTrackedObject.transform.position, cc.CameraTrackedObject.transform.position + hitPosFrozen, Color.red);
-        //}
-        //Debug.LogWarning("Mouse Position: " + Mouse.current.delta.ReadValue().magnitude);
     }
 
     private void LateUpdate()
@@ -187,7 +179,7 @@ public class Manipulation : MonoBehaviour
     public void KeepApparentSizeOnScreen()
     {
         float distance = (transform.position - cc.transform.position).magnitude;
-        float scale = distance / size;
+        float scale = distance / sizeOfTool;
         transform.localScale = new Vector3(scale, scale, scale);
     }
 
@@ -208,7 +200,7 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = cc.CamDistance * dot * moveSensativity * Time.deltaTime * Picked.transform.localPosition.normalized;
+            Vector3 move = cc.CamDistance * dot * moveMultipier * moveSensativity * Picked.transform.localPosition.normalized;
 
             cc.CameraTrackedObject.transform.position += move;
             cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
@@ -262,20 +254,13 @@ public class Manipulation : MonoBehaviour
         float dot = MouseDragAngleDotProduct(cross);
 
         //Rotate the object based on the vector3 information stored in the object, in this case it stores rotation information for X, Y, and Z
-        Vector3 rotation = (dot * flipOrientation * rotateSensativity * Mouse.current.delta.ReadValue().magnitude * Time.deltaTime) * rotationAxis.Value;
+        Vector3 rotation = dot * flipOrientation * rotateMultiplier * rotateSensativity * rotationAxis.Value;
 
         //rotationTool.transform.Rotate(rotation);
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestiabl body after using rotation tool
         cc.CameraTrackedObject.ResetVelocity(cc.CameraTrackedObject.Speed);
-
-        ////Debug
-        ////Debug.Log("Rotation value " + rotation);
-        //Debug.DrawLine(picked.transform.position, picked.transform.position + hitPosFrozen, Color.red);
-        //Debug.DrawLine(picked.transform.position + hitPosFrozen, picked.transform.position + hitPosFrozen + cross, Color.yellow);
-        //Debug.DrawLine(picked.transform.position, picked.transform.position + picked.transform.forward, Color.blue);
-        ////Debug.LogWarning("Dot mouse drag and cross: " + dot);
     }
 
     /// <summary>
@@ -283,8 +268,8 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void ShowMoveTool()
     {
-        ShowObject(true, moveTool);
-        ShowObject(false, rotationTool);
+        ShowObject(true, MoveTool);
+        ShowObject(false, RotationTool);
         MoveToolActive = true;
     }
 
@@ -293,8 +278,8 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void ShowDirectionTool()
     {
-        ShowObject(false, moveTool);
-        ShowObject(true, rotationTool);
+        ShowObject(false, MoveTool);
+        ShowObject(true, RotationTool);
         MoveToolActive = false;
 
         //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
@@ -312,7 +297,7 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void HideTools()
     {
-        ShowObject(false, moveTool);
-        ShowObject(false, rotationTool);
+        ShowObject(false, MoveTool);
+        ShowObject(false, RotationTool);
     }
 }

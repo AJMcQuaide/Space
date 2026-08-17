@@ -19,34 +19,6 @@ public class Inputs : MonoBehaviour
     Vector2 prevMousePos;
     Vector2 mousePos;
 
-    ////The direction of a mouse right click and drag, returns zero if not
-    //Vector2 rightMouseDragDir;
-    //public Vector2 RightMouseDragDir
-    //{
-    //    get { return rightMouseDragDir; }
-    //    set
-    //    { 
-    //        if ( rightMouseDragDir != value )
-    //        {
-    //            rightMouseDragDir = value;
-    //        }
-    //    }
-    //}
-
-    ////The direction of a mouse left click and drag, returns zero if not
-    //Vector2 leftMouseDragDir;
-    //public Vector2 LeftMouseDragDir
-    //{
-    //    get { return leftMouseDragDir; }
-    //    set
-    //    {
-    //        if (leftMouseDragDir != value)
-    //        {
-    //            leftMouseDragDir = value;
-    //        }
-    //    }
-    //}
-
     //The direction of a mouse middle click and drag, returns zero if not
     Vector2 mouseDrag;
     public Vector2 MouseDrag
@@ -71,7 +43,7 @@ public class Inputs : MonoBehaviour
 
     private void Update()
     {
-        MouseDrag = MouseClickDrag();
+        mouseDrag = MouseClickDrag();
     }
 
     /// <summary>
@@ -84,6 +56,7 @@ public class Inputs : MonoBehaviour
         prevMousePos = mousePos;
         mousePos = Mouse.current.position.ReadValue();
         Vector2 delta = mousePos - prevMousePos;
+        Debug.LogWarning("Mouse Drag: " + delta * Time.deltaTime);
         return delta;
     }
 }

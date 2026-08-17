@@ -1252,12 +1252,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2627957277315306263}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
+      propertyPath: sizeOfTool
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: moveSensativity
-      value: 0.1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5156441863841884107, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: rotateSensativity
-      value: 25
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8182569105789298714, guid: 7258ffb771c449b438cf0ab8b7478a08, type: 3}
       propertyPath: m_Name
@@ -1485,7 +1489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4613822729691006517, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: rotateSensativity
-      value: 1.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6405498177538066956, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: m_Name
