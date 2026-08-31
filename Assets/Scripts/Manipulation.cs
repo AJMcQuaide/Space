@@ -58,7 +58,7 @@ public class Manipulation : MonoBehaviour
         get { return picked; }
         set 
         {
-            if (value != picked && isDragging == false)
+            if (value != picked && IsDragging == false)
             {
                 if (value != null)
                 {
@@ -81,12 +81,17 @@ public class Manipulation : MonoBehaviour
     /// <summary>
     /// The hit location the Picking tool, updated every frame as an output of the Picking tool
     /// </summary>
-    Vector3 hitPos;
+    Vector3 clickPoint;
 
     /// <summary>
-    /// The hit location the Picking tool, frozen when you click the mouse on the obejct and not updated until clicking again
+    /// The hit location the Picking tool, frozen when you initially click the mouse on the obejct and not updated until clicking again
     /// </summary>
-    Vector3 hitPosFrozen;
+    Vector3 initialClickPoint;
+
+    /// <summary>
+    /// The target position of the manipulation too, usually a celestial body
+    /// </summary>
+    Transform target;
 
     void Start()
     {
@@ -100,13 +105,17 @@ public class Manipulation : MonoBehaviour
 
     void Update()
     {
-        Picked = cc.Picking(1 << 7, out hitPos);
+        Picked = cc.Picking(1 << 7, out clickPoint);
         KeepApparentSizeOnScreen();
 
         if (SpaceController.Instance.InPlayMode == false)
         {
             if (isDragging)
             {
+                //Set the position of the manipulation tool to the target transform position
+                transform.position = target.position;
+
+                //Drag and rotation modes
                 if (MoveToolActive)
                 {
                     DragObject();
@@ -126,7 +135,7 @@ public class Manipulation : MonoBehaviour
                     //Stop the camera from tracking the object on drag to reposition
                     cc.TrackObject = false;
                     //Grab the clicked location once there is a click
-                    hitPosFrozen = hitPos;
+                    initialClickPoint = clickPoint;
                 }
                 //Check if there is a picked celestial body which can show/hide the manipulation tools
                 else if (cc.Picked != null)
@@ -138,6 +147,7 @@ public class Manipulation : MonoBehaviour
                     else
                     {
                         ShowDirectionTool();
+                        //Re alignment of the rotation tool to match the new celestial body that was clicked, is done in CameraController
                     }
                 }
                 //If not picking up an object, or clicking outside of one, then hide the manipulation tools
@@ -162,14 +172,10 @@ public class Manipulation : MonoBehaviour
         {
             HideTools();
         }
-    }
 
-    private void LateUpdate()
-    {
-        //Set position to the camera tracked object
-        if (cc.CameraTrackedObject != null)
+        if (Mouse.current.leftButton.wasPressedThisFrame && Inputs.Instance.MouseDrag == Vector2.zero)
         {
-            transform.position = cc.CameraTrackedObject.transform.position;
+            Debug.Log("read zero drag while clicking");
         }
     }
 
@@ -232,7 +238,7 @@ public class Manipulation : MonoBehaviour
     void RotateObject()
     {
         //Create cross product from camera foward, hitPos, and the output goes into the method.
-        Vector3 cross = Vector3.Cross(cc.transform.forward, hitPosFrozen).normalized;
+        Vector3 cross = Vector3.Cross(cc.transform.forward, initialClickPoint).normalized;
         //Get the rotation vector stored in the picked object
         if (rotationAxis == null)
         {
@@ -259,7 +265,7 @@ public class Manipulation : MonoBehaviour
         //rotationTool.transform.Rotate(rotation);
         rotationTool.transform.Rotate(rotation);
 
-        //Update the velocity of the celestiabl body after using rotation tool
+        //Update the velocity of the celestial body after using rotation tool
         cc.CameraTrackedObject.ResetVelocity(cc.CameraTrackedObject.Speed);
     }
 
@@ -281,15 +287,6 @@ public class Manipulation : MonoBehaviour
         ShowObject(false, MoveTool);
         ShowObject(true, RotationTool);
         MoveToolActive = false;
-
-        //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
-        CelestialBody cb = cc.CameraTrackedObject;
-        Vector3 cbDirection = new ((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
-        if (cbDirection.sqrMagnitude > 0)
-        {
-            Quaternion look = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
-            rotationTool.transform.rotation = look;
-        }
     }
 
     /// <summary>
@@ -299,5 +296,33 @@ public class Manipulation : MonoBehaviour
     {
         ShowObject(false, MoveTool);
         ShowObject(false, RotationTool);
+    }
+
+    /// <summary>
+    /// Align the direction tool with the object that was selected
+    /// </summary>
+    public void ReAlignDirectionTool()
+    {
+        //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
+        CelestialBody cb = cc.CameraTrackedObject;
+
+        Vector3 cbDirection = new((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
+        if (cbDirection.sqrMagnitude > 0)
+        {
+            Quaternion look = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
+            rotationTool.transform.rotation = look;
+        }
+    }
+
+    /// <summary>
+    /// Set the location of the manipulation tool to the new camera tracked celestial body
+    /// </summary>
+    public void ReSetManipulationToolPosition()
+    {
+        //Cache the target transform
+        target = cc.CameraTrackedObject.transform;
+
+        //Set the manipulation tool position initially
+        transform.position = target.position;
     }
 }

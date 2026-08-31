@@ -66,11 +66,6 @@ public class CelestialBody : MonoBehaviour
 
     public double RelativeMass { get; set; }
 
-    //[Header("Speed in m/s")]
-    //[SerializeField]
-    //double initialSpeed;
-    //public double InitialSpeed { get { return initialSpeed; } set { initialSpeed = value; } }
-
     /// <summary>
     /// Double 3 verison of transform.position to pair wiht and aid in accurate calculations
     /// </summary>
@@ -120,7 +115,7 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     [SerializeField]
     double3 velocity;
-    public double3 Velocity { get { return velocity; } }
+    public double3 Velocity { get { return velocity; } set { velocity = value; } }
 
     /// <summary>
     /// The max acceleration is set to the radius of the planet
@@ -173,12 +168,16 @@ public class CelestialBody : MonoBehaviour
         }
     }
 
+    TrailRenderer trailRenderer;
+
+    double3 defaultDirection = new double3(0d, 0d, 1d);
+
     private void Start()
     {
         SetProperties();
         Register(this);
         UpdateSpeed();
-        NameTagController.Instance.Register(this);
+        //NameTagController.Instance.Register(this);
         if (model != null)
         {
             mr = model.GetComponent<MeshRenderer>();
@@ -189,6 +188,9 @@ public class CelestialBody : MonoBehaviour
 
         //Send outline thickness to shader
         mr.material.SetFloat("_OT", sc._OutlineThickness);
+
+        //Get trail renderer
+        trailRenderer = GetComponent<TrailRenderer>();
     }
 
     private void FixedUpdate()
@@ -199,6 +201,20 @@ public class CelestialBody : MonoBehaviour
             SetPosition();
             UpdateSpeed();
             RelativeMass = Mass * LorentzFactor;
+
+            //Trail renderer
+            if (trailRenderer.emitting == false)
+            {
+                trailRenderer.emitting = true;
+            }    
+        }
+        else
+        {
+            //Trail renderer
+            if (trailRenderer.emitting == true)
+            {
+                trailRenderer.emitting = false;
+            }
         }
     }
 
@@ -220,8 +236,11 @@ public class CelestialBody : MonoBehaviour
         //Set relative mass equal to mass to start
         RelativeMass = Mass;
 
-        //Set direction and velocity based on manipulation rotation tool
-        ResetVelocity(Speed);
+        //Set a default direction if none is present
+        if (math.lengthsq(Velocity) == 0f)
+        {
+            Velocity = defaultDirection * Speed;
+        }
 
         //Set position double to the transform at start
         Position = sc.Vector3ToDouble3(transform.position);
@@ -411,18 +430,6 @@ public class CelestialBody : MonoBehaviour
         float velocityMagnitude = (float)math.length(velocity);
         Speed = velocityMagnitude;
     }
-
-    ///// <summary>
-    ///// Point forward in the direction of velocity
-    ///// </summary>
-    //public void UpdateRotation()
-    //{
-    //    if (math.lengthsq(Velocity) > 0)
-    //    {
-    //        Vector3 velVector = new((float)Velocity.x, (float)Velocity.y, (float)Velocity.z);
-    //        transform.rotation = Quaternion.LookRotation(velVector.normalized, Vector3.up);
-    //    }
-    //}
 
     /// <summary>
     /// Calculate the density of the celestrial body

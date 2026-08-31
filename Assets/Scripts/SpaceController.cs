@@ -123,8 +123,8 @@ public class SpaceController : MonoBehaviour
     private void Start()
     {
         //Testing frame rate control
-        QualitySettings.vSyncCount = 0;
-        Application.targetFrameRate = -1;
+        QualitySettings.vSyncCount = 1;
+        //Application.targetFrameRate = 60;
 
         Debug.Log("Cb Count: " + CelestialBodiesInScene.Count);
         Debug.Log("Save Path: " + savePath);
@@ -183,7 +183,8 @@ public class SpaceController : MonoBehaviour
     }
 
     /// <summary>
-    /// Set physics properties of all celestrial bodies
+    /// Set Acceleration and contact properties, this is done in Space Controller as to set all celestial bodies at the same time,
+    /// without a new update effecting and adjacent celestial body (If it were done in each celestial bodies themselves)
     /// </summary>
     public void SetPhysics()
     {
@@ -192,8 +193,11 @@ public class SpaceController : MonoBehaviour
             //Determine overall acceleration based on all celestial bodies
             CelestialBodiesInScene[i].TotalAcceleration = CelestialBodiesInScene[i].SetAcceleration(CelestialBodiesInScene[i]);
 
-            //Alter velocity of this object, and the object contacted if there is contact
-            CelestialBodiesInScene[i].SetContact(CelestialBodiesInScene[i]);
+            if (ContactsEnabled)
+            {
+                //Alter velocity of this object, and the object contacted if there is contact
+                CelestialBodiesInScene[i].SetContact(CelestialBodiesInScene[i]);
+            }
         }
     }
 
@@ -278,7 +282,7 @@ public class SpaceController : MonoBehaviour
 
                 //Position and Rotation
                 writer.Write(t.position);
-                writer.Write(t.rotation);
+                //writer.Write(t.rotation);
 
                 //Velocity which will be used as starting velocity
                 writer.Write(cb.Velocity);
@@ -322,11 +326,13 @@ public class SpaceController : MonoBehaviour
                     cb.transform.position = reader.ReadVector3();
                     cb.Position = Vector3ToDouble3(cb.transform.position);
 
-                    cb.transform.rotation = reader.ReadQuaternion();
+                    //cb.transform.rotation = reader.ReadQuaternion();
 
-                    //Set initial velocity
+                    //Set velocity and speed, from the saved velocity
                     double3 vel = reader.ReadDouble3();
+                    Debug.Log("Set the Velocity and speed");
                     cb.Speed = (float)math.length(vel);
+                    cb.Velocity = vel;
 
                     //Set Trail
                     cb.TrailColor = reader.ReadColor();

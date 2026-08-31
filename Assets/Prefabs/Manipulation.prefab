@@ -46,13 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 90eb299e9d0219e47b8cd2b2bbe309df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 4
   cc: {fileID: 0}
   moveTool: {fileID: 3264492323363993672}
   rotationTool: {fileID: 9203609685225315751}
-  moveSensativity: 0.4
-  rotateSensativity: 200
-  picked: {fileID: 0}
+  moveSensativity: 5
+  rotateSensativity: 5
 --- !u!1001 &695972456316971862
 PrefabInstance:
   m_ObjectHideFlags: 0

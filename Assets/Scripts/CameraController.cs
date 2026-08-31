@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
     Vector3 target;
     public Vector3 Target { get { return target; } set { target = value; } }
 
+    SpaceController sc;
 
     /// <summary>
     /// The celestial body object that the camera is tracking
@@ -102,6 +103,7 @@ public class CameraController : MonoBehaviour
             objectHighlight = FindAnyObjectByType<Highlighter>();
             Debug.Log("Found missing objectHighlighter in " + GetType());
         }
+        sc = SpaceController.Instance;
     }
 
     private void Update()
@@ -115,10 +117,27 @@ public class CameraController : MonoBehaviour
         {
             TrackObject = true;
             CameraTrackedObject = Picked.GetComponent<CelestialBody>();
+
+            //Set the rotation tool starting direction on clicking a celestial body
+            if (sc.ObjectManipulation.MoveToolActive == false)
+            {
+                sc.ObjectManipulation.ReAlignDirectionTool();
+            }
+            //Set the position of the manipulation tool on click
+            sc.ObjectManipulation.ReSetManipulationToolPosition();
         }
         if (TrackObject)
         {
-            Target = CameraTrackedObject.transform.position;
+            if (CameraTrackedObject != null)
+            {
+                Target = CameraTrackedObject.transform.position;
+            }
+            else
+            {
+                //Stop tracking the object because there is no object
+                TrackObject = false;
+            }
+
         }
 
         //Set Position and Rotation for camera (In Update - positioning celestial bodies are in Fixed Update (earlier))
@@ -189,11 +208,6 @@ public class CameraController : MonoBehaviour
         {
             return null;
         }
-
-        ////Debug the picking
-        //Debug.DrawLine(transform.position, transform.position + z, Color.yellow);
-        //Debug.DrawLine(transform.position + z, transform.position + total, Color.red);
-        //Debug.DrawRay(transform.position, total, Color.blue);
     }
 
     /// <summary>

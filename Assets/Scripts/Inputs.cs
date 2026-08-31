@@ -33,17 +33,25 @@ public class Inputs : MonoBehaviour
         }
     }
 
+    [SerializeField]
+    PlayerInput playerInput;
+    InputAction mouseMoveInput;
+
     private void Awake()
     {
         //Singleton
         if (Instance != this) { Destroy(gameObject); }
-        mousePos = Mouse.current.position.ReadValue();
-        prevMousePos = mousePos;
+
+        mouseMoveInput = playerInput.actions.FindAction("MouseDelta");
+
+        //mousePos = Mouse.current.position.ReadValue();
+        //prevMousePos = mousePos;
     }
 
     private void Update()
     {
-        mouseDrag = MouseClickDrag();
+        //Debug.LogWarning("Mouse Drag: " + mouseDrag);
+        //mouseDrag = MouseDelta();
     }
 
     /// <summary>
@@ -51,12 +59,26 @@ public class Inputs : MonoBehaviour
     /// </summary>
     /// <param name="dragSensativity"></param>
     /// <returns></returns>
-    public Vector2 MouseClickDrag()
+    private void OnMouseDelta(InputAction.CallbackContext context)
     {
-        prevMousePos = mousePos;
-        mousePos = Mouse.current.position.ReadValue();
-        Vector2 delta = mousePos - prevMousePos;
-        Debug.LogWarning("Mouse Drag: " + delta * Time.deltaTime);
-        return delta;
+        //Previous code
+        //prevMousePos = mousePos;
+        //mousePos = Mouse.current.position.ReadValue(); //There is also Mouse.current.delta.ReadValue();
+        //Vector2 delta = mousePos - prevMousePos;
+        //return delta;
+
+        //New code
+        mouseDrag = context.ReadValue<Vector2>();
+    }
+    private void OnEnable()
+    {
+        mouseMoveInput.Enable();
+        mouseMoveInput.performed += OnMouseDelta;
+    }
+
+    private void OnDisable()
+    {
+        mouseMoveInput.performed -= OnMouseDelta;
+        mouseMoveInput.Disable();
     }
 }
