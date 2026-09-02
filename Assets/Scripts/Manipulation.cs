@@ -172,11 +172,6 @@ public class Manipulation : MonoBehaviour
         {
             HideTools();
         }
-
-        if (Mouse.current.leftButton.wasPressedThisFrame && Inputs.Instance.MouseDrag == Vector2.zero)
-        {
-            Debug.Log("read zero drag while clicking");
-        }
     }
 
     /// <summary>
@@ -229,7 +224,7 @@ public class Manipulation : MonoBehaviour
         Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
 
         //Compare the click and drag of the mouse, to the axis to see if you are dragging in the direction of the axis or not
-        return Vector2.Dot(Inputs.Instance.MouseDrag, projectTransform2D);
+        return Vector2.Dot(Inputs.Instance.MouseMoveInput.ReadValue<Vector2>(), projectTransform2D);
     }
 
     /// <summary>

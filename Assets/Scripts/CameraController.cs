@@ -71,7 +71,6 @@ public class CameraController : MonoBehaviour
     readonly float rotateModifier = 0.0005f;
     [SerializeField, Range(0, 90f)]
     float verticalRotationMax;
-    Vector3 orbitPos;
 
     /// <summary>
     /// The 2d mouse drag input per frame, that is then turned into the 3d orbit Vector3
@@ -137,7 +136,6 @@ public class CameraController : MonoBehaviour
                 //Stop tracking the object because there is no object
                 TrackObject = false;
             }
-
         }
 
         //Set Position and Rotation for camera (In Update - positioning celestial bodies are in Fixed Update (earlier))
@@ -150,7 +148,7 @@ public class CameraController : MonoBehaviour
     {
         if (Mouse.current.middleButton.isPressed)
         {
-            camPosInput -= rotateModifier * rotateSensativity * Inputs.Instance.MouseDrag;
+            camPosInput -= rotateModifier * rotateSensativity * Inputs.Instance.MouseMoveInput.ReadValue<Vector2>();
             float yMax = verticalRotationMax * Mathf.Deg2Rad;
             camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
         }
