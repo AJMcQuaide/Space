@@ -27,17 +27,13 @@ public class Inputs : MonoBehaviour
         if (Instance != this) { Destroy(gameObject); }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         mouseMoveInput = playerInput.actions.FindAction("MouseDelta");
         if (mouseMoveInput == null)
         {
             Debug.LogError("Cannot find Input Action");
         }
-    }
-
-    private void OnEnable()
-    {
         mouseMoveInput.Enable();
     }
 
