@@ -83,7 +83,6 @@ public class CameraController : MonoBehaviour
     Highlighter objectHighlight;
     public Highlighter ObjectHighlight { get { return objectHighlight; } }
 
-    [SerializeField]
     GameObject picked;
     public GameObject Picked { get { return picked; } set { picked = value; } }
 
@@ -153,7 +152,8 @@ public class CameraController : MonoBehaviour
             camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
         }
 
-        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * 10f);
+        //Smooth the camera distance
+        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * zoomSensativity);
         float x = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Cos(camPosInput.x);
         float y = camDistanceSmooth * Mathf.Sin(camPosInput.y);
         float z = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Sin(camPosInput.x);
@@ -232,13 +232,13 @@ public class CameraController : MonoBehaviour
     }
 
     /// <summary>
-    /// Camera distance from object controlled by inputs (not orbit data just distance)
+    /// Camera distance from object
     /// </summary>
     /// <param name="sensitivity"></param>
     public void CameraDistance(float sensitivity)
     {
         //Mouse wheel
-        camDistance -= Mouse.current.scroll.ReadValue().y * Time.fixedDeltaTime * sensitivity;
+        camDistance -= Inputs.Instance.MouseScrollInput.ReadValue<float>() * Time.fixedDeltaTime * sensitivity;
         camDistance = Mathf.Clamp(camDistance, 2f, 20f);
     }
 }

@@ -1644,7 +1644,7 @@ PrefabInstance:
       objectReference: {fileID: 242601182}
     - target: {fileID: 4613822729691006517, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: zoomSensativity
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4613822729691006517, guid: 1d84d1fa499687249af4798b09aa771d, type: 3}
       propertyPath: rotateSensativity

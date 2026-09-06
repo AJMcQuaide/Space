@@ -18,8 +18,18 @@ public class Inputs : MonoBehaviour
 
     [SerializeField]
     PlayerInput playerInput;
+
+    /// <summary>
+    /// Mouse drag / movement delta
+    /// </summary>
     InputAction mouseMoveInput;
     public InputAction MouseMoveInput { get { return mouseMoveInput; } }
+
+    /// <summary>
+    /// Mouse wheel scroll delta
+    /// </summary>
+    InputAction mouseScrollInput;
+    public InputAction MouseScrollInput { get { return mouseScrollInput; } }
 
     private void Awake()
     {
@@ -30,15 +40,18 @@ public class Inputs : MonoBehaviour
     private void OnEnable()
     {
         mouseMoveInput = playerInput.actions.FindAction("MouseDelta");
-        if (mouseMoveInput == null)
+        mouseScrollInput = playerInput.actions.FindAction("MouseWheelDelta");
+        if (mouseMoveInput == null || mouseScrollInput == null)
         {
-            Debug.LogError("Cannot find Input Action");
+            Debug.LogError("Cannot find Input Action(s)");
         }
         mouseMoveInput.Enable();
+        mouseScrollInput.Enable();
     }
 
     private void OnDisable()
     {
         mouseMoveInput.Disable();
+        mouseScrollInput.Disable();
     }
 }
