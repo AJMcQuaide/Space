@@ -152,8 +152,6 @@ public class CameraController : MonoBehaviour
             camPosInput.y = Mathf.Clamp(camPosInput.y, -yMax, yMax);
         }
 
-        //Smooth the camera distance
-        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * zoomSensativity);
         float x = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Cos(camPosInput.x);
         float y = camDistanceSmooth * Mathf.Sin(camPosInput.y);
         float z = camDistanceSmooth * Mathf.Cos(camPosInput.y) * Mathf.Sin(camPosInput.x);
@@ -240,5 +238,8 @@ public class CameraController : MonoBehaviour
         //Mouse wheel
         camDistance -= Inputs.Instance.MouseScrollInput.ReadValue<float>() * Time.fixedDeltaTime * sensitivity;
         camDistance = Mathf.Clamp(camDistance, 2f, 20f);
+
+        //Smooth the camera distance
+        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * zoomSensativity);
     }
 }
