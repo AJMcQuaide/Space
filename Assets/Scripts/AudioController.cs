@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
 
@@ -14,13 +14,15 @@ public class AudioController : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI onScreenText;
 
+    [SerializeField]
+    Slider volumeSlider;
+
     bool backgroundMusicOn = true;
 
     float timer = 0;
     int currentTrack = 0;
     int totalTracks;
 
-    // Start is called before the first frame update
     void Start()
     {        
         totalTracks = backgroundMusicClips.Length;
@@ -28,31 +30,50 @@ public class AudioController : MonoBehaviour
         {
             StartCoroutine(JukeBox(backgroundMusic));
         }
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        //Set volume initially to half
+        volumeSlider.value = 0.5f;
     }
 
     IEnumerator JukeBox(AudioSource audioSource)
     {
         while (backgroundMusicOn)
         {
+            float secondTimer = 0;
             //Get the new song and play
             backgroundMusic.clip = backgroundMusicClips[currentTrack];
-            float currentTrackLength = 5;
+            float trackLengthSeconds = backgroundMusic.clip.length;
             backgroundMusic.Play();
 
-            onScreenText.text = backgroundMusic.clip.name + " " + currentTrackLength / 60f;
-            //Debug.LogWarning("Track: " + backgroundMusic.clip.name + " started. Length: " + currentTrackLength / 60f + " Min");
+            onScreenText.text = backgroundMusic.clip.name;
+            float sec = 0f;
+            float min = 0f;
 
-            //Wait for the song to end
-            while (currentTrackLength > timer)
+            //Logic for changing to the next track, as well as the on screen timer
+            while (trackLengthSeconds > timer)
             {
-                Debug.Log("Time: " + timer);
+                secondTimer += Time.deltaTime;
                 timer += Time.deltaTime;
+                if (secondTimer > 1f)
+                {
+                    sec++;
+                    if (sec >= 60f)
+                    {
+                        sec = 0f;
+                        min++;
+                    }
+
+                    //Show the title of the track and current time on screen
+                    if (sec < 10f)
+                    {
+                        onScreenText.text = backgroundMusic.clip.name + " " + min + ":0" + sec;
+                    }
+                    else
+                    {
+                        onScreenText.text = backgroundMusic.clip.name + " " + min + ":" + sec;
+                    }
+                    secondTimer = 0;
+                }
                 yield return null;
             }
 
@@ -65,5 +86,10 @@ public class AudioController : MonoBehaviour
             }
             yield return null;
         }
+    }
+
+    public void UpdateVolume()
+    {
+        backgroundMusic.volume = volumeSlider.value;
     }
 }

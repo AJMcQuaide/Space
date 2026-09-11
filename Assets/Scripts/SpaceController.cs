@@ -330,7 +330,6 @@ public class SpaceController : MonoBehaviour
 
                     //Set velocity and speed, from the saved velocity
                     double3 vel = reader.ReadDouble3();
-                    Debug.Log("Set the Velocity and speed");
                     cb.Speed = (float)math.length(vel);
                     cb.Velocity = vel;
 
