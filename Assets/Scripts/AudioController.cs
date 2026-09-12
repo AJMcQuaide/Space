@@ -20,6 +20,7 @@ public class AudioController : MonoBehaviour
     bool backgroundMusicOn = true;
 
     float timer = 0;
+    float trackLengthSeconds = 0;
     int currentTrack = 0;
     int totalTracks;
 
@@ -42,7 +43,7 @@ public class AudioController : MonoBehaviour
             float secondTimer = 0;
             //Get the new song and play
             backgroundMusic.clip = backgroundMusicClips[currentTrack];
-            float trackLengthSeconds = backgroundMusic.clip.length;
+            trackLengthSeconds = backgroundMusic.clip.length;
             backgroundMusic.Play();
 
             onScreenText.text = backgroundMusic.clip.name;
@@ -50,7 +51,7 @@ public class AudioController : MonoBehaviour
             float min = 0f;
 
             //Logic for changing to the next track, as well as the on screen timer
-            while (trackLengthSeconds > timer)
+            while (trackLengthSeconds >= timer)
             {
                 secondTimer += Time.deltaTime;
                 timer += Time.deltaTime;
@@ -91,5 +92,10 @@ public class AudioController : MonoBehaviour
     public void UpdateVolume()
     {
         backgroundMusic.volume = volumeSlider.value;
+    }
+
+    public void NextSong()
+    {
+        timer = trackLengthSeconds;
     }
 }

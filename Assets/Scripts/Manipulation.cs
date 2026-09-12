@@ -271,6 +271,7 @@ public class Manipulation : MonoBehaviour
     {
         ShowObject(true, MoveTool);
         ShowObject(false, RotationTool);
+        ReSetManipulationToolPosition();
         MoveToolActive = true;
     }
 
@@ -281,6 +282,8 @@ public class Manipulation : MonoBehaviour
     {
         ShowObject(false, MoveTool);
         ShowObject(true, RotationTool);
+        ReSetManipulationToolPosition();
+        ReAlignDirectionTool();
         MoveToolActive = false;
     }
 
@@ -301,11 +304,14 @@ public class Manipulation : MonoBehaviour
         //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
         CelestialBody cb = cc.CameraTrackedObject;
 
-        Vector3 cbDirection = new((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
-        if (cbDirection.sqrMagnitude > 0)
+        if (cb != null)
         {
-            Quaternion look = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
-            rotationTool.transform.rotation = look;
+            Vector3 cbDirection = new((float)cb.Velocity.x, (float)cb.Velocity.y, (float)cb.Velocity.z);
+            if (cbDirection.sqrMagnitude > 0)
+            {
+                Quaternion look = Quaternion.LookRotation(cbDirection.normalized, Vector3.up);
+                rotationTool.transform.rotation = look;
+            }
         }
     }
 
@@ -314,10 +320,13 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void ReSetManipulationToolPosition()
     {
-        //Cache the target transform
-        target = cc.CameraTrackedObject.transform;
+        if (cc.CameraTrackedObject != null)
+        {
+            //Cache the target transform
+            target = cc.CameraTrackedObject.transform;
 
-        //Set the manipulation tool position initially
-        transform.position = target.position;
+            //Set the manipulation tool position initially
+            transform.position = target.position;
+        }
     }
 }
