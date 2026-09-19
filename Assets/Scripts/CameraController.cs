@@ -64,7 +64,7 @@ public class CameraController : MonoBehaviour
     /// </summary>
     float camDistanceSmooth = 0;
 
-    [SerializeField, Range(0.1f, 10f)]
+    [SerializeField, Range(0f, 1f)]
     float zoomSensativity;
     [SerializeField, Range(1f, 10f)]
     float rotateSensativity;
@@ -106,7 +106,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        CameraDistance(zoomSensativity);
+        CameraDistance();
         SetPickPos();
 
         //Go to object when clicked on specified layer (Celestial Body)
@@ -233,13 +233,13 @@ public class CameraController : MonoBehaviour
     /// Camera distance from object
     /// </summary>
     /// <param name="sensitivity"></param>
-    public void CameraDistance(float sensitivity)
+    public void CameraDistance()
     {
         //Mouse wheel
-        camDistance -= Inputs.Instance.MouseScrollInput.ReadValue<float>() * Time.fixedDeltaTime * sensitivity;
+        camDistance -= Inputs.Instance.MouseScrollInput.ReadValue<float>() * 0.006f;
         camDistance = Mathf.Clamp(camDistance, 2f, 20f);
 
         //Smooth the camera distance
-        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, Time.fixedDeltaTime * zoomSensativity);
+        camDistanceSmooth = Mathf.Lerp(camDistanceSmooth, camDistance, zoomSensativity);
     }
 }

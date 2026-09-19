@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -37,11 +38,16 @@ public class UIController : MonoBehaviour
     [SerializeField]
     Button playPauseButton;
 
-    RectTransform rt;
+    //RectTransform rt;
     bool playPauseSelected = true;
     public bool PlayPauseSelected { get { return playPauseButton; } }
 
     SpriteState playPause;
+
+    [SerializeField]
+    GameObject escMenu;
+    public GameObject EscButton {  get { return escMenu; } }
+
 
     private void Awake()
     {
@@ -49,6 +55,8 @@ public class UIController : MonoBehaviour
         playPause = new();
 
         SetSpriteState();
+
+        escMenu.SetActive(false);
     }
 
     public void PlayPauseButton()
@@ -87,5 +95,20 @@ public class UIController : MonoBehaviour
 
         //Set the button sprite state
         playPauseButton.spriteState = playPause;
+    }
+
+    public void OnEscapeKey(InputAction.CallbackContext context)
+    {
+        escMenu.SetActive(!escMenu.activeSelf);
+        if (SpaceController.Instance.InPlayMode)
+        {
+            PlayPauseButton();
+        }
+        AudioController.Instance.OnEscapeKey();
+    }
+
+    public void QuitApplication()
+    {
+        Application.Quit();
     }
 }

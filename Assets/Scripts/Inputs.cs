@@ -31,6 +31,12 @@ public class Inputs : MonoBehaviour
     InputAction mouseScrollInput;
     public InputAction MouseScrollInput { get { return mouseScrollInput; } }
 
+    /// <summary>
+    /// Mouse wheel scroll delta
+    /// </summary>
+    InputAction escapeKey;
+    public InputAction EscapeKey { get { return escapeKey; } }
+
     private void Awake()
     {
         //Singleton
@@ -39,19 +45,23 @@ public class Inputs : MonoBehaviour
 
     private void OnEnable()
     {
+        //Find input actions
         mouseMoveInput = playerInput.actions.FindAction("MouseDelta");
         mouseScrollInput = playerInput.actions.FindAction("MouseWheelDelta");
-        if (mouseMoveInput == null || mouseScrollInput == null)
-        {
-            Debug.LogError("Cannot find Input Action(s)");
-        }
+        escapeKey = playerInput.actions.FindAction("Escape");
+
+        //Enable input action callbacks
         mouseMoveInput.Enable();
         mouseScrollInput.Enable();
+        escapeKey.performed += UIController.Instance.OnEscapeKey;
+        escapeKey.Enable();
     }
 
     private void OnDisable()
     {
         mouseMoveInput.Disable();
         mouseScrollInput.Disable();
+        escapeKey.Disable();
+        escapeKey.performed -= UIController.Instance.OnEscapeKey;
     }
 }

@@ -2,14 +2,41 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
+using Unity.VisualScripting;
 
 public class AudioController : MonoBehaviour
 {
+    static AudioController instance;
+    public static AudioController Instance
+    {
+        get
+        {
+            return instance;
+        }
+        set
+        {
+            if (instance == null)
+            {
+                instance = FindAnyObjectByType<AudioController>();
+                if (instance == null )
+                {
+                    Debug.LogError("Cannot find Audio Controller");
+                }
+            }
+        }
+    }
+
     [SerializeField]
     AudioSource backgroundMusic;
 
     [SerializeField]
+    AudioSource soundEffects;
+
+    [SerializeField]
     AudioClip[] backgroundMusicClips;
+
+    [SerializeField]
+    AudioClip escapeButton;
 
     [SerializeField]
     TextMeshProUGUI onScreenText;
@@ -24,16 +51,28 @@ public class AudioController : MonoBehaviour
     int currentTrack = 0;
     int totalTracks;
 
-    void Start()
-    {        
-        totalTracks = backgroundMusicClips.Length;
-        if (totalTracks > 0)
+    private void Awake()
+    {
+        Instance = this;
+        if (Instance != this)
         {
-            StartCoroutine(JukeBox(backgroundMusic));
+            Destroy(gameObject);
         }
+    }
+
+    void Start()
+    {
+        //Get the number of tracks
+        totalTracks = backgroundMusicClips.Length;
 
         //Set volume initially to half
         volumeSlider.value = 0.5f;
+
+        //Set a random starting track
+        currentTrack = Random.Range(0, totalTracks + 1);
+
+        //Start JukeBox coroutine
+        StartCoroutine(JukeBox(backgroundMusic));
     }
 
     IEnumerator JukeBox(AudioSource audioSource)
@@ -97,5 +136,14 @@ public class AudioController : MonoBehaviour
     public void NextSong()
     {
         timer = trackLengthSeconds;
+    }
+
+    public void OnEscapeKey()
+    {
+        if (UIController.Instance.EscButton.activeSelf == false)
+        {
+            soundEffects.clip = escapeButton;
+            soundEffects.Play();
+        }
     }
 }
