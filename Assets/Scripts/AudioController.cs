@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 
 public class AudioController : MonoBehaviour
 {
@@ -29,14 +29,18 @@ public class AudioController : MonoBehaviour
     [SerializeField]
     AudioSource backgroundMusic;
 
-    [SerializeField]
-    AudioSource soundEffects;
+    List<AudioSource> soundEffects;
 
     [SerializeField]
     AudioClip[] backgroundMusicClips;
 
     [SerializeField]
-    AudioClip escapeButton;
+    AudioClip escapeMenuSound;
+    public AudioClip EscapeMenuSound { get { return escapeMenuSound; } }
+
+    [SerializeField]
+    AudioClip planetFocusSound;
+    public AudioClip PlanetFocusSound { get { return planetFocusSound; } }
 
     [SerializeField]
     TextMeshProUGUI onScreenText;
@@ -62,6 +66,9 @@ public class AudioController : MonoBehaviour
 
     void Start()
     {
+        //Initialize sound effects array
+        soundEffects = new List<AudioSource>(1);
+
         //Get the number of tracks
         totalTracks = backgroundMusicClips.Length;
 
@@ -69,7 +76,7 @@ public class AudioController : MonoBehaviour
         volumeSlider.value = 0.5f;
 
         //Set a random starting track
-        currentTrack = Random.Range(0, totalTracks + 1);
+        currentTrack = Random.Range(0, totalTracks);
 
         //Start JukeBox coroutine
         StartCoroutine(JukeBox(backgroundMusic));
@@ -138,12 +145,44 @@ public class AudioController : MonoBehaviour
         timer = trackLengthSeconds;
     }
 
-    public void OnEscapeKey()
+    //public void PlaySoundEffect(AudioClip clip, float volume)
+    //{
+    //    //Check if a Audio Source is available to play sound effect
+    //    AudioSource source = null;
+    //    foreach (AudioSource _as in soundEffects)
+    //    {
+    //        if (_as.isPlaying == false)
+    //        {
+    //            source = _as;
+    //        }
+    //    }
+    //    //Did not find an available source
+    //    if (source == null)
+    //    {
+    //        soundEffects.Add(source);
+    //    }
+    //    source.clip = clip;
+    //    source.volume = volume;
+    //    source.Play();
+    //}
+
+    public IEnumerator PlaySoundEffect(AudioClip clip, float volume)
     {
-        if (UIController.Instance.EscButton.activeSelf == false)
+        AudioSource _as = gameObject.AddComponent<AudioSource>();
+        float timer = 0;
+        _as.clip = clip;
+        _as.volume = volume;
+        _as.Play();
+        Debug.Log("Created AudioSource, play clip");
+        yield return null;
+        while (clip.length > timer)
         {
-            soundEffects.clip = escapeButton;
-            soundEffects.Play();
+            timer += Time.deltaTime;
+            yield return null;
         }
+        _as.Stop();
+        Destroy(_as);
+        Debug.Log("Finished clip, destroying AudioSource");
+        yield return null;
     }
 }

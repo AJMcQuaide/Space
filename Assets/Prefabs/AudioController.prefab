@@ -46,7 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   backgroundMusic: {fileID: 810631803010930263}
-  backgroundMusicClips: []
+  backgroundMusicClips:
+  - {fileID: 8300000, guid: c5a0cb5765273b047b7ba4200c77612e, type: 3}
+  - {fileID: 8300000, guid: 46dc7415da4f96240902201878d04ffc, type: 3}
+  - {fileID: 8300000, guid: 9aca0ec043aedeb4986149bbcb927e05, type: 3}
+  - {fileID: 8300000, guid: a434f3059dc18b047ba048277ca7e8fb, type: 3}
+  - {fileID: 8300000, guid: 3037e7f0fb79aca4ba36f2822d53692a, type: 3}
+  escapeMenuSound: {fileID: 8300000, guid: d7ef47a1a05fc56438117e5421dcd069, type: 3}
+  planetFocusSound: {fileID: 8300000, guid: 97bd5f65771a04441a15c880f293ee35, type: 3}
+  onScreenText: {fileID: 0}
+  volumeSlider: {fileID: 0}
 --- !u!82 &810631803010930263
 AudioSource:
   m_ObjectHideFlags: 0

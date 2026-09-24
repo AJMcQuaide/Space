@@ -46,7 +46,7 @@ public class UIController : MonoBehaviour
 
     [SerializeField]
     GameObject escMenu;
-    public GameObject EscButton {  get { return escMenu; } }
+    public GameObject EscMenu { get { return escMenu; } set { escMenu = value; } }
 
 
     private void Awake()
@@ -97,15 +97,15 @@ public class UIController : MonoBehaviour
         playPauseButton.spriteState = playPause;
     }
 
-    public void OnEscapeKey(InputAction.CallbackContext context)
-    {
-        escMenu.SetActive(!escMenu.activeSelf);
-        if (SpaceController.Instance.InPlayMode)
-        {
-            PlayPauseButton();
-        }
-        AudioController.Instance.OnEscapeKey();
-    }
+    //public void OnEscapeKey(InputAction.CallbackContext context)
+    //{
+    //    UIController.Instance.EscMenu.SetActive(!escMenu.activeSelf);
+    //    if (SpaceController.Instance.InPlayMode)
+    //    {
+    //        PlayPauseButton();
+    //    }
+    //    AudioController.Instance.PlaySoundEffect(AudioController.Instance.EscapeMenuSound, 0.5f);
+    //}
 
     public void QuitApplication()
     {

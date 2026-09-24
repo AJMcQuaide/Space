@@ -115,6 +115,7 @@ public class CameraController : MonoBehaviour
         {
             TrackObject = true;
             CameraTrackedObject = Picked.GetComponent<CelestialBody>();
+            StartCoroutine(AudioController.Instance.PlaySoundEffect(AudioController.Instance.PlanetFocusSound, 0.75f));
 
             //Set the rotation tool starting direction on clicking a celestial body
             if (sc.ObjectManipulation.MoveToolActive == false)

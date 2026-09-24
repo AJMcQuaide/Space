@@ -402,7 +402,7 @@ MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
   m_PrefabInstance: {fileID: 3910552990856475572}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1279628884}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72e9dc04c6b19fc4f8492bfaa4643a73, type: 3}
@@ -950,107 +950,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1002768813344562380, guid: 282072b3505e1bd4ba7fe11950b7301f, type: 3}
   m_PrefabInstance: {fileID: 6434734001382937501}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1279628884 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8828180510856947780, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-  m_PrefabInstance: {fileID: 3910552990856475572}
-  m_PrefabAsset: {fileID: 0}
---- !u!82 &1279628887
-AudioSource:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1279628884}
-  m_Enabled: 1
-  serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
-  m_Pitch: 1
-  Loop: 0
-  Mute: 0
-  Spatialize: 0
-  SpatializePostEffects: 0
-  Priority: 128
-  DopplerLevel: 1
-  MinDistance: 1
-  MaxDistance: 500
-  Pan2D: 0
-  rolloffMode: 0
-  BypassEffects: 0
-  BypassListenerEffects: 0
-  BypassReverbZones: 0
-  rolloffCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    - serializedVersion: 3
-      time: 1
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  panLevelCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  spreadCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  reverbZoneMixCustomCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0.33333334
-      outWeight: 0.33333334
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
 --- !u!1001 &1355668140
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1668,45 +1567,13 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: escapeButton
-      value: 
-      objectReference: {fileID: 8300000, guid: d7ef47a1a05fc56438117e5421dcd069, type: 3}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
       propertyPath: onScreenText
       value: 
       objectReference: {fileID: 1156983482}
     - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: soundEffects
-      value: 
-      objectReference: {fileID: 1279628887}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
       propertyPath: volumeSlider
       value: 
       objectReference: {fileID: 1186922157}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.data[0]
-      value: 
-      objectReference: {fileID: 8300000, guid: c5a0cb5765273b047b7ba4200c77612e, type: 3}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.data[1]
-      value: 
-      objectReference: {fileID: 8300000, guid: 46dc7415da4f96240902201878d04ffc, type: 3}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.data[2]
-      value: 
-      objectReference: {fileID: 8300000, guid: 9aca0ec043aedeb4986149bbcb927e05, type: 3}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.data[3]
-      value: 
-      objectReference: {fileID: 8300000, guid: a434f3059dc18b047ba048277ca7e8fb, type: 3}
-    - target: {fileID: 391283952885986255, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      propertyPath: backgroundMusicClips.Array.data[4]
-      value: 
-      objectReference: {fileID: 8300000, guid: 3037e7f0fb79aca4ba36f2822d53692a, type: 3}
     - target: {fileID: 4352091266754000153, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1754,10 +1621,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8828180510856947780, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1279628887}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fb9d475c12b810d4cb2c699385592391, type: 3}
 --- !u!1001 &6103252648243364630
 PrefabInstance:
@@ -1767,6 +1631,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 393261583409464726, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: escMenu
+      value: 
+      objectReference: {fileID: 1238319138}
+    - target: {fileID: 393261583409464726, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+      propertyPath: playPauseButton
+      value: 
+      objectReference: {fileID: 1130417040}
     - target: {fileID: 496478908968886678, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1933.0345
@@ -1814,36 +1686,19 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7358250217428432606, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6103252648243364632}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
---- !u!1 &6103252648243364631 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7358250217428432606, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
+--- !u!114 &6103252648243364632 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 393261583409464726, guid: a958c40f53fdeb94eb359aa9d1608524, type: 3}
   m_PrefabInstance: {fileID: 6103252648243364630}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6103252648243364632
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6103252648243364631}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e007872f6009b242bc90005ab9ca4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Play: {fileID: 21300000, guid: 38015e15ebc04814fb1a2a70e249a85e, type: 3}
-  play_Hover: {fileID: 21300000, guid: 25f2593631ba2ca40864f959662836da, type: 3}
-  Play_Pressed: {fileID: 21300000, guid: fef31990620e901409828df44fc60059, type: 3}
-  Pause: {fileID: 21300000, guid: 8a223656903d55642bd1217f2348ff6d, type: 3}
-  pause_Hover: {fileID: 21300000, guid: 45eda186d71e28443895c4720e475b0f, type: 3}
-  Pause_Pressed: {fileID: 21300000, guid: a2487823fd63cfa4cbd09ef66726f7eb, type: 3}
-  playPauseButton: {fileID: 1130417040}
-  escMenu: {fileID: 1238319138}
 --- !u!1001 &6434734001382937501
 PrefabInstance:
   m_ObjectHideFlags: 0

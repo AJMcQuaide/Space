@@ -37,10 +37,35 @@ public class Inputs : MonoBehaviour
     InputAction escapeKey;
     public InputAction EscapeKey { get { return escapeKey; } }
 
+    //Refereneces
+    UIController ui;
+    AudioController ac;
+    SpaceController sc;
+
     private void Awake()
     {
         //Singleton
         if (Instance != this) { Destroy(gameObject); }
+    }
+
+    private void Start()
+    {
+        ui = UIController.Instance;
+        ac = AudioController.Instance;
+        sc = SpaceController.Instance;
+    }
+
+    public void OnEscapeKey(InputAction.CallbackContext context)
+    {
+        ui.EscMenu.SetActive(!ui.EscMenu.activeSelf);
+        if (sc.InPlayMode)
+        {
+            ui.PlayPauseButton();
+        }
+        if (ui.EscMenu.activeSelf == true)
+        {
+            StartCoroutine(ac.PlaySoundEffect(ac.EscapeMenuSound, 0.5f));
+        }
     }
 
     private void OnEnable()
@@ -53,7 +78,7 @@ public class Inputs : MonoBehaviour
         //Enable input action callbacks
         mouseMoveInput.Enable();
         mouseScrollInput.Enable();
-        escapeKey.performed += UIController.Instance.OnEscapeKey;
+        escapeKey.performed += OnEscapeKey;
         escapeKey.Enable();
     }
 
@@ -62,6 +87,6 @@ public class Inputs : MonoBehaviour
         mouseMoveInput.Disable();
         mouseScrollInput.Disable();
         escapeKey.Disable();
-        escapeKey.performed -= UIController.Instance.OnEscapeKey;
+        escapeKey.performed -= OnEscapeKey;
     }
 }
