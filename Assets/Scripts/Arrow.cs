@@ -6,6 +6,9 @@ public class Arrow : MonoBehaviour
     [SerializeField]
     ArrowType arrowType;
 
+    static Color gravityColor = Color.cyan;
+    static Color velocityColor = Color.yellow;
+
     CelestialBody body;
 
     double3 kinematicProperty;
@@ -66,7 +69,7 @@ public class Arrow : MonoBehaviour
     void ShowHide(bool show)
     {
         mr.enabled = show;
-        mr.material.color = arrowType == ArrowType.Velocity ? Color.grey : Color.white;
+        mr.material.color = arrowType == ArrowType.Velocity ? velocityColor : gravityColor;
         transform.localScale = new Vector3(size, size, size);
     }
 }

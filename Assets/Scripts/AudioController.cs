@@ -145,27 +145,6 @@ public class AudioController : MonoBehaviour
         timer = trackLengthSeconds;
     }
 
-    //public void PlaySoundEffect(AudioClip clip, float volume)
-    //{
-    //    //Check if a Audio Source is available to play sound effect
-    //    AudioSource source = null;
-    //    foreach (AudioSource _as in soundEffects)
-    //    {
-    //        if (_as.isPlaying == false)
-    //        {
-    //            source = _as;
-    //        }
-    //    }
-    //    //Did not find an available source
-    //    if (source == null)
-    //    {
-    //        soundEffects.Add(source);
-    //    }
-    //    source.clip = clip;
-    //    source.volume = volume;
-    //    source.Play();
-    //}
-
     public IEnumerator PlaySoundEffect(AudioClip clip, float volume)
     {
         AudioSource _as = gameObject.AddComponent<AudioSource>();
@@ -173,7 +152,6 @@ public class AudioController : MonoBehaviour
         _as.clip = clip;
         _as.volume = volume;
         _as.Play();
-        Debug.Log("Created AudioSource, play clip");
         yield return null;
         while (clip.length > timer)
         {
@@ -182,7 +160,6 @@ public class AudioController : MonoBehaviour
         }
         _as.Stop();
         Destroy(_as);
-        Debug.Log("Finished clip, destroying AudioSource");
         yield return null;
     }
 }

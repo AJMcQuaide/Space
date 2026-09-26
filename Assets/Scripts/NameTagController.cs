@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections;
 using TMPro;
 using UnityEngine;
 
@@ -21,7 +22,7 @@ public class NameTagController : MonoBehaviour
     [SerializeField]
     GameObject textPrefab;
 
-    List<TextMeshProUGUI> nameTagList = new List<TextMeshProUGUI>();
+    List<TextMeshProUGUI> nameTagList = new();
 
     [SerializeField]
     float multiplier = 70f;
@@ -84,21 +85,29 @@ public class NameTagController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Add the name tag
+    /// </summary>
+    /// <param name="cb"></param>
     public void Register(CelestialBody cb)
     {
         int index = sc.CelestialBodiesInScene.IndexOf(cb);
-        //Debug.LogWarning("Index: " + index + " cb index of: " + sc.CelestialBodiesInScene.IndexOf(cb) + " Total CBs: " + sc.CelestialBodiesInScene.Count);
         if (index >= 0)
         {
             //Match the index of the Cb list and the nametag list
             TextMeshProUGUI text = Instantiate(textPrefab.GetComponent<TextMeshProUGUI>());
             text.transform.SetParent(transform, false);
-            text.text = cb.name;
+            text.alignment = TextAlignmentOptions.Left;
+            text.text = cb.name + "<br>" + cb.Speed + "m/s";
             nameTagList.Add(text);
-            //Debug.LogWarning("Added to nametag list " + nameTagList[index].text + " at index " + index);
+            StartCoroutine(UpdateSpeedText(cb, text));
         }
     }
 
+    /// <summary>
+    /// Remove the name tag
+    /// </summary>
+    /// <param name="cb"></param>
     public void DeRegister(CelestialBody cb)
     {
         if (sc != null)
@@ -106,8 +115,19 @@ public class NameTagController : MonoBehaviour
             int index = sc.CelestialBodiesInScene.IndexOf(cb);
             if (index >= 0)
             {
+                Destroy(nameTagList[index].gameObject);
                 nameTagList.RemoveAt(index);
             }
+        }
+    }
+
+    IEnumerator UpdateSpeedText(CelestialBody cb, TextMeshProUGUI text)
+    {
+        WaitForSeconds delay = new(1);
+        while (cb != null)
+        {
+            text.text = text.text = cb.name + "<br>" + (int)cb.Speed + "m/s";
+            yield return delay;
         }
     }
 }

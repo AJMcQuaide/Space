@@ -78,8 +78,7 @@ public class CelestialBody : MonoBehaviour
     Color trailColor;
     public Color TrailColor { get { return new Color(trailColor.r, trailColor.g, trailColor.b, 1f); } set { trailColor = value; } }
 
-    [SerializeField]
-    float trailWidth;
+    float trailWidth = 0.01f;
     public float TrailWidth { get { return trailWidth; } set { trailWidth = value; } }
 
     [SerializeField]
@@ -90,9 +89,9 @@ public class CelestialBody : MonoBehaviour
     bool warpGrid;
     public bool WarpGrid { get { return warpGrid; } set { warpGrid = value; } }
 
-    [SerializeField]
-    bool physicsArrow = true;
-    public bool PhysicsArrows { get { return physicsArrow; } }
+    //[SerializeField]
+    //bool physicsArrow = true;
+    //public bool PhysicsArrows { get { return physicsArrow; } }
 
     [Header("Reference")]
     [SerializeField]
@@ -170,14 +169,14 @@ public class CelestialBody : MonoBehaviour
 
     TrailRenderer trailRenderer;
 
-    double3 defaultDirection = new double3(0d, 0d, 1d);
+    double3 defaultDirection = new(0d, 0d, 1d);
 
     private void Start()
     {
         SetProperties();
         Register(this);
         UpdateSpeed();
-        //NameTagController.Instance.Register(this);
+        NameTagController.Instance.Register(this);
         if (model != null)
         {
             mr = model.GetComponent<MeshRenderer>();
@@ -226,7 +225,6 @@ public class CelestialBody : MonoBehaviour
         MaterialPropertyBlock trailProperty = new();
         trailProperty.SetColor("_Color", trailColor);
         tr.SetPropertyBlock(trailProperty);
-        trailWidth = trailWidth == 0 ? 0.02f : trailWidth;
         tr.widthMultiplier = trailWidth;
         tr.time = Sc.UniversalTrailLength;
 
