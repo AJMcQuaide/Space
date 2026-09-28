@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -13,6 +14,8 @@ public class UIController : MonoBehaviour
             return instance;
         }
     }
+
+    SpaceController sc;
 
     [SerializeField]
     Sprite Play;
@@ -48,21 +51,22 @@ public class UIController : MonoBehaviour
     GameObject escMenu;
     public GameObject EscMenu { get { return escMenu; } set { escMenu = value; } }
 
+    [SerializeField]
+    TMP_Dropdown dropdownAddCB;
 
     private void Awake()
     {
         if (Instance != this) { Destroy(gameObject); }
         playPause = new();
-
         SetSpriteState();
-
         escMenu.SetActive(false);
+        sc = SpaceController.Instance;
     }
 
     public void PlayPauseButton()
     {
         playPauseSelected = !playPauseSelected;
-        SpaceController.Instance.InPlayMode = !playPauseSelected;
+        sc.InPlayMode = !playPauseSelected;
 
         SetSpriteState();
     }
@@ -72,7 +76,7 @@ public class UIController : MonoBehaviour
     /// </summary>
     public void FastForward()
     {
-        SpaceController.Instance.TimeScale *= 2f;
+        sc.TimeScale *= 2f;
     }
 
     /// <summary>
@@ -80,7 +84,7 @@ public class UIController : MonoBehaviour
     /// </summary>
     public void SlowForward()
     {
-        SpaceController.Instance.TimeScale *= 0.5f;
+        sc.TimeScale *= 0.5f;
     }
 
     //Set state of the game mode (Play/Pause) control buttons in the UI
@@ -97,18 +101,13 @@ public class UIController : MonoBehaviour
         playPauseButton.spriteState = playPause;
     }
 
-    //public void OnEscapeKey(InputAction.CallbackContext context)
-    //{
-    //    UIController.Instance.EscMenu.SetActive(!escMenu.activeSelf);
-    //    if (SpaceController.Instance.InPlayMode)
-    //    {
-    //        PlayPauseButton();
-    //    }
-    //    AudioController.Instance.PlaySoundEffect(AudioController.Instance.EscapeMenuSound, 0.5f);
-    //}
-
     public void QuitApplication()
     {
         Application.Quit();
+    }
+
+    public void AddCelestialBody()
+    {
+        Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
     }
 }
