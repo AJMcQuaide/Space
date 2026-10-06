@@ -203,8 +203,11 @@ public class Manipulation : MonoBehaviour
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
             Vector3 move = cc.CamDistance * dot * moveMultipier * moveSensativity * Picked.transform.localPosition.normalized;
 
-            cc.CameraTrackedObject.transform.position += move;
-            cc.CameraTrackedObject.Position += new double3((double)move.x, (double)move.y, (double)move.z);
+            CelestialBody cb = cc.CameraTrackedObject;
+
+            cb.transform.position += move;
+            cb.Position += new double3((double)move.x, (double)move.y, (double)move.z);
+            cb.PreviousPosition = new Vector3((float)cb.Position.x, (float)cb.Position.y, (float)cb.Position.z);
         }
     }
 

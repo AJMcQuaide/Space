@@ -135,7 +135,7 @@ public class CelestialBody : MonoBehaviour
     float density;
 
     Vector3 previousPosition;
-    public Vector3 PreviousPosition { get { return previousPosition; } }
+    public Vector3 PreviousPosition { get { return previousPosition; } set { previousPosition = value; } }
 
     public bool ContactChecked { get; set; } = false;
 
@@ -186,7 +186,7 @@ public class CelestialBody : MonoBehaviour
         mr.material.SetFloat("_Scale", model.transform.localScale.x);
 
         //Send outline thickness to shader
-        mr.material.SetFloat("_OT", sc._OutlineThickness);
+        mr.material.SetFloat("_OT", sc.OutlineThickness);
 
         //Get trail renderer
         trailRenderer = GetComponent<TrailRenderer>();
@@ -311,6 +311,7 @@ public class CelestialBody : MonoBehaviour
 
     /// <summary>
     /// Loop through all Celestial bodies and set total acceleration 
+    /// Recommended to apply this method outside of this class, so that all can be evaluated at once
     /// </summary>
     public double3 SetAcceleration(CelestialBody _thisCB)
     {
@@ -326,7 +327,8 @@ public class CelestialBody : MonoBehaviour
         {
             if (_otherCB != _thisCB && _thisCB.isKinematic == false)
             {
-               //Convert to double
+                //Convert to double
+                //Previous position is used so that the new position of a Celesial Body is not used in calculations on the current frame
                 double3 otherCB = new(_otherCB.PreviousPosition.x, _otherCB.PreviousPosition.y, _otherCB.PreviousPosition.z);
                 double3 thisCB = new(_thisCB.transform.position.x, _thisCB.transform.position.y, _thisCB.transform.position.z);
                 double3 difference = otherCB - thisCB;
@@ -336,7 +338,7 @@ public class CelestialBody : MonoBehaviour
                 double magnitude = math.length(difference);
                 if (magnitude == 0)
                 {
-                    Debug.LogWarning("When calculating acceleration, the distance between objects was zero and therefore returned zero acceleration");
+                    Debug.LogWarning("Distance between celestial bodies was zero: " + _otherCB.name + " at position: " + otherCB + " and " + _thisCB.name + " at position " + thisCB);
                     return new double3(0d, 0d, 0d);
                 }
                 double acceleration = GetAcceleration(magnitude, _otherCB.RelativeMass);

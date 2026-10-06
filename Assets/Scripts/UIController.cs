@@ -54,6 +54,9 @@ public class UIController : MonoBehaviour
     [SerializeField]
     TMP_Dropdown dropdownAddCB;
 
+    [SerializeField]
+    TMP_InputField addCBInputSpeed;
+
     private void Awake()
     {
         if (Instance != this) { Destroy(gameObject); }
@@ -67,6 +70,9 @@ public class UIController : MonoBehaviour
     {
         playPauseSelected = !playPauseSelected;
         sc.InPlayMode = !playPauseSelected;
+
+        //Set the input field to only accept numbers
+        addCBInputSpeed.contentType = TMP_InputField.ContentType.DecimalNumber;
 
         SetSpriteState();
     }
@@ -108,6 +114,20 @@ public class UIController : MonoBehaviour
 
     public void AddCelestialBody()
     {
-        Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
+        CelestialBody newCB = Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
+        newCB.name = sc.GetCelestialBodyPrefab(dropdownAddCB.value).name;
+        if (float.TryParse(addCBInputSpeed.text, out float result))
+        {
+            newCB.ResetVelocity(result);
+        }
+        else
+        {
+            Debug.LogError("Input field failed to parse");
+        }
+    }
+
+    public void OnValueChangedDropdown()
+    {
+        addCBInputSpeed = null;
     }
 }
