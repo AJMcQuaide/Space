@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(SphereCollider))]
@@ -144,6 +145,33 @@ public class CelestialBody : MonoBehaviour
     GameObject model;
 
     MeshRenderer mr;
+    public MeshRenderer Mr
+    {
+        get
+        {
+            if (mr == null)
+            {
+                mr = model.GetComponent<MeshRenderer>();
+            }
+            return mr;
+        }
+    }
+
+    /// <summary>
+    /// Hold a copy of the Celestial Bodies material at start
+    /// </summary>
+    Material mat;
+    public Material Mat
+    {
+        get
+        {
+            if (mat == null)
+            {
+                mat = Mr.material;
+            }
+            return mat;
+        }
+    }
 
     [SerializeField]
     bool selected;
@@ -157,11 +185,11 @@ public class CelestialBody : MonoBehaviour
                 selected = value;
                 if (selected)
                 {
-                    mr.material.EnableKeyword("_SELECTED");
+                    Mr.material.EnableKeyword("_SELECTED");
                 }
                 else
                 {
-                    mr.material.DisableKeyword("_SELECTED");
+                    Mr.material.DisableKeyword("_SELECTED");
                 }
             }
         }
@@ -171,25 +199,63 @@ public class CelestialBody : MonoBehaviour
 
     double3 defaultDirection = new(0d, 0d, 1d);
 
+    /// <summary>
+    /// Pre-Insertion state of the CelestialBody. In this state, the user chooses a position without physics or collisions.
+    /// </summary>
+    bool ghostMode;
+    public bool GhostMode
+    {
+        get { return ghostMode; }
+        set 
+        {
+            if (Sc.InPlayMode == false && ghostMode != value)
+            {
+                ghostMode = value;
+                ToggleGhostMode();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Track whether or not this is added to the Celestial Body list
+    /// </summary>
+    bool registered;
+
+    private void Awake()
+    {
+        //Create a copy of the default material, to be used when turning ghost mode off
+        mat = Mr.material;
+    }
+
     private void Start()
     {
         SetProperties();
-        Register(this);
         UpdateSpeed();
-        NameTagController.Instance.Register(this);
-        if (model != null)
+        if (ghostMode == false)
         {
-            mr = model.GetComponent<MeshRenderer>();
+            Register();
+            //Debug
+            Debug.LogWarning("Called Register at START for CB: " + name);
+            NameTagController.Instance.Register(this);
         }
 
         //Send scale to shader
-        mr.material.SetFloat("_Scale", model.transform.localScale.x);
+        Mr.material.SetFloat("_Scale", model.transform.localScale.x);
 
         //Send outline thickness to shader
-        mr.material.SetFloat("_OT", sc.OutlineThickness);
+        Mr.material.SetFloat("_OT", sc.OutlineThickness);
 
         //Get trail renderer
         trailRenderer = GetComponent<TrailRenderer>();
+    }
+
+    private void Update()
+    {
+        //Debug
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            GhostMode = !GhostMode;
+        }
     }
 
     private void FixedUpdate()
@@ -223,6 +289,7 @@ public class CelestialBody : MonoBehaviour
         //Set trail renderer color
         TrailRenderer tr = GetComponent<TrailRenderer>();
         MaterialPropertyBlock trailProperty = new();
+        trailColor.a = 1f;
         trailProperty.SetColor("_Color", trailColor);
         tr.SetPropertyBlock(trailProperty);
         tr.widthMultiplier = trailWidth;
@@ -261,6 +328,10 @@ public class CelestialBody : MonoBehaviour
     /// </summary>
     public void SetContact(CelestialBody cb1)
     {
+        if (ghostMode)
+        {
+            return;
+        }
         //Break out of another cb already contacted this and set it's velocity
         if (cb1.ContactChecked == true)
         {
@@ -279,8 +350,22 @@ public class CelestialBody : MonoBehaviour
                 double3 p1 = new(cb1.position.x, cb1.position.y, cb1.position.z);
                 double3 difference = p2 - p1;
 
-                //Contact and calculation reflection
-                if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
+                //Replaced by "Spheres touching" method
+                ////Contact and calculation reflection
+                //if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
+                //{
+                //    //Calculate the velocity of the cb being evaluated
+                //    double3 iv1 = cb1.velocity;
+                //    double3 iv2 = cb2.velocity;
+                //    double3 v1 = Reflect(difference, iv1, iv2, cb1.Mass, cb2.Mass);
+                //    cb1.velocity = v1;
+                //    //Calculate the velocity of the other cb that was contacted
+                //    double3 v2 = Reflect(difference, iv2, iv1, cb2.Mass, cb1.Mass);
+                //    cb2.velocity = v2;
+                //    cb2.ContactChecked = true;
+                //}
+
+                if (SpheresTouching(cb1.transform.position, cb2.transform.position, cb1.Radius, cb2.Radius))
                 {
                     //Calculate the velocity of the cb being evaluated
                     double3 iv1 = cb1.velocity;
@@ -294,6 +379,19 @@ public class CelestialBody : MonoBehaviour
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// Return true if two spheres are intersecting
+    /// </summary>
+    /// <param name="pos1"></param>
+    /// <param name="pos2"></param>
+    /// <param name="rad1"></param>
+    /// <param name="rad2"></param>
+    /// <returns></returns>
+    public static bool SpheresTouching(Vector3 pos1, Vector3 pos2, float rad1, float rad2)
+    {
+        return math.length(pos1 - pos2) < (rad2 * CelestialBody.SD + rad1 * CelestialBody.SD);
     }
 
     /// <summary>
@@ -488,24 +586,61 @@ public class CelestialBody : MonoBehaviour
     }
 
     //Add the object to the Celestial body list
-    public void Register(CelestialBody celestialBody)
+    public void Register()
     {
-        SpaceController Instance = SpaceController.Instance;
-        if (Instance != null)
+        if (registered == false && ghostMode == false)
         {
-            SpaceController.Instance.CelestialBodiesInScene.Add(celestialBody);
+            Debug.LogWarning("[Register] Registered: " + this.name);
+            sc.CelestialBodiesInScene.Add(this);
+            registered = true;
+        }
+        else
+        {
+            Debug.LogWarning("[Register] Did not Register: " + this.name + " because it is already registered, or, ghost mode was on");
         }
     }
 
     //Add the object to the Celestial body list
     public void DeRegister()
     {
-        SpaceController Instance = SpaceController.Instance;
-        if (Instance != null)
+        if (registered == true)
         {
-            SpaceController.Instance.CelestialBodiesInScene.Remove(this);
+            Debug.LogWarning("[De-Register] De-Registered: " + this.name);
+            sc.CelestialBodiesInScene.Remove(this);
+            registered = false;
+        }
+        else
+        {
+            Debug.LogWarning("[De-Register] Did not De-Register: " + this.name + " because it wasnt registered in the first place");
         }
     }
+
+    /// <summary>
+    /// Turn ghost mode on or off
+    /// </summary>
+    void ToggleGhostMode()
+    {
+        if (ghostMode)
+        {
+            Mr.material = Sc.CelestialBodyGhostMaterial;
+            if (registered)
+            {
+                NameTagController.Instance.DeRegister(this);
+                DeRegister();
+                TotalAcceleration = new double3(0d, 0d, 0d);
+                ResetVelocity(0d);
+            }
+        }
+        else
+        {
+            Mr.material = mat;
+            if (registered == false)
+            {
+                Register();
+                NameTagController.Instance.Register(this);
+            }
+        }
+    }    
 
     private void OnDisable()
     {

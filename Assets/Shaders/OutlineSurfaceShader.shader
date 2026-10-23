@@ -6,7 +6,9 @@ Shader "Custom/OutlineSurfaceShader"
         _MainTex ("Albedo (RGB)", 2D) = "white" {}
         _Glossiness ("Smoothness", Range(0,1)) = 0.5
         _Metallic ("Metallic", Range(0,1)) = 0.0
+        _C ("Color", Color) = (0, 0, 0, 1)
         _O ("OutlineColor", Color) = (1, 1, 1, 1)
+        _OT ("OutlineThickness", Range(0.001, 0.05)) = 0.01
     }
     SubShader
     {

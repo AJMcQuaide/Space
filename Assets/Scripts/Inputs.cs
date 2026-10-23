@@ -64,7 +64,7 @@ public class Inputs : MonoBehaviour
         }
         if (ui.EscMenu.activeSelf == true)
         {
-            StartCoroutine(ac.PlaySoundEffect(ac.EscapeMenuSound, 0.5f));
+            AudioController.PlaySound(ac.EscapeMenuSound, 0.5f);
         }
     }
 

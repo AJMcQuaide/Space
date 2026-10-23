@@ -57,6 +57,14 @@ public class UIController : MonoBehaviour
     [SerializeField]
     TMP_InputField addCBInputSpeed;
 
+    [SerializeField]
+    Button addCBButton;
+
+    /// <summary>
+    /// The Celestial Body that is inserted into the scene
+    /// </summary>
+    CelestialBody insertedCB;
+
     private void Awake()
     {
         if (Instance != this) { Destroy(gameObject); }
@@ -64,6 +72,7 @@ public class UIController : MonoBehaviour
         SetSpriteState();
         escMenu.SetActive(false);
         sc = SpaceController.Instance;
+        addCBButton.onClick.AddListener(AddCelestialBody);
     }
 
     public void PlayPauseButton()
@@ -112,22 +121,54 @@ public class UIController : MonoBehaviour
         Application.Quit();
     }
 
+    /// <summary>
+    /// Insert a new Celestial Body into the scene, but in a 'ghosted' mode to position it, without physics or contacts
+    /// </summary>
     public void AddCelestialBody()
     {
-        CelestialBody newCB = Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
-        newCB.name = sc.GetCelestialBodyPrefab(dropdownAddCB.value).name;
+        Debug.LogWarning("Add");
+
+        insertedCB = Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
+        insertedCB.GhostMode = true;
+        addCBButton.GetComponentInChildren<TextMeshProUGUI>().text = "CONFIRM";
+
+        foreach (CelestialBody cb in sc.CelestialBodiesInScene)
+        {
+            if (CelestialBody.SpheresTouching(cb.transform.position, insertedCB.transform.position, cb.Radius, insertedCB.Radius))
+            {
+                //Play 'error' noise
+                //Change color to red
+            }
+        }
+
+        insertedCB.name = sc.GetCelestialBodyPrefab(dropdownAddCB.value).name;
         if (float.TryParse(addCBInputSpeed.text, out float result))
         {
-            newCB.ResetVelocity(result);
+            insertedCB.ResetVelocity(result);
         }
         else
         {
             Debug.LogError("Input field failed to parse");
         }
+        addCBButton.onClick.RemoveAllListeners();
+        addCBButton.onClick.AddListener(ConfirmCelestialBody);
     }
 
-    public void OnValueChangedDropdown()
+    /// <summary>
+    /// Finalize the insertion of a Celestial Body in ghost mode, and make it into a real object with physics and contacts
+    /// </summary>
+    public void ConfirmCelestialBody()
     {
-        addCBInputSpeed = null;
+        Debug.LogWarning("Confirm");
+
+        insertedCB.GhostMode = false;
+        addCBButton.GetComponentInChildren<TextMeshProUGUI>().text = "ADD";
+        addCBButton.onClick.RemoveAllListeners();
+        addCBButton.onClick.AddListener(AddCelestialBody);
+    }
+
+    public void SetInitialSpeedToZero()
+    {
+        addCBInputSpeed.text = "0";
     }
 }

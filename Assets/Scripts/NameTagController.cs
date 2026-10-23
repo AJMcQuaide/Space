@@ -51,8 +51,14 @@ public class NameTagController : MonoBehaviour
     /// </summary>
     void PositionNameTags()
     {
+        if (sc.CelestialBodiesInScene.Count == 0)
+        {
+            return;
+        }
         for (int i = 0; i < nameTagList.Count; i++)
         {
+
+
             CelestialBody cb = sc.CelestialBodiesInScene[i];
 
             Vector3 screenPoint = cam.WorldToScreenPoint(cb.transform.position);
@@ -92,6 +98,7 @@ public class NameTagController : MonoBehaviour
     public void Register(CelestialBody cb)
     {
         int index = sc.CelestialBodiesInScene.IndexOf(cb);
+        Debug.LogWarning("CB INDEX: " +  index + " For CB NAMED: " + cb.name);
         if (index >= 0)
         {
             //Match the index of the Cb list and the nametag list

@@ -97,6 +97,13 @@ public class SpaceController : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI FPS_Text;
 
+    /// <summary>
+    /// The material universally used by CB's when they are being positioned prior to insertion, a ghost verison of the object
+    /// </summary>
+    [SerializeField]
+    Material celestialBodyGhostMaterial;
+    public Material CelestialBodyGhostMaterial { get { return  celestialBodyGhostMaterial;  } }
+
     void Awake()
     {
         //Singleton
@@ -117,6 +124,12 @@ public class SpaceController : MonoBehaviour
                 Debug.LogWarning("No Manipulation object - searching for one");
                 objectManipulation = FindAnyObjectByType<Manipulation>();
             }
+
+            //Initialize outline thickness if the serialize field hasnt set it in it's specificed range
+            if (outlineThickness == 0)
+            {
+                outlineThickness = 1;
+            }
         }
     }
 
@@ -132,13 +145,13 @@ public class SpaceController : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Set acceleration and contacts for all Cb's
+        //Set ACCELERATION and CONTACTS for all Cb's
         SetPhysics();
 
-        //Grid Warp
+        //Grid Warp to visualize gravity
         SetShader(meshRenderer.material);
 
-        //FPS
+        //FPS display
         if (Frames < simulationLength && InPlayMode)
         {
             Frames++;

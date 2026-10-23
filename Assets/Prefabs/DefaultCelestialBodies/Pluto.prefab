@@ -177,21 +177,23 @@ MonoBehaviour:
   thisCelestialBody: 0
   mass: 1.309e+22
   radius: 1185000
-  initialSpeed: 0
-  trailColor: {r: 1, g: 1, b: 1, a: 0}
-  trailWidth: 0
+  trailColor: {r: 1, g: 1, b: 1, a: 1}
   isKinematic: 0
   warpGrid: 0
-  physicsArrow: 1
   lorentzFactor: 1
   speed: 0
   totalAcceleration:
     x: 0
     y: 0
     z: 0
+  velocity:
+    x: 0
+    y: 0
+    z: 0
   sR: 0
   density: 0
   model: {fileID: 7826250384571501997}
+  selected: 0
 --- !u!1 &7826250384571501997
 GameObject:
   m_ObjectHideFlags: 0

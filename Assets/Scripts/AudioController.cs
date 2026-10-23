@@ -29,8 +29,6 @@ public class AudioController : MonoBehaviour
     [SerializeField]
     AudioSource backgroundMusic;
 
-    List<AudioSource> soundEffects;
-
     [SerializeField]
     AudioClip[] backgroundMusicClips;
 
@@ -41,6 +39,10 @@ public class AudioController : MonoBehaviour
     [SerializeField]
     AudioClip planetFocusSound;
     public AudioClip PlanetFocusSound { get { return planetFocusSound; } }
+
+    [SerializeField]
+    AudioClip errorSound;
+    public AudioClip ErrorSound { get { return errorSound; } }
 
     [SerializeField]
     TextMeshProUGUI onScreenText;
@@ -66,9 +68,6 @@ public class AudioController : MonoBehaviour
 
     void Start()
     {
-        //Initialize sound effects array
-        soundEffects = new List<AudioSource>(1);
-
         //Get the number of tracks
         totalTracks = backgroundMusicClips.Length;
 
@@ -145,9 +144,14 @@ public class AudioController : MonoBehaviour
         timer = trackLengthSeconds;
     }
 
-    public IEnumerator PlaySoundEffect(AudioClip clip, float volume)
+    public static void PlaySound(AudioClip clip, float volume)
     {
-        AudioSource _as = gameObject.AddComponent<AudioSource>();
+        Instance.StartCoroutine(PlaySoundCoroutine(clip, volume));
+    }
+
+    static IEnumerator PlaySoundCoroutine(AudioClip clip, float volume)
+    {
+        AudioSource _as = Instance.gameObject.AddComponent<AudioSource>();
         float timer = 0;
         _as.clip = clip;
         _as.volume = volume;

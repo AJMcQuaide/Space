@@ -8,8 +8,7 @@ Shader "Unlit/Color"
     {
         Tags
         {
-            "RenderType"="Transparent"
-            "RendereQueue"="Transparent"
+            "RenderType"="Opaque"
         }
         LOD 100
 

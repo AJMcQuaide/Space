@@ -30,6 +30,6 @@ public class Planet : CelestialBody
     private void OnEnable()
     {        
         SetProperties();
-        Register(this);
+        Register();
     }
 }
