@@ -101,8 +101,11 @@ public class SpaceController : MonoBehaviour
     /// The material universally used by CB's when they are being positioned prior to insertion, a ghost verison of the object
     /// </summary>
     [SerializeField]
-    Material celestialBodyGhostMaterial;
-    public Material CelestialBodyGhostMaterial { get { return  celestialBodyGhostMaterial;  } }
+    Material ghostMaterial;
+    public Material GhostMaterial { get { return  ghostMaterial;  } }
+
+    public Color GhostMaterialPass { get; } = new Color(0f, 1f, 0f, 0.5f);
+    public Color GhostMaterialFail { get; } = new Color(1f, 0f, 0f, 0.5f);
 
     void Awake()
     {
@@ -129,6 +132,11 @@ public class SpaceController : MonoBehaviour
             if (outlineThickness == 0)
             {
                 outlineThickness = 1;
+            }
+
+            if (ghostMaterial == null)
+            {
+                Debug.LogError("Ghost Material is null");
             }
         }
     }
@@ -267,6 +275,23 @@ public class SpaceController : MonoBehaviour
     {
         double3 double3 = new(vector3.x, vector3.y, vector3.z);
         return double3;
+    }
+
+    /// <summary>
+    /// Checks if there is inteference with the provided CB with any other CB's in the scene, returns true if there is interference
+    /// </summary>
+    /// <param name="CBToCheck"></param>
+    /// <returns></returns>
+    public bool GlobalCBInteference(CelestialBody insertedCB)
+    {
+        foreach (CelestialBody cbInList in CelestialBodiesInScene)
+        {
+            if (CelestialBody.SphericalInterference(cbInList.transform.position, insertedCB.transform.position, cbInList.Radius, insertedCB.Radius))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>

@@ -98,7 +98,6 @@ public class NameTagController : MonoBehaviour
     public void Register(CelestialBody cb)
     {
         int index = sc.CelestialBodiesInScene.IndexOf(cb);
-        Debug.LogWarning("CB INDEX: " +  index + " For CB NAMED: " + cb.name);
         if (index >= 0)
         {
             //Match the index of the Cb list and the nametag list

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -128,19 +129,18 @@ public class UIController : MonoBehaviour
     {
         Debug.LogWarning("Add");
 
+        //Instantiate
         insertedCB = Instantiate(sc.GetCelestialBodyPrefab(dropdownAddCB.value));
         insertedCB.GhostMode = true;
         addCBButton.GetComponentInChildren<TextMeshProUGUI>().text = "CONFIRM";
 
-        foreach (CelestialBody cb in sc.CelestialBodiesInScene)
+        //If the new CB is initially interfering with something, move it until it is not
+        while (sc.GlobalCBInteference(insertedCB))
         {
-            if (CelestialBody.SpheresTouching(cb.transform.position, insertedCB.transform.position, cb.Radius, insertedCB.Radius))
-            {
-                //Play 'error' noise
-                //Change color to red
-            }
+            insertedCB.transform.position += new Vector3(0f, 0f, 1f);
         }
 
+        //Set name and initial speed
         insertedCB.name = sc.GetCelestialBodyPrefab(dropdownAddCB.value).name;
         if (float.TryParse(addCBInputSpeed.text, out float result))
         {
@@ -150,8 +150,13 @@ public class UIController : MonoBehaviour
         {
             Debug.LogError("Input field failed to parse");
         }
+
+        //Swap useage of button
         addCBButton.onClick.RemoveAllListeners();
         addCBButton.onClick.AddListener(ConfirmCelestialBody);
+
+        //Start checking for interference coroutine
+        StartCoroutine(PeriodicallyCheckInterference(0.2f));
     }
 
     /// <summary>
@@ -159,12 +164,47 @@ public class UIController : MonoBehaviour
     /// </summary>
     public void ConfirmCelestialBody()
     {
-        Debug.LogWarning("Confirm");
+        //Check if the new CB is interfering again based on user movement
+        if (sc.GlobalCBInteference(insertedCB))
+        {
+            insertedCB.GetComponentInChildren<MeshRenderer>().material.color = sc.GhostMaterialFail;
+            AudioController.PlaySound(AudioController.Instance.ErrorSound, 1f);
+        }
+        else
+        {
+            insertedCB.GetComponentInChildren<MeshRenderer>().material.color = sc.GhostMaterialPass;
+            insertedCB.GhostMode = false;
+            addCBButton.GetComponentInChildren<TextMeshProUGUI>().text = "ADD";
+            addCBButton.onClick.RemoveAllListeners();
+            addCBButton.onClick.AddListener(AddCelestialBody);
+            insertedCB = null;
+        }
+    }
 
-        insertedCB.GhostMode = false;
-        addCBButton.GetComponentInChildren<TextMeshProUGUI>().text = "ADD";
-        addCBButton.onClick.RemoveAllListeners();
-        addCBButton.onClick.AddListener(AddCelestialBody);
+    /// <summary>
+    /// Check for interference of spheres every X time period
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator PeriodicallyCheckInterference(float t)
+    {
+        Debug.LogWarning("Started inserted CB checking interference");
+        WaitForSeconds delay = new WaitForSeconds(t);
+        MeshRenderer mr = insertedCB.GetComponentInChildren<MeshRenderer>();
+        bool interfering;
+        while (insertedCB != null)
+        {
+            interfering = sc.GlobalCBInteference(insertedCB);
+            if (interfering)
+            {
+                mr.material.color = sc.GhostMaterialFail;
+            }
+            else
+            {
+                mr.material.color = sc.GhostMaterialPass;
+            }
+            yield return delay;
+        }
+        Debug.LogWarning("End coroutine because insertedCB was null");
     }
 
     public void SetInitialSpeedToZero()

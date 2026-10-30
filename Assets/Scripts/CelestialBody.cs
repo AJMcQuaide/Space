@@ -234,8 +234,6 @@ public class CelestialBody : MonoBehaviour
         if (ghostMode == false)
         {
             Register();
-            //Debug
-            Debug.LogWarning("Called Register at START for CB: " + name);
             NameTagController.Instance.Register(this);
         }
 
@@ -365,7 +363,7 @@ public class CelestialBody : MonoBehaviour
                 //    cb2.ContactChecked = true;
                 //}
 
-                if (SpheresTouching(cb1.transform.position, cb2.transform.position, cb1.Radius, cb2.Radius))
+                if (SphericalInterference(cb1.transform.position, cb2.transform.position, cb1.Radius, cb2.Radius))
                 {
                     //Calculate the velocity of the cb being evaluated
                     double3 iv1 = cb1.velocity;
@@ -389,7 +387,7 @@ public class CelestialBody : MonoBehaviour
     /// <param name="rad1"></param>
     /// <param name="rad2"></param>
     /// <returns></returns>
-    public static bool SpheresTouching(Vector3 pos1, Vector3 pos2, float rad1, float rad2)
+    public static bool SphericalInterference(Vector3 pos1, Vector3 pos2, float rad1, float rad2)
     {
         return math.length(pos1 - pos2) < (rad2 * CelestialBody.SD + rad1 * CelestialBody.SD);
     }
@@ -590,13 +588,8 @@ public class CelestialBody : MonoBehaviour
     {
         if (registered == false && ghostMode == false)
         {
-            Debug.LogWarning("[Register] Registered: " + this.name);
             sc.CelestialBodiesInScene.Add(this);
             registered = true;
-        }
-        else
-        {
-            Debug.LogWarning("[Register] Did not Register: " + this.name + " because it is already registered, or, ghost mode was on");
         }
     }
 
@@ -605,13 +598,8 @@ public class CelestialBody : MonoBehaviour
     {
         if (registered == true)
         {
-            Debug.LogWarning("[De-Register] De-Registered: " + this.name);
             sc.CelestialBodiesInScene.Remove(this);
             registered = false;
-        }
-        else
-        {
-            Debug.LogWarning("[De-Register] Did not De-Register: " + this.name + " because it wasnt registered in the first place");
         }
     }
 
@@ -622,7 +610,7 @@ public class CelestialBody : MonoBehaviour
     {
         if (ghostMode)
         {
-            Mr.material = Sc.CelestialBodyGhostMaterial;
+            Mr.material = Sc.GhostMaterial;
             if (registered)
             {
                 NameTagController.Instance.DeRegister(this);
