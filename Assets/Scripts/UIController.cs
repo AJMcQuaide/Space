@@ -190,17 +190,17 @@ public class UIController : MonoBehaviour
         Debug.LogWarning("Started inserted CB checking interference");
         WaitForSeconds delay = new WaitForSeconds(t);
         MeshRenderer mr = insertedCB.GetComponentInChildren<MeshRenderer>();
-        bool interfering;
+        bool interfering = false;
+        bool check;
         while (insertedCB != null)
         {
-            interfering = sc.GlobalCBInteference(insertedCB);
-            if (interfering)
+            check = sc.GlobalCBInteference(insertedCB);
+            if (interfering != check)
             {
-                mr.material.color = sc.GhostMaterialFail;
-            }
-            else
-            {
-                mr.material.color = sc.GhostMaterialPass;
+                interfering = check;
+                mr.material.color = interfering ? sc.GhostMaterialFail : sc.GhostMaterialPass;
+                Debug.LogWarning("Changed ghost material color for new CB");
+
             }
             yield return delay;
         }
