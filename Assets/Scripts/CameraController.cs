@@ -124,6 +124,12 @@ public class CameraController : MonoBehaviour
             }
             //Set the position of the manipulation tool on click
             sc.ObjectManipulation.ReSetManipulationToolPosition();
+
+            //Show information in inspector about Celestial Body when clicked
+            UIController.Instance.Inspector.PullInspectorValues();
+
+            //Start coroutine to push position and rotation of Celestial Body to inspector when clicked
+            StartCoroutine(UIController.Instance.Inspector.UpdateInspector());
         }
         if (TrackObject)
         {

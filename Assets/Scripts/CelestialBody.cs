@@ -247,15 +247,6 @@ public class CelestialBody : MonoBehaviour
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
-    private void Update()
-    {
-        //Debug
-        if (Input.GetKeyDown(KeyCode.I))
-        {
-            GhostMode = !GhostMode;
-        }
-    }
-
     private void FixedUpdate()
     {
         //Update in FixedUpdate, the position of the celestial bodies should be early in the frame

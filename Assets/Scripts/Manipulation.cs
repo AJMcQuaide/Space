@@ -12,8 +12,7 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     readonly float sizeOfTool = 5f;
 
-    [SerializeField]
-    CameraController cc;
+
 
     [SerializeField]
     GameObject moveTool;
@@ -93,19 +92,21 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     Transform target;
 
+    SpaceController sc;
+
+    private void Awake()
+    {
+        sc = SpaceController.Instance;
+    }
+
     void Start()
     {
-        if (cc == null)
-        {
-            cc = FindAnyObjectByType<CameraController>();
-            Debug.Log("Found missing Camera Controller in " + GetType());
-        }
         HideTools();
     }
 
     void Update()
     {
-        Picked = cc.Picking(1 << 7, out clickPoint);
+        Picked = sc.Cc.Picking(1 << 7, out clickPoint);
         KeepApparentSizeOnScreen();
 
         if (SpaceController.Instance.InPlayMode == false)
@@ -133,12 +134,12 @@ public class Manipulation : MonoBehaviour
                 {
                     isDragging = true;
                     //Stop the camera from tracking the object on drag to reposition
-                    cc.TrackObject = false;
+                    sc.Cc.TrackObject = false;
                     //Grab the clicked location once there is a click
                     initialClickPoint = clickPoint;
                 }
                 //Check if there is a picked celestial body which can show/hide the manipulation tools
-                else if (cc.Picked != null)
+                else if (sc.Cc.Picked != null)
                 {
                     if (MoveToolActive)
                     {
@@ -179,7 +180,7 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void KeepApparentSizeOnScreen()
     {
-        float distance = (transform.position - cc.transform.position).magnitude;
+        float distance = (transform.position - sc.Cc.transform.position).magnitude;
         float scale = distance / sizeOfTool;
         transform.localScale = new Vector3(scale, scale, scale);
     }
@@ -201,9 +202,9 @@ public class Manipulation : MonoBehaviour
         if (dot != 0)
         {
             //Drag the object based on the dot product (drag direction vs the tool's arrow), and the direction the arrow points (it's local space locations)
-            Vector3 move = cc.CamDistance * dot * moveMultipier * moveSensativity * Picked.transform.localPosition.normalized;
+            Vector3 move = sc.Cc.CamDistance * dot * moveMultipier * moveSensativity * Picked.transform.localPosition.normalized;
 
-            CelestialBody cb = cc.CameraTrackedObject;
+            CelestialBody cb = sc.Cc.CameraTrackedObject;
 
             cb.transform.position += move;
             cb.Position += new double3((double)move.x, (double)move.y, (double)move.z);
@@ -218,10 +219,10 @@ public class Manipulation : MonoBehaviour
     float MouseDragAngleDotProduct(Vector3 mousePos)
     {
         //The local vector3 is projected onto the camera plane, the projection still exists in 3D space so it moves around with the camera
-        Vector3 project = Vector3.ProjectOnPlane(mousePos, cc.Cam.transform.forward).normalized;
+        Vector3 project = Vector3.ProjectOnPlane(mousePos, sc.Cc.Cam.transform.forward).normalized;
 
         //The projection is transformed local to the camera space
-        Vector3 projectTransform = cc.Cam.transform.InverseTransformDirection(project);
+        Vector3 projectTransform = sc.Cc.Cam.transform.InverseTransformDirection(project);
 
         //Flatten the Vector to make it 2D
         Vector2 projectTransform2D = new(projectTransform.x, projectTransform.y);
@@ -236,7 +237,7 @@ public class Manipulation : MonoBehaviour
     void RotateObject()
     {
         //Create cross product from camera foward, hitPos, and the output goes into the method.
-        Vector3 cross = Vector3.Cross(cc.transform.forward, initialClickPoint).normalized;
+        Vector3 cross = Vector3.Cross(sc.Cc.transform.forward, initialClickPoint).normalized;
         //Get the rotation vector stored in the picked object
         if (rotationAxis == null)
         {
@@ -245,7 +246,7 @@ public class Manipulation : MonoBehaviour
 
         ///Start The following code is designed to make sure the rotation rings pull in the intended direction in all viewpoints or orientations
         //The dot product that helps get the right orientiaton, so that pushing/pulling goes in the right direction
-        float orientation = Vector3.Dot(cc.transform.forward, Picked.transform.up);
+        float orientation = Vector3.Dot(sc.Cc.transform.forward, Picked.transform.up);
         float flipOrientation = orientation < 0 ? 1 : -1;
         //Only the "Y" ring needs fliped opposite of the others
         if (rotationAxis.Value == Vector3.up)
@@ -264,7 +265,7 @@ public class Manipulation : MonoBehaviour
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestial body after using rotation tool
-        cc.CameraTrackedObject.ResetVelocity(cc.CameraTrackedObject.Speed);
+        sc.Cc.CameraTrackedObject.ResetVelocity(sc.Cc.CameraTrackedObject.Speed);
     }
 
     /// <summary>
@@ -305,7 +306,7 @@ public class Manipulation : MonoBehaviour
     public void ReAlignDirectionTool()
     {
         //Set the direction tool to the direction (velocity) of the celestial body the camera is tracking
-        CelestialBody cb = cc.CameraTrackedObject;
+        CelestialBody cb = sc.Cc.CameraTrackedObject;
 
         if (cb != null)
         {
@@ -323,10 +324,10 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     public void ReSetManipulationToolPosition()
     {
-        if (cc.CameraTrackedObject != null)
+        if (sc.Cc.CameraTrackedObject != null)
         {
             //Cache the target transform
-            target = cc.CameraTrackedObject.transform;
+            target = sc.Cc.CameraTrackedObject.transform;
 
             //Set the manipulation tool position initially
             transform.position = target.position;

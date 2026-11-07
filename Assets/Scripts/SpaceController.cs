@@ -107,6 +107,10 @@ public class SpaceController : MonoBehaviour
     public Color GhostMaterialPass { get; } = new Color(0f, 1f, 0f, 0.5f);
     public Color GhostMaterialFail { get; } = new Color(1f, 0f, 0f, 0.5f);
 
+    [SerializeField]
+    CameraController cc;
+    public CameraController Cc { get { return cc; } }
+
     void Awake()
     {
         //Singleton
@@ -137,6 +141,12 @@ public class SpaceController : MonoBehaviour
             if (ghostMaterial == null)
             {
                 Debug.LogError("Ghost Material is null");
+            }
+
+            if (cc == null)
+            {
+                cc = FindAnyObjectByType<CameraController>();
+                Debug.Log("Found missing Camera Controller in " + GetType());
             }
         }
     }

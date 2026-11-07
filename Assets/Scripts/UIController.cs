@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class UIController : MonoBehaviour
@@ -62,9 +61,14 @@ public class UIController : MonoBehaviour
     Button addCBButton;
 
     /// <summary>
-    /// The Celestial Body that is inserted into the scene
+    /// The reference to a new Celestial Body inserted into the scene, prior to being confirmed
     /// </summary>
     CelestialBody insertedCB;
+    public CelestialBody InsertedCB { get { return insertedCB; } }
+
+    [SerializeField]
+    Inspector inspector;
+    public Inspector Inspector { get { return inspector; } }
 
     private void Awake()
     {
