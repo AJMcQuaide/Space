@@ -305,6 +305,24 @@ public class SpaceController : MonoBehaviour
     }
 
     /// <summary>
+    /// Convert string to float, return zero if failed
+    /// </summary>
+    /// <param name="text"></param>
+    /// <returns></returns>
+    public static float StringToFloat(string text)
+    {
+        if (float.TryParse(text, out float result))
+        {
+            return result;
+        }
+        else
+        {
+            Debug.LogError("Failed to parse (Cannot convert string to float)");
+            return 0f;
+        }
+    }
+
+    /// <summary>
     /// Save the current state of the app
     /// </summary>
     /// 
@@ -329,7 +347,6 @@ public class SpaceController : MonoBehaviour
 
                 //Position and Rotation
                 writer.Write(t.position);
-                //writer.Write(t.rotation);
 
                 //Velocity which will be used as starting velocity
                 writer.Write(cb.Velocity);
@@ -369,11 +386,9 @@ public class SpaceController : MonoBehaviour
                     //Load Name
                     cb.gameObject.name = reader.ReadString();
 
-                    //Location and rotation of planet
+                    //Position
                     cb.transform.position = reader.ReadVector3();
                     cb.Position = Vector3ToDouble3(cb.transform.position);
-
-                    //cb.transform.rotation = reader.ReadQuaternion();
 
                     //Set velocity and speed, from the saved velocity
                     double3 vel = reader.ReadDouble3();

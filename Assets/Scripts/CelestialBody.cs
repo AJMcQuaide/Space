@@ -339,21 +339,6 @@ public class CelestialBody : MonoBehaviour
                 double3 p1 = new(cb1.position.x, cb1.position.y, cb1.position.z);
                 double3 difference = p2 - p1;
 
-                //Replaced by "Spheres touching" method
-                ////Contact and calculation reflection
-                //if (math.length(difference) < (cb2.Radius * SD + Radius * SD))
-                //{
-                //    //Calculate the velocity of the cb being evaluated
-                //    double3 iv1 = cb1.velocity;
-                //    double3 iv2 = cb2.velocity;
-                //    double3 v1 = Reflect(difference, iv1, iv2, cb1.Mass, cb2.Mass);
-                //    cb1.velocity = v1;
-                //    //Calculate the velocity of the other cb that was contacted
-                //    double3 v2 = Reflect(difference, iv2, iv1, cb2.Mass, cb1.Mass);
-                //    cb2.velocity = v2;
-                //    cb2.ContactChecked = true;
-                //}
-
                 if (SphericalInterference(cb1.transform.position, cb2.transform.position, cb1.Radius, cb2.Radius))
                 {
                     //Calculate the velocity of the cb being evaluated
@@ -550,10 +535,9 @@ public class CelestialBody : MonoBehaviour
     }
 
     /// <summary>
-    /// Set the direction of the celestial body based on the manipulation tool's 'forward' direction.
-    /// If the user rotates the object update the direction and velocity.
+    /// Set the velocity of the celestial body based on the input speed, and the direction is taken from the manipulation tool's forward
     /// </summary>
-    public void ResetVelocity(double speed)
+    public void SetVelocityToManipulationForward(double speed)
     {
         //Set velocity, then multiply by the speed, and clamp from zero to near speed of light
         GameObject tool = SpaceController.Instance.ObjectManipulation.RotationTool;
@@ -607,7 +591,7 @@ public class CelestialBody : MonoBehaviour
                 NameTagController.Instance.DeRegister(this);
                 DeRegister();
                 TotalAcceleration = new double3(0d, 0d, 0d);
-                ResetVelocity(0d);
+                SetVelocityToManipulationForward(0d);
             }
         }
         else

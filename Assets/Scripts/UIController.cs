@@ -89,6 +89,12 @@ public class UIController : MonoBehaviour
         addCBInputSpeed.contentType = TMP_InputField.ContentType.DecimalNumber;
 
         SetSpriteState();
+
+        //Inspector starts pulling data again, if the user hits play
+        if (sc.InPlayMode)
+        {
+            Inspector.OnInputFieldDeSelected();
+        }
     }
 
     /// <summary>
@@ -144,16 +150,11 @@ public class UIController : MonoBehaviour
             insertedCB.transform.position += new Vector3(0f, 0f, 1f);
         }
 
-        //Set name and initial speed
+        //Set name
         insertedCB.name = sc.GetCelestialBodyPrefab(dropdownAddCB.value).name;
-        if (float.TryParse(addCBInputSpeed.text, out float result))
-        {
-            insertedCB.ResetVelocity(result);
-        }
-        else
-        {
-            Debug.LogError("Input field failed to parse");
-        }
+        //Set initial speed
+        insertedCB.SetVelocityToManipulationForward(SpaceController.StringToFloat(addCBInputSpeed.text));
+
 
         //Swap useage of button
         addCBButton.onClick.RemoveAllListeners();

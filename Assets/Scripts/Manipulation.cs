@@ -12,8 +12,6 @@ public class Manipulation : MonoBehaviour
     /// </summary>
     readonly float sizeOfTool = 5f;
 
-
-
     [SerializeField]
     GameObject moveTool;
     public GameObject MoveTool {  get { return moveTool; } }
@@ -148,7 +146,7 @@ public class Manipulation : MonoBehaviour
                     else
                     {
                         ShowDirectionTool();
-                        //Re alignment of the rotation tool to match the new celestial body that was clicked, is done in CameraController
+                        //Note: In CameraController, when a Celesital Body is clicked, the manipulation tool is rotated to match the object
                     }
                 }
                 //If not picking up an object, or clicking outside of one, then hide the manipulation tools
@@ -232,7 +230,7 @@ public class Manipulation : MonoBehaviour
     }
 
     /// <summary>
-    /// Rotate the object with click and drag
+    /// Rotate the manipulation rotation tool by clicking and dragging, then, update the Celestial Body's velocity to match
     /// </summary>
     void RotateObject()
     {
@@ -265,7 +263,7 @@ public class Manipulation : MonoBehaviour
         rotationTool.transform.Rotate(rotation);
 
         //Update the velocity of the celestial body after using rotation tool
-        sc.Cc.CameraTrackedObject.ResetVelocity(sc.Cc.CameraTrackedObject.Speed);
+        sc.Cc.CameraTrackedObject.SetVelocityToManipulationForward(sc.Cc.CameraTrackedObject.Speed);
     }
 
     /// <summary>
